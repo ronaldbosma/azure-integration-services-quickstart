@@ -32,6 +32,18 @@ param storageAccountName string
 //=============================================================================
 
 var storageAccountConnectionString = 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount.listKeys().keys[0].value}'
+var appSettings = {
+  APP_KIND: 'workflowApp'
+  APPLICATIONINSIGHTS_CONNECTION_STRING: appInsights.properties.ConnectionString
+  AzureFunctionsJobHost__extensionBundle__id: 'Microsoft.Azure.Functions.ExtensionBundle.Workflows'
+  AzureFunctionsJobHost__extensionBundle__version: '[1.*, 2.0.0)'
+  AzureWebJobsStorage: storageAccountConnectionString
+  FUNCTIONS_EXTENSION_VERSION: '~4'
+  FUNCTIONS_WORKER_RUNTIME: 'dotnet'
+  WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: storageAccountConnectionString
+  WEBSITE_CONTENTSHARE: toLower(logicAppSettings.logicAppName)
+  WEBSITE_NODE_DEFAULT_VERSION: '~20'
+}
 
 //=============================================================================
 // Existing resources
@@ -98,52 +110,25 @@ resource logicApp 'Microsoft.Web/sites@2021-03-01' = {
     serverFarmId: hostingPlan.id
     keyVaultReferenceIdentity: logicAppIdentity.id
     siteConfig: {
-      appSettings: [
-        {
-          name: 'APP_KIND'
-          value: 'workflowApp'
-        }
-        {
-          name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
-          value: appInsights.properties.ConnectionString
-        }
-        {
-          name: 'AzureFunctionsJobHost__extensionBundle__id'
-          value: 'Microsoft.Azure.Functions.ExtensionBundle.Workflows'
-        }
-        {
-          name: 'AzureFunctionsJobHost__extensionBundle__version'
-          value: '[1.*, 2.0.0)'
-        }
-        {
-          name: 'AzureWebJobsStorage'
-          value: storageAccountConnectionString
-        }
-        {
-          name: 'FUNCTIONS_EXTENSION_VERSION'
-          value: '~4'
-        }
-        {
-          name: 'FUNCTIONS_WORKER_RUNTIME'
-          value: 'dotnet'
-        }
-        {
-          name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
-          value: storageAccountConnectionString
-        }
-        {
-          name: 'WEBSITE_CONTENTSHARE'
-          value: toLower(logicAppSettings.logicAppName)
-        }
-        {
-          name: 'WEBSITE_NODE_DEFAULT_VERSION'
-          value: '~20'
-        }
-      ]
+      // NOTE: the app settings will be set separately
       ftpsState: 'FtpsOnly'
       minTlsVersion: '1.2'
       netFrameworkVersion: logicAppSettings.netFrameworkVersion
     }
     httpsOnly: true
+  }
+}
+
+
+// Set App Settings
+//  NOTE: this is done in a separate module that merges the app settings with the existing ones 
+//        to prevent other (manually) created app settings from being removed.
+
+module setLogicAppSettings 'merge-app-settings.bicep' = {
+  name: 'setLogicAppSettings'
+  params: {
+    siteName: logicAppSettings.logicAppName
+    currentAppSettings: list('${logicApp.id}/config/appsettings', logicApp.apiVersion).properties
+    newAppSettings: appSettings
   }
 }

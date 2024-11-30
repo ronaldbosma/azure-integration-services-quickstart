@@ -32,6 +32,16 @@ param storageAccountName string
 //=============================================================================
 
 var storageAccountConnectionString = 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount.listKeys().keys[0].value}'
+var appSettings = {
+  APPLICATIONINSIGHTS_CONNECTION_STRING: appInsights.properties.ConnectionString
+  AzureWebJobsStorage: storageAccountConnectionString
+  FUNCTIONS_EXTENSION_VERSION: '~4'
+  FUNCTIONS_WORKER_RUNTIME: 'dotnet-isolated'
+  WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: storageAccountConnectionString
+  WEBSITE_CONTENTSHARE: toLower(functionAppSettings.functionAppName)
+  WEBSITE_USE_PLACEHOLDER_DOTNETISOLATED: '1'
+}
+
 
 //=============================================================================
 // Existing resources
@@ -95,40 +105,25 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
   properties: {
     serverFarmId: hostingPlan.id
     siteConfig: {
-      appSettings: [
-        {
-          name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
-          value: appInsights.properties.ConnectionString
-        }
-        {
-          name: 'AzureWebJobsStorage'
-          value: storageAccountConnectionString
-        }
-        {
-          name: 'FUNCTIONS_EXTENSION_VERSION'
-          value: '~4'
-        }
-        {
-          name: 'FUNCTIONS_WORKER_RUNTIME'
-          value: 'dotnet-isolated'
-        }
-        {
-          name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
-          value: storageAccountConnectionString
-        }
-        {
-          name: 'WEBSITE_CONTENTSHARE'
-          value: toLower(functionAppSettings.functionAppName)
-        }
-        {
-          name: 'WEBSITE_USE_PLACEHOLDER_DOTNETISOLATED'
-          value: '1'
-        }
-      ]
+      // NOTE: the app settings will be set separately
       ftpsState: 'FtpsOnly'
       minTlsVersion: '1.2'
       netFrameworkVersion: functionAppSettings.netFrameworkVersion
     }
     httpsOnly: true
+  }
+}
+
+
+// Set App Settings
+//  NOTE: this is done in a separate module that merges the app settings with the existing ones 
+//        to prevent other (manually) created app settings from being removed.
+
+module setFunctionAppSettings 'merge-app-settings.bicep' = {
+  name: 'setFunctionAppSettings'
+  params: {
+    siteName: functionAppSettings.functionAppName
+    currentAppSettings: list('${functionApp.id}/config/appsettings', functionApp.apiVersion).properties
+    newAppSettings: appSettings
   }
 }
