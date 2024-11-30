@@ -399,3 +399,4 @@ FodyWeavers.xsd
 
 # Local files
 src/deploy.local.ps1
+src/test.local.http
