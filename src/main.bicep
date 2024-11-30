@@ -9,7 +9,7 @@ targetScope = 'subscription'
 // Imports
 //=============================================================================
 
-import { getResourceName, getResourceIdentityName } from './functions/naming-conventions.bicep'
+import { getResourceName } from './functions/naming-conventions.bicep'
 import * as settings from './types/settings.bicep'
 
 
@@ -52,7 +52,7 @@ var resourceGroupName = getResourceName('resourceGroup', workload, environment, 
 
 var apiManagementSettings = {
   serviceName: getResourceName('apiManagement', workload, environment, location, instance)
-  identityName: getResourceIdentityName('apiManagement', workload, environment, location, instance)
+  identityName: getResourceName('managedIdentity', workload, environment, location, 'apim-${instance}')
   publisherName: 'admin@example.org'
   publisherEmail: 'admin@example.org'
 }
@@ -65,7 +65,7 @@ var appInsightsSettings = {
 
 var functionAppSettings = {
   functionAppName: getResourceName('functionApp', workload, environment, location, instance)
-  identityName: getResourceIdentityName('functionApp', workload, environment, location, instance)
+  identityName: getResourceName('managedIdentity', workload, environment, location, 'functionapp-${instance}')
   appServicePlanName: getResourceName('appServicePlan', workload, environment, location, 'functionapp-${instance}')
   netFrameworkVersion: 'v8.0'
 }

@@ -15,10 +15,6 @@ func getResourceName(resourceType string, workload string, environment string, r
 func getResourceNameByConvention(resourceType string, workload string, environment string, region string, instance string) string => 
   sanitizeResourceName('${getPrefix(resourceType)}-${workload}-${abbreviateEnvironment(environment)}-${abbreviateRegion(region)}-${instance}')
 
-// The user-assigned managed identity name for a resource based on the naming convention.
-@export()
-func getResourceIdentityName(resourceType string, workload string, environment string, region string, instance string) string => 
-  '${getPrefix('managedIdentity')}-${getResourceNameByConvention(resourceType, workload, environment, region, instance)}'
 
 //=============================================================================
 // Shorten Names
