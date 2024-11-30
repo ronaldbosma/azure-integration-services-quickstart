@@ -70,6 +70,13 @@ var functionAppSettings = {
   netFrameworkVersion: 'v8.0'
 }
 
+var logicAppSettings = {
+  logicAppName: getResourceName('logicApp', workload, environment, location, instance)
+  identityName: getResourceName('managedIdentity', workload, environment, location, 'logicapp-${instance}')
+  appServicePlanName: getResourceName('appServicePlan', workload, environment, location, 'logicapp-${instance}')
+  netFrameworkVersion: 'v8.0'
+}
+
 var keyVaultName = getResourceName('keyVault', workload, environment, location, instance)
 
 var storageAccountName = getResourceName('storageAccount', workload, environment, location, instance)
@@ -147,6 +154,22 @@ module functionApp 'modules/function-app.bicep' = {
   ]
 }
 
+module logicApp 'modules/logic-app.bicep' = {
+  name: 'logicApp'
+  scope: workloadResourceGroup
+  params: {
+    location: location
+    logicAppSettings: logicAppSettings
+    appInsightsName: appInsightsSettings.appInsightsName
+    keyVaultName: keyVaultName
+    storageAccountName: storageAccountName
+  }
+  dependsOn: [
+    appInsights
+    storageAccount
+  ]
+}
+
 module assignRolesToCurrentUser 'modules/assign-roles-to-principal.bicep' = if (currentUserPrincipalId != null) {
   name: 'assignRolesToCurrentUser'
   scope: workloadResourceGroup
@@ -174,4 +197,6 @@ output functionAppName string = functionAppSettings.functionAppName
 output functionAppServicePlanName string = functionAppSettings.appServicePlanName
 output keyVaultName string = keyVaultName
 output logAnalyticsWorkspaceName string = appInsightsSettings.logAnalyticsWorkspaceName
+output logicAppName string = logicAppSettings.logicAppName
+output logicAppServicePlanName string = logicAppSettings.appServicePlanName
 output storageAccountName string = storageAccountName
