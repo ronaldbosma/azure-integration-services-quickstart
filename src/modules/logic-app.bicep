@@ -108,6 +108,14 @@ resource logicApp 'Microsoft.Web/sites@2021-03-01' = {
           value: appInsights.properties.ConnectionString
         }
         {
+          name: 'AzureFunctionsJobHost__extensionBundle__id'
+          value: 'Microsoft.Azure.Functions.ExtensionBundle.Workflows'
+        }
+        {
+          name: 'AzureFunctionsJobHost__extensionBundle__version'
+          value: '[1.*, 2.0.0)'
+        }
+        {
           name: 'AzureWebJobsStorage'
           value: storageAccountConnectionString
         }
