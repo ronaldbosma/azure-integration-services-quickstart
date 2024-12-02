@@ -19,7 +19,7 @@ Set-StrictMode -Version Latest
 if (-not($CurrentUserPrincipalId))
 {
     $signedInUser = az ad signed-in-user show | ConvertFrom-Json
-    if (-not($CurrentUserPrincipalId))
+    if ($signedInUser)
     {
         $CurrentUserPrincipalId = $signedInUser.id
     }
