@@ -194,4 +194,5 @@ output keyVaultName string = keyVaultName
 output logAnalyticsWorkspaceName string = appInsightsSettings.logAnalyticsWorkspaceName
 output logicAppName string = logicAppSettings.logicAppName
 output logicAppServicePlanName string = logicAppSettings.appServicePlanName
+output resourceGroupName string = resourceGroupName
 output storageAccountName string = storageAccountName
