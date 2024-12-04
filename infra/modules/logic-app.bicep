@@ -15,6 +15,9 @@ import { logicAppSettingsType } from '../types/settings.bicep'
 @description('Location to use for all resources')
 param location string
 
+@description('The tags to associate with the resource')
+param tags object
+
 @description('The settings for the Logic App that will be created')
 param logicAppSettings logicAppSettingsType
 
@@ -66,6 +69,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-04-01' existing 
 resource logicAppIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
   name: logicAppSettings.identityName
   location: location
+  tags: tags
 }
 
 module assignRolesToLogicAppIdentity 'assign-roles-to-principal.bicep' = {
@@ -83,6 +87,7 @@ module assignRolesToLogicAppIdentity 'assign-roles-to-principal.bicep' = {
 resource hostingPlan 'Microsoft.Web/serverfarms@2021-03-01' = {
   name: logicAppSettings.appServicePlanName
   location: location
+  tags: tags
   kind: 'elastic'
   sku: {
     name: 'WS1'
@@ -99,6 +104,7 @@ resource hostingPlan 'Microsoft.Web/serverfarms@2021-03-01' = {
 resource logicApp 'Microsoft.Web/sites@2021-03-01' = {
   name: logicAppSettings.logicAppName
   location: location
+  tags: tags
   kind: 'functionapp,workflowapp'
   identity: {
     type: 'UserAssigned'

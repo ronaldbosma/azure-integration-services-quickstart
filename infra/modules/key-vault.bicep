@@ -12,6 +12,9 @@ param tenantId string
 @description('Location to use for all resources')
 param location string
 
+@description('The tags to associate with the resource')
+param tags object
+
 @description('The name of the Key Vault that will contain the secrets')
 @maxLength(24)
 param keyVaultName string
@@ -25,6 +28,7 @@ param keyVaultName string
 resource keyVault 'Microsoft.KeyVault/vaults@2023-02-01' = {
   name: keyVaultName
   location: location
+  tags: tags
   properties: {
     tenantId: tenantId
     enableRbacAuthorization: true

@@ -15,6 +15,9 @@ import { appInsightsSettingsType } from '../types/settings.bicep'
 @description('Location to use for all resources')
 param location string
 
+@description('The tags to associate with the resource')
+param tags object
+
 @description('The settings for the App Insights instance that will be created')
 param appInsightsSettings appInsightsSettingsType
 
@@ -39,6 +42,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' existing = {
 resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2022-10-01' = {
   name: appInsightsSettings.logAnalyticsWorkspaceName
   location: location
+  tags: tags
   properties: {
     retentionInDays: appInsightsSettings.retentionInDays
     sku: {
@@ -53,6 +57,7 @@ resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2022-10
 resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
   name: appInsightsSettings.appInsightsName
   location: location
+  tags: tags
   kind: 'web'
   properties: {
     Application_Type: 'web'

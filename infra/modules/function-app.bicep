@@ -15,6 +15,9 @@ import { functionAppSettingsType } from '../types/settings.bicep'
 @description('Location to use for all resources')
 param location string
 
+@description('The tags to associate with the resource')
+param tags object
+
 @description('The settings for the Function App that will be created')
 param functionAppSettings functionAppSettingsType
 
@@ -64,6 +67,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-04-01' existing 
 resource functionAppIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
   name: functionAppSettings.identityName
   location: location
+  tags: tags
 }
 
 module assignRolesToFunctionAppIdentity 'assign-roles-to-principal.bicep' = {
@@ -81,6 +85,7 @@ module assignRolesToFunctionAppIdentity 'assign-roles-to-principal.bicep' = {
 resource hostingPlan 'Microsoft.Web/serverfarms@2021-03-01' = {
   name: functionAppSettings.appServicePlanName
   location: location
+  tags: tags
   kind: 'functionapp'
   sku: {
     name: 'Y1'
@@ -95,6 +100,7 @@ resource hostingPlan 'Microsoft.Web/serverfarms@2021-03-01' = {
 resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
   name: functionAppSettings.functionAppName
   location: location
+  tags: tags
   kind: 'functionapp'
   identity: {
     type: 'UserAssigned'

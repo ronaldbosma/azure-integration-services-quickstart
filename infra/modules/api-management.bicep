@@ -15,6 +15,9 @@ import { apiManagementSettingsType } from '../types/settings.bicep'
 @description('Location to use for all resources')
 param location string
 
+@description('The tags to associate with the resource')
+param tags object
+
 @description('The settings for the API Management Service that will be created')
 param apiManagementSettings apiManagementSettingsType
 
@@ -48,6 +51,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' existing = {
 resource apimIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
   name: apiManagementSettings.identityName
   location: location
+  tags: tags
 }
 
 module assignRolesToApimIdentity 'assign-roles-to-principal.bicep' = {
@@ -65,6 +69,7 @@ module assignRolesToApimIdentity 'assign-roles-to-principal.bicep' = {
 resource apiManagementService 'Microsoft.ApiManagement/service@2022-08-01' = {
   name: apiManagementSettings.serviceName
   location: location
+  tags: tags
   sku: {
     name: 'Consumption'
     capacity: 0

@@ -79,6 +79,9 @@ var keyVaultName = getResourceName('keyVault', environmentName, location, instan
 
 var storageAccountName = getResourceName('storageAccount', environmentName, location, instanceId)
 
+var tags = {
+  'azd-env-name': environmentName
+}
 
 //=============================================================================
 // Resources
@@ -87,6 +90,7 @@ var storageAccountName = getResourceName('storageAccount', environmentName, loca
 resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: resourceGroupName
   location: location
+  tags: tags
 }
 
 module keyVault 'modules/key-vault.bicep' = {
@@ -95,6 +99,7 @@ module keyVault 'modules/key-vault.bicep' = {
   params: {
     tenantId: tenantId
     location: location
+    tags: tags
     keyVaultName: keyVaultName
   }
 }
@@ -104,6 +109,7 @@ module storageAccount 'modules/storage-account.bicep' = {
   scope: resourceGroup
   params: {
     location: location
+    tags: tags
     storageAccountName: storageAccountName
   }
 }
@@ -113,6 +119,7 @@ module appInsights 'modules/app-insights.bicep' = {
   scope: resourceGroup
   params: {
     location: location
+    tags: tags
     appInsightsSettings: appInsightsSettings
     keyVaultName: keyVaultName
   }
@@ -126,6 +133,7 @@ module apiManagement 'modules/api-management.bicep' = {
   scope: resourceGroup
   params: {
     location: location
+    tags: tags
     apiManagementSettings: apiManagementSettings
     appInsightsName: appInsightsSettings.appInsightsName
     keyVaultName: keyVaultName
@@ -141,6 +149,7 @@ module functionApp 'modules/function-app.bicep' = {
   scope: resourceGroup
   params: {
     location: location
+    tags: tags
     functionAppSettings: functionAppSettings
     appInsightsName: appInsightsSettings.appInsightsName
     keyVaultName: keyVaultName
@@ -157,6 +166,7 @@ module logicApp 'modules/logic-app.bicep' = {
   scope: resourceGroup
   params: {
     location: location
+    tags: tags
     logicAppSettings: logicAppSettings
     appInsightsName: appInsightsSettings.appInsightsName
     keyVaultName: keyVaultName
