@@ -27,7 +27,7 @@ param location string
 @minLength(1)
 @maxLength(12) // The maximum length of the storage account name and key vault name is 24 characters. To prevent errors the environment name should be short.
 @description('The name of the environment to deploy to')
-param environment string
+param environmentName string
 
 @minLength(1)
 @maxLength(5) // The maximum length of the storage account name and key vault name is 24 characters. To prevent errors the instance name should be short.
@@ -43,41 +43,41 @@ param currentUserPrincipalId string = ''
 //=============================================================================
 
 // Use a generated instance ID in the resource names if no instance is provided
-var generatedInstanceId = substring(uniqueString(subscription().subscriptionId, environment, location), 0, 5)
+var generatedInstanceId = substring(uniqueString(subscription().subscriptionId, environmentName, location), 0, 5)
 var instanceId = (removeWhiteSpaces(instance) == '') ? generatedInstanceId : instance
 
-var resourceGroupName = getResourceName('resourceGroup', environment, location, instanceId)
+var resourceGroupName = getResourceName('resourceGroup', environmentName, location, instanceId)
 
 var apiManagementSettings = {
-  serviceName: getResourceName('apiManagement', environment, location, instanceId)
-  identityName: getResourceName('managedIdentity', environment, location, 'apim-${instanceId}')
+  serviceName: getResourceName('apiManagement', environmentName, location, instanceId)
+  identityName: getResourceName('managedIdentity', environmentName, location, 'apim-${instanceId}')
   publisherName: 'admin@example.org'
   publisherEmail: 'admin@example.org'
 }
 
 var appInsightsSettings = {
-  appInsightsName: getResourceName('applicationInsights', environment, location, instanceId)
-  logAnalyticsWorkspaceName: getResourceName('logAnalyticsWorkspace', environment, location, instanceId)
+  appInsightsName: getResourceName('applicationInsights', environmentName, location, instanceId)
+  logAnalyticsWorkspaceName: getResourceName('logAnalyticsWorkspace', environmentName, location, instanceId)
   retentionInDays: 30
 }
 
 var functionAppSettings = {
-  functionAppName: getResourceName('functionApp', environment, location, instanceId)
-  identityName: getResourceName('managedIdentity', environment, location, 'functionapp-${instanceId}')
-  appServicePlanName: getResourceName('appServicePlan', environment, location, 'functionapp-${instanceId}')
+  functionAppName: getResourceName('functionApp', environmentName, location, instanceId)
+  identityName: getResourceName('managedIdentity', environmentName, location, 'functionapp-${instanceId}')
+  appServicePlanName: getResourceName('appServicePlan', environmentName, location, 'functionapp-${instanceId}')
   netFrameworkVersion: 'v8.0'
 }
 
 var logicAppSettings = {
-  logicAppName: getResourceName('logicApp', environment, location, instanceId)
-  identityName: getResourceName('managedIdentity', environment, location, 'logicapp-${instanceId}')
-  appServicePlanName: getResourceName('appServicePlan', environment, location, 'logicapp-${instanceId}')
+  logicAppName: getResourceName('logicApp', environmentName, location, instanceId)
+  identityName: getResourceName('managedIdentity', environmentName, location, 'logicapp-${instanceId}')
+  appServicePlanName: getResourceName('appServicePlan', environmentName, location, 'logicapp-${instanceId}')
   netFrameworkVersion: 'v8.0'
 }
 
-var keyVaultName = getResourceName('keyVault', environment, location, instanceId)
+var keyVaultName = getResourceName('keyVault', environmentName, location, instanceId)
 
-var storageAccountName = getResourceName('storageAccount', environment, location, instanceId)
+var storageAccountName = getResourceName('storageAccount', environmentName, location, instanceId)
 
 
 //=============================================================================

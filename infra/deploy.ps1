@@ -37,7 +37,7 @@ az deployment sub create `
     --name "deploy-$Environment-$(Get-Date -Format "yyyyMMdd-HHmmss")" `
     --location $Location `
     --template-file './main.bicep' `
-    --parameters environment=$Environment `
+    --parameters environmentName=$Environment `
                  location=$Location `
                  instance=$Instance `
                  currentUserPrincipalId=$CurrentUserPrincipalId `
