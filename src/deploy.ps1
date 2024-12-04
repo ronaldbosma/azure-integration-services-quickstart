@@ -1,8 +1,7 @@
 param (
-    [ValidateLength(5,12)][string]$Workload = "aisquick", # To prevent errors, we keep it short
-    [string]$Environment = "demo",
+    [ValidateLength(5,15)][string]$Environment = "aisquick-demo",
     [string]$Location = "norwayeast",
-    [string]$Instance = "01",
+    [ValidateLength(0,5)][string]$Instance = "01",
     [string]$CurrentUserPrincipalId = $null
 )
 
@@ -35,12 +34,11 @@ Write-Host "Start deployment at: $(Get-Date -Format "dd-MM-yyyy HH:mm:ss")"
 
 # Deploy the resources with Bicep
 az deployment sub create `
-    --name "deploy-$Workload-$(Get-Date -Format "yyyyMMdd-HHmmss")" `
+    --name "deploy-$Environment-$(Get-Date -Format "yyyyMMdd-HHmmss")" `
     --location $Location `
     --template-file './main.bicep' `
-    --parameters location=$Location `
-                 workload=$Workload `
-                 environment=$Environment `
+    --parameters environment=$Environment `
+                 location=$Location `
                  instance=$Instance `
                  currentUserPrincipalId=$CurrentUserPrincipalId `
     --verbose

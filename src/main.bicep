@@ -23,21 +23,12 @@ param tenantId string = subscription().tenantId
 @description('Location to use for all resources')
 param location string
 
-@description('The name of the workload to deploy')
-@maxLength(12) // The maximum length of the storage account name and key vault name is 24 characters. To prevent errors the workload name should be short (about 12 characters).
-param workload string
-
 @description('The name of the environment to deploy to')
-@allowed([
-  'demo'
-  'dev'
-  'tst'
-  'acc'
-  'prd'
-])
+@maxLength(12) // The maximum length of the storage account name and key vault name is 24 characters. To prevent errors the environment name should be short.
 param environment string
 
 @description('The instance number to will be added to the deployed resources names to make them unique')
+@maxLength(5) // The maximum length of the storage account name and key vault name is 24 characters. To prevent errors the instance name should be short.
 param instance string
 
 @description('The principal ID of the user that will be assigned roles to the Key Vault and Storage Account.')
@@ -48,52 +39,52 @@ param currentUserPrincipalId string
 // Variables
 //=============================================================================
 
-var resourceGroupName = getResourceName('resourceGroup', workload, environment, location, instance)
+var resourceGroupName = getResourceName('resourceGroup', environment, location, instance)
 
 var apiManagementSettings = {
-  serviceName: getResourceName('apiManagement', workload, environment, location, instance)
-  identityName: getResourceName('managedIdentity', workload, environment, location, 'apim-${instance}')
+  serviceName: getResourceName('apiManagement', environment, location, instance)
+  identityName: getResourceName('managedIdentity', environment, location, 'apim-${instance}')
   publisherName: 'admin@example.org'
   publisherEmail: 'admin@example.org'
 }
 
 var appInsightsSettings = {
-  appInsightsName: getResourceName('applicationInsights', workload, environment, location, instance)
-  logAnalyticsWorkspaceName: getResourceName('logAnalyticsWorkspace', workload, environment, location, instance)
+  appInsightsName: getResourceName('applicationInsights', environment, location, instance)
+  logAnalyticsWorkspaceName: getResourceName('logAnalyticsWorkspace', environment, location, instance)
   retentionInDays: 30
 }
 
 var functionAppSettings = {
-  functionAppName: getResourceName('functionApp', workload, environment, location, instance)
-  identityName: getResourceName('managedIdentity', workload, environment, location, 'functionapp-${instance}')
-  appServicePlanName: getResourceName('appServicePlan', workload, environment, location, 'functionapp-${instance}')
+  functionAppName: getResourceName('functionApp', environment, location, instance)
+  identityName: getResourceName('managedIdentity', environment, location, 'functionapp-${instance}')
+  appServicePlanName: getResourceName('appServicePlan', environment, location, 'functionapp-${instance}')
   netFrameworkVersion: 'v8.0'
 }
 
 var logicAppSettings = {
-  logicAppName: getResourceName('logicApp', workload, environment, location, instance)
-  identityName: getResourceName('managedIdentity', workload, environment, location, 'logicapp-${instance}')
-  appServicePlanName: getResourceName('appServicePlan', workload, environment, location, 'logicapp-${instance}')
+  logicAppName: getResourceName('logicApp', environment, location, instance)
+  identityName: getResourceName('managedIdentity', environment, location, 'logicapp-${instance}')
+  appServicePlanName: getResourceName('appServicePlan', environment, location, 'logicapp-${instance}')
   netFrameworkVersion: 'v8.0'
 }
 
-var keyVaultName = getResourceName('keyVault', workload, environment, location, instance)
+var keyVaultName = getResourceName('keyVault', environment, location, instance)
 
-var storageAccountName = getResourceName('storageAccount', workload, environment, location, instance)
+var storageAccountName = getResourceName('storageAccount', environment, location, instance)
 
 
 //=============================================================================
 // Resources
 //=============================================================================
 
-resource workloadResourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
+resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: resourceGroupName
   location: location
 }
 
 module keyVault 'modules/key-vault.bicep' = {
   name: 'keyVault'
-  scope: workloadResourceGroup
+  scope: resourceGroup
   params: {
     tenantId: tenantId
     location: location
@@ -103,7 +94,7 @@ module keyVault 'modules/key-vault.bicep' = {
 
 module storageAccount 'modules/storage-account.bicep' = {
   name: 'storageAccount'
-  scope: workloadResourceGroup
+  scope: resourceGroup
   params: {
     location: location
     storageAccountName: storageAccountName
@@ -112,7 +103,7 @@ module storageAccount 'modules/storage-account.bicep' = {
 
 module appInsights 'modules/app-insights.bicep' = {
   name: 'appInsights'
-  scope: workloadResourceGroup
+  scope: resourceGroup
   params: {
     location: location
     appInsightsSettings: appInsightsSettings
@@ -125,7 +116,7 @@ module appInsights 'modules/app-insights.bicep' = {
 
 module apiManagement 'modules/api-management.bicep' = {
   name: 'apiManagement'
-  scope: workloadResourceGroup
+  scope: resourceGroup
   params: {
     location: location
     apiManagementSettings: apiManagementSettings
@@ -140,7 +131,7 @@ module apiManagement 'modules/api-management.bicep' = {
 
 module functionApp 'modules/function-app.bicep' = {
   name: 'functionApp'
-  scope: workloadResourceGroup
+  scope: resourceGroup
   params: {
     location: location
     functionAppSettings: functionAppSettings
@@ -156,7 +147,7 @@ module functionApp 'modules/function-app.bicep' = {
 
 module logicApp 'modules/logic-app.bicep' = {
   name: 'logicApp'
-  scope: workloadResourceGroup
+  scope: resourceGroup
   params: {
     location: location
     logicAppSettings: logicAppSettings
@@ -172,7 +163,7 @@ module logicApp 'modules/logic-app.bicep' = {
 
 module assignRolesToCurrentUser 'modules/assign-roles-to-principal.bicep' = if (currentUserPrincipalId != null) {
   name: 'assignRolesToCurrentUser'
-  scope: workloadResourceGroup
+  scope: resourceGroup
   params: {
     principalId: currentUserPrincipalId
     principalType: 'User'

@@ -2,18 +2,16 @@
 // Naming Conventions for Azure Resources
 //=============================================================================
 
-// Get resource name based on the naming convention taken from the Cloud Adoption Framework.
-// Convention: <resourceType>-<workload>-<environment>-<region>-<instance>
-// Source: https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-naming
-// Blog about these functions: https://ronaldbosma.github.io/blog/2024/06/05/apply-azure-naming-convention-using-bicep-functions/
+// Get resource name based on the convention: <resourceType>-<environment>-<region>-<instance>
+// Functions based on: https://ronaldbosma.github.io/blog/2024/06/05/apply-azure-naming-convention-using-bicep-functions/
 @export()
-func getResourceName(resourceType string, workload string, environment string, region string, instance string) string => 
+func getResourceName(resourceType string, environment string, region string, instance string) string => 
   shouldBeShortened(resourceType) 
-    ? getShortenedResourceName(resourceType, workload, environment, region, instance)
-    : getResourceNameByConvention(resourceType, workload, environment, region, instance)
+    ? getShortenedResourceName(resourceType, environment, region, instance)
+    : getResourceNameByConvention(resourceType, environment, region, instance)
 
-func getResourceNameByConvention(resourceType string, workload string, environment string, region string, instance string) string => 
-  sanitizeResourceName('${getPrefix(resourceType)}-${workload}-${abbreviateEnvironment(environment)}-${abbreviateRegion(region)}-${instance}')
+func getResourceNameByConvention(resourceType string, environment string, region string, instance string) string => 
+  sanitizeResourceName('${getPrefix(resourceType)}-${environment}-${abbreviateRegion(region)}-${instance}')
 
 
 //=============================================================================
@@ -29,14 +27,14 @@ func getResourcesTypesToShorten() array => [
   'virtualMachine'  // Has max length of 15 for Windows
 ]
 
-func getShortenedResourceName(resourceType string, workload string, environment string, region string, instance string) string =>
+func getShortenedResourceName(resourceType string, environment string, region string, instance string) string =>
   resourceType == 'virtualMachine'
-    ? getVirtualMachineName(workload, environment, region, instance)
-    : shortenString(getResourceNameByConvention(resourceType, workload, environment, region, instance))
+    ? getVirtualMachineName(environment, region, instance)
+    : shortenString(getResourceNameByConvention(resourceType, environment, region, instance))
 
 // Virtual machines have a max length of 15 characters so we use uniqueString to generate a short unique name
-func getVirtualMachineName(workload string, environment string, region string, instance string) string =>
-  'vm${substring(uniqueString(workload, environment, region), 0, 13-length(shortenString(instance)))}${shortenString(instance)}'
+func getVirtualMachineName(environment string, region string, instance string) string =>
+  'vm${substring(uniqueString(environment, region), 0, 13-length(shortenString(instance)))}${shortenString(instance)}'
 
 // Shorten the string by removing hyphens and sanitizing the resource name.
 func shortenString(value string) string => removeHyphens(sanitizeResourceName(value))
@@ -104,26 +102,6 @@ func getPrefixMap() object => {
   webtest: 'webtest'
 }
 
-
-//=============================================================================
-// Environments
-//=============================================================================
-
-func abbreviateEnvironment(environment string) string => getEnvironmentMap()[toLower(environment)]
-
-// By using a map for the environments, we can keep the names short but also only allow a specific set of values.
-func getEnvironmentMap() object => {
-  demo: 'demo'
-  dev: 'dev'
-  development: 'dev'
-  tst: 'tst'
-  test: 'tst'
-  acc: 'acc'
-  acceptance: 'acc'
-  prd: 'prd'
-  prod: 'prd'
-  production: 'prd'
-}
 
 //=============================================================================
 // Regions
