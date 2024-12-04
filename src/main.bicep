@@ -9,7 +9,7 @@ targetScope = 'subscription'
 // Imports
 //=============================================================================
 
-import { getResourceName } from './functions/naming-conventions.bicep'
+import { getResourceName, removeWhiteSpaces } from './functions/naming-conventions.bicep'
 import * as settings from './types/settings.bicep'
 
 
@@ -27,50 +27,54 @@ param location string
 @maxLength(12) // The maximum length of the storage account name and key vault name is 24 characters. To prevent errors the environment name should be short.
 param environment string
 
-@description('The instance number to will be added to the deployed resources names to make them unique')
+@description('The instance that will be added to the deployed resources names to make them unique. Will be generated if not provided.')
 @maxLength(5) // The maximum length of the storage account name and key vault name is 24 characters. To prevent errors the instance name should be short.
-param instance string
+param instance string = ''
 
 @description('The principal ID of the user that will be assigned roles to the Key Vault and Storage Account.')
-param currentUserPrincipalId string
+param currentUserPrincipalId string = ''
 
 
 //=============================================================================
 // Variables
 //=============================================================================
 
-var resourceGroupName = getResourceName('resourceGroup', environment, location, instance)
+// Use a generated instance ID in the resource names if no instance is provided
+var generatedInstanceId = substring(uniqueString(subscription().subscriptionId, environment, location), 0, 5)
+var instanceId = (removeWhiteSpaces(instance) == '') ? generatedInstanceId : instance
+
+var resourceGroupName = getResourceName('resourceGroup', environment, location, instanceId)
 
 var apiManagementSettings = {
-  serviceName: getResourceName('apiManagement', environment, location, instance)
-  identityName: getResourceName('managedIdentity', environment, location, 'apim-${instance}')
+  serviceName: getResourceName('apiManagement', environment, location, instanceId)
+  identityName: getResourceName('managedIdentity', environment, location, 'apim-${instanceId}')
   publisherName: 'admin@example.org'
   publisherEmail: 'admin@example.org'
 }
 
 var appInsightsSettings = {
-  appInsightsName: getResourceName('applicationInsights', environment, location, instance)
-  logAnalyticsWorkspaceName: getResourceName('logAnalyticsWorkspace', environment, location, instance)
+  appInsightsName: getResourceName('applicationInsights', environment, location, instanceId)
+  logAnalyticsWorkspaceName: getResourceName('logAnalyticsWorkspace', environment, location, instanceId)
   retentionInDays: 30
 }
 
 var functionAppSettings = {
-  functionAppName: getResourceName('functionApp', environment, location, instance)
-  identityName: getResourceName('managedIdentity', environment, location, 'functionapp-${instance}')
-  appServicePlanName: getResourceName('appServicePlan', environment, location, 'functionapp-${instance}')
+  functionAppName: getResourceName('functionApp', environment, location, instanceId)
+  identityName: getResourceName('managedIdentity', environment, location, 'functionapp-${instanceId}')
+  appServicePlanName: getResourceName('appServicePlan', environment, location, 'functionapp-${instanceId}')
   netFrameworkVersion: 'v8.0'
 }
 
 var logicAppSettings = {
-  logicAppName: getResourceName('logicApp', environment, location, instance)
-  identityName: getResourceName('managedIdentity', environment, location, 'logicapp-${instance}')
-  appServicePlanName: getResourceName('appServicePlan', environment, location, 'logicapp-${instance}')
+  logicAppName: getResourceName('logicApp', environment, location, instanceId)
+  identityName: getResourceName('managedIdentity', environment, location, 'logicapp-${instanceId}')
+  appServicePlanName: getResourceName('appServicePlan', environment, location, 'logicapp-${instanceId}')
   netFrameworkVersion: 'v8.0'
 }
 
-var keyVaultName = getResourceName('keyVault', environment, location, instance)
+var keyVaultName = getResourceName('keyVault', environment, location, instanceId)
 
-var storageAccountName = getResourceName('storageAccount', environment, location, instance)
+var storageAccountName = getResourceName('storageAccount', environment, location, instanceId)
 
 
 //=============================================================================
@@ -161,7 +165,7 @@ module logicApp 'modules/logic-app.bicep' = {
   ]
 }
 
-module assignRolesToCurrentUser 'modules/assign-roles-to-principal.bicep' = if (currentUserPrincipalId != null) {
+module assignRolesToCurrentUser 'modules/assign-roles-to-principal.bicep' = if (currentUserPrincipalId != '') {
   name: 'assignRolesToCurrentUser'
   scope: resourceGroup
   params: {

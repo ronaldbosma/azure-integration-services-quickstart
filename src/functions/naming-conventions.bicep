@@ -52,6 +52,7 @@ func removeCommas(value string) string => replace(value, ',', '')
 func removeDots(value string) string => replace(value, '.', '')
 func removeSemicolons(value string) string => replace(value, ';', '')
 func removeUnderscores(value string) string => replace(value, '_', '')
+@export()
 func removeWhiteSpaces(value string) string => replace(value, ' ', '')
 
 
