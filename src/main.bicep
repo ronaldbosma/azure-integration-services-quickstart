@@ -20,15 +20,18 @@ import * as settings from './types/settings.bicep'
 @description('Specifies the Azure Active Directory tenant ID that should be used for authenticating requests to the key vault.')
 param tenantId string = subscription().tenantId
 
+@minLength(1)
 @description('Location to use for all resources')
 param location string
 
-@description('The name of the environment to deploy to')
+@minLength(1)
 @maxLength(12) // The maximum length of the storage account name and key vault name is 24 characters. To prevent errors the environment name should be short.
+@description('The name of the environment to deploy to')
 param environment string
 
-@description('The instance that will be added to the deployed resources names to make them unique. Will be generated if not provided.')
+@minLength(1)
 @maxLength(5) // The maximum length of the storage account name and key vault name is 24 characters. To prevent errors the instance name should be short.
+@description('The instance that will be added to the deployed resources names to make them unique. Will be generated if not provided.')
 param instance string = ''
 
 @description('The principal ID of the user that will be assigned roles to the Key Vault and Storage Account.')
