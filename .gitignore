@@ -398,8 +398,8 @@ FodyWeavers.xsd
 *.sln.iml
 
 # Local files
-src/deploy.local.ps1
-src/test.local.http
+deploy.local.ps1
+test.local.http
 
 # Ignore .azure folder (used by azd)
 .azure
