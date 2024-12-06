@@ -40,6 +40,21 @@ test testPrefixFunctionApp 'naming-conventions.test-module.bicep' = {
 
 
 //=============================================================================
+// Environment Names
+//=============================================================================
+
+test testEnvironmentName 'naming-conventions.test-module.bicep' = {
+  params: {
+    resourceType: 'resourceGroup'
+    environment: 'sample-environment'
+    region: 'norwayeast'
+    instance: '12345'
+    expectedResult: 'rg-sample-environment-nwe-12345'
+  }
+}
+
+
+//=============================================================================
 // Locations
 //=============================================================================
 
