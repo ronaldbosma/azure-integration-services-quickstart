@@ -97,3 +97,48 @@ test testInstanceAbcde 'naming-conventions.test-module.bicep' = {
     expectedResult: 'rg-aisquick-nwe-abcde'
   }
 }
+
+
+//=============================================================================
+// Shortened Names
+//=============================================================================
+
+test testShortenedStorageAccountName 'naming-conventions.test-module.bicep' = {
+  params: {
+    resourceType: 'storageAccount'
+    environment: 'aisquick'
+    region: 'norwayeast'
+    instance: 'abcde'
+    expectedResult: 'staisquicknweabcde'
+  }
+}
+
+test testShortenedKeyVaultName 'naming-conventions.test-module.bicep' = {
+  params: {
+    resourceType: 'keyVault'
+    environment: 'aisquick'
+    region: 'norwayeast'
+    instance: 'abcde'
+    expectedResult: 'kvaisquicknweabcde'
+  }
+}
+
+test testStorageAccountNameWhenEnvironmentNameIsTooLong 'naming-conventions.test-module.bicep' = {
+  params: {
+    resourceType: 'storageAccount'
+    environment: 'thisenvironmentnameistoolong'
+    region: 'eastus2'
+    instance: 'abcde'
+    expectedResult: 'stthisenvironmeus2abcde'
+  }
+}
+
+test testKeyVaultNameWhenEnvironmentNameIsTooLong 'naming-conventions.test-module.bicep' = {
+  params: {
+    resourceType: 'keyVault'
+    environment: 'thisenvironmentnameistoolong'
+    region: 'eastus2'
+    instance: 'abcde'
+    expectedResult: 'kvthisenvironmeus2abcde'
+  }
+}

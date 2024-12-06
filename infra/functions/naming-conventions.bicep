@@ -30,11 +30,14 @@ func getResourcesTypesToShorten() array => [
 func getShortenedResourceName(resourceType string, environment string, region string, instance string) string =>
   resourceType == 'virtualMachine'
     ? getVirtualMachineName(environment, region, instance)
-    : shortenString(getResourceNameByConvention(resourceType, environment, region, instance))
+    : shortenString(getResourceNameByConvention(resourceType, shortenEnvironmentName(environment), region, instance))
 
 // Virtual machines have a max length of 15 characters so we use uniqueString to generate a short unique name
 func getVirtualMachineName(environment string, region string, instance string) string =>
   'vm${substring(uniqueString(environment, region), 0, 13-length(shortenString(instance)))}${shortenString(instance)}'
+
+// Shorten the environment name to max 12 characters.
+func shortenEnvironmentName(value string) string => substring(shortenString(value), 0, min(12, length(shortenString(value))))
 
 // Shorten the string by removing hyphens and sanitizing the resource name.
 func shortenString(value string) string => removeHyphens(sanitizeResourceName(value))
