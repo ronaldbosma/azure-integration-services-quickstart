@@ -37,3 +37,38 @@ test testPrefixFunctionApp 'naming-conventions.test-module.bicep' = {
     expectedResult: 'func-aisquick-nwe-12345'
   }
 }
+
+
+//=============================================================================
+// Locations
+//=============================================================================
+
+test testLocationNorwayEast 'naming-conventions.test-module.bicep' = {
+  params: {
+    resourceType: 'resourceGroup'
+    environment: 'aisquick'
+    region: 'norwayeast'
+    instance: '12345'
+    expectedResult: 'rg-aisquick-nwe-12345'
+  }
+}
+
+test testLocationSwedenCentral 'naming-conventions.test-module.bicep' = {
+  params: {
+    resourceType: 'resourceGroup'
+    environment: 'aisquick'
+    region: 'swedencentral'
+    instance: '12345'
+    expectedResult: 'rg-aisquick-sdc-12345'
+  }
+}
+
+test testLocationEastUS2 'naming-conventions.test-module.bicep' = {
+  params: {
+    resourceType: 'resourceGroup'
+    environment: 'aisquick'
+    region: 'eastus2'
+    instance: '12345'
+    expectedResult: 'rg-aisquick-eus2-12345'
+  }
+}
