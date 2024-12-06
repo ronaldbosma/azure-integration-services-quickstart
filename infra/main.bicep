@@ -96,6 +96,7 @@ module keyVault 'modules/services/key-vault.bicep' = {
   name: 'keyVault'
   scope: resourceGroup
   params: {
+    location: location
     tags: tags
     keyVaultName: keyVaultName
   }
@@ -105,6 +106,7 @@ module storageAccount 'modules/services/storage-account.bicep' = {
   name: 'storageAccount'
   scope: resourceGroup
   params: {
+    location: location
     tags: tags
     storageAccountName: storageAccountName
   }
@@ -114,6 +116,7 @@ module appInsights 'modules/services/app-insights.bicep' = {
   name: 'appInsights'
   scope: resourceGroup
   params: {
+    location: location
     tags: tags
     appInsightsSettings: appInsightsSettings
     keyVaultName: keyVaultName
@@ -127,6 +130,7 @@ module apiManagement 'modules/services/api-management.bicep' = {
   name: 'apiManagement'
   scope: resourceGroup
   params: {
+    location: location
     tags: tags
     apiManagementSettings: apiManagementSettings
     appInsightsName: appInsightsSettings.appInsightsName
@@ -142,6 +146,7 @@ module functionApp 'modules/services/function-app.bicep' = {
   name: 'functionApp'
   scope: resourceGroup
   params: {
+    location: location
     tags: tags
     functionAppSettings: functionAppSettings
     appInsightsName: appInsightsSettings.appInsightsName
@@ -158,6 +163,7 @@ module logicApp 'modules/services/logic-app.bicep' = {
   name: 'logicApp'
   scope: resourceGroup
   params: {
+    location: location
     tags: tags
     logicAppSettings: logicAppSettings
     appInsightsName: appInsightsSettings.appInsightsName

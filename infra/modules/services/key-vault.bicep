@@ -10,7 +10,7 @@
 param tenantId string = subscription().tenantId
 
 @description('Location to use for all resources')
-param location string = resourceGroup().location
+param location string
 
 @description('The tags to associate with the resource')
 param tags object
