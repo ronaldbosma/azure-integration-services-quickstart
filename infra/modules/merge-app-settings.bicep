@@ -21,7 +21,7 @@ param newAppSettings object
 // Existing resources
 //=============================================================================
 
-resource site 'Microsoft.Web/sites@2023-12-01' existing = {
+resource site 'Microsoft.Web/sites@2024-04-01' existing = {
   name: siteName
 }
 
@@ -29,7 +29,7 @@ resource site 'Microsoft.Web/sites@2023-12-01' existing = {
 // Resources
 //=============================================================================
 
-resource siteAppSettings 'Microsoft.Web/sites/config@2023-12-01' = {
+resource siteAppSettings 'Microsoft.Web/sites/config@2024-04-01' = {
   parent: site
   name: 'appsettings'
   properties: union(currentAppSettings, newAppSettings)

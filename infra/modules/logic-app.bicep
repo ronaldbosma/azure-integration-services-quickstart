@@ -56,7 +56,7 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
   name: appInsightsName
 }
 
-resource storageAccount 'Microsoft.Storage/storageAccounts@2023-04-01' existing = {
+resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' existing = {
   name: storageAccountName
 }
 
@@ -84,7 +84,7 @@ module assignRolesToLogicAppIdentity 'assign-roles-to-principal.bicep' = {
 
 // Create the Application Service Plan for the Logic App
 
-resource hostingPlan 'Microsoft.Web/serverfarms@2021-03-01' = {
+resource hostingPlan 'Microsoft.Web/serverfarms@2024-04-01' = {
   name: logicAppSettings.appServicePlanName
   location: location
   tags: tags
@@ -101,7 +101,7 @@ resource hostingPlan 'Microsoft.Web/serverfarms@2021-03-01' = {
 
 // Create the Logic App
 
-resource logicApp 'Microsoft.Web/sites@2021-03-01' = {
+resource logicApp 'Microsoft.Web/sites@2024-04-01' = {
   name: logicAppSettings.logicAppName
   location: location
   tags: tags

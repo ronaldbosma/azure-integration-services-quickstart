@@ -89,12 +89,12 @@ resource apiManagementService 'Microsoft.ApiManagement/service@2022-08-01' = {
 
 // Get reference to secret containing the App Insights instrumentation key and store the secret URI in a named value
 
-resource appInsightsInstrumentationKeySecret 'Microsoft.KeyVault/vaults/secrets@2023-02-01' existing = {
+resource appInsightsInstrumentationKeySecret 'Microsoft.KeyVault/vaults/secrets@2023-07-01' existing = {
   name: 'applicationinsights-instrumentationkey'
   parent: keyVault
 }
 
-resource appInsightsInstrumentationKeyNamedValue 'Microsoft.ApiManagement/service/namedValues@2020-06-01-preview' = {
+resource appInsightsInstrumentationKeyNamedValue 'Microsoft.ApiManagement/service/namedValues@2022-08-01' = {
   name: 'appin-instrumentation-key'
   parent: apiManagementService
   properties: {

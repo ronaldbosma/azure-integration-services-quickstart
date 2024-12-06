@@ -39,7 +39,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' existing = {
 
 // Log Analytics Workspace
 
-resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2022-10-01' = {
+resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
   name: appInsightsSettings.logAnalyticsWorkspaceName
   location: location
   tags: tags
@@ -71,7 +71,7 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
 
 // Store secrets in Key Vault
 
-resource appInsightsInstrumentationKeySecret 'Microsoft.KeyVault/vaults/secrets@2023-02-01' = {
+resource appInsightsInstrumentationKeySecret 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
   name: 'applicationinsights-instrumentationkey'
   parent: keyVault
   properties: {
@@ -79,7 +79,7 @@ resource appInsightsInstrumentationKeySecret 'Microsoft.KeyVault/vaults/secrets@
   }
 }
 
-resource appInsightsConnectionStringSecret 'Microsoft.KeyVault/vaults/secrets@2023-02-01' = {
+resource appInsightsConnectionStringSecret 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
   name: 'applicationinsights-connectionstring'
   parent: keyVault
   properties: {

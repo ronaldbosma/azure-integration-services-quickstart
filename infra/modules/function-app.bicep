@@ -54,7 +54,7 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
   name: appInsightsName
 }
 
-resource storageAccount 'Microsoft.Storage/storageAccounts@2023-04-01' existing = {
+resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' existing = {
   name: storageAccountName
 }
 
@@ -82,7 +82,7 @@ module assignRolesToFunctionAppIdentity 'assign-roles-to-principal.bicep' = {
 
 // Create the Application Service Plan for the Function App
 
-resource hostingPlan 'Microsoft.Web/serverfarms@2021-03-01' = {
+resource hostingPlan 'Microsoft.Web/serverfarms@2024-04-01' = {
   name: functionAppSettings.appServicePlanName
   location: location
   tags: tags
@@ -97,7 +97,7 @@ resource hostingPlan 'Microsoft.Web/serverfarms@2021-03-01' = {
 
 // Create the Function App
 
-resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
+resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
   name: functionAppSettings.functionAppName
   location: location
   tags: tags
