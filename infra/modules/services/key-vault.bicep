@@ -32,8 +32,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' = {
   properties: {
     tenantId: tenantId
     enableRbacAuthorization: true
-    enableSoftDelete: true
-    softDeleteRetentionInDays: 90
+    enableSoftDelete: false // Disable soft delete so cleanup is easier and faster
     sku: {
       name: 'standard'
       family: 'A'
