@@ -35,3 +35,30 @@ This template is designed to simplify and accelerate the deployment of Azure Int
 To minimize cost, the cheapest possible SKUs are used for each service, and virtual networks, application gateways and other security measures typically implemented in production scenarios are not included.
 
 **Note:** This template does not deploy any APIs, functions, or workflows. Users can add these after deployment based on their requirements.
+
+
+## Know Errors
+
+### API Management deployment failed because service already exists in soft-deleted state
+
+If you've previously deployed this template and deleted the resources, you may encounter the following error when redeploying the template. This error occurs because the API Management service is in a soft-deleted state and needs to be purged before you can create a new service with the same name.
+
+```
+{
+    "code": "DeploymentFailed",
+    "target": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-aisquick-dev-nwe-00001/providers/Microsoft.Resources/deployments/apiManagement",
+    "message": "At least one resource deployment operation failed. Please list deployment operations for details. Please see https://aka.ms/arm-deployment-operations for usage details.",
+    "details": [
+        {
+            "code": "ServiceAlreadyExistsInSoftDeletedState",
+            "message": "Api service apim-aisquick-dev-nwe-00001 was soft-deleted. In order to create the new service with the same name, you have to either undelete the service or purge it. See https://aka.ms/apimsoftdelete."
+        }
+    ]
+}
+```
+
+Use the [az apim deletedservice list](https://learn.microsoft.com/en-us/cli/azure/apim/deletedservice?view=azure-cli-latest#az-apim-deletedservice-list) Azure CLI command to list all deleted API Management services in your subscription. Locate the service that is in a soft-deleted state and purge it using the [purge](https://learn.microsoft.com/en-us/cli/azure/apim/deletedservice?view=azure-cli-latest#az-apim-deletedservice-purge) command. See the following example:
+
+```
+az apim deletedservice purge --location "norwayeast" --service-name "apim-aisquick-dev-nwe-00001"
+```
