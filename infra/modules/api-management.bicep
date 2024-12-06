@@ -46,7 +46,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' existing = {
 // Resources
 //=============================================================================
 
-// Create API Management identity and assign roles to it
+// Create API Management user-assigned identity and assign roles to it
 
 resource apimIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
   name: apiManagementSettings.identityName
@@ -54,8 +54,8 @@ resource apimIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-
   tags: tags
 }
 
-module assignRolesToApimIdentity 'assign-roles-to-principal.bicep' = {
-  name: 'assignRolesToApimIdentity'
+module assignRolesToApimUserAssignedIdentity 'assign-roles-to-principal.bicep' = {
+  name: 'assignRolesToApimUserAssignedIdentity'
   params: {
     principalId: apimIdentity.properties.principalId
     keyVaultName: keyVaultName
@@ -79,10 +79,22 @@ resource apiManagementService 'Microsoft.ApiManagement/service@2022-08-01' = {
     publisherEmail: apiManagementSettings.publisherEmail
   }
   identity: {
-    type: 'UserAssigned'
+    type: 'SystemAssigned, UserAssigned'
     userAssignedIdentities: {
       '${apimIdentity.id}': {}
     }
+  }
+}
+
+
+// Assign roles to system-assigned identity of API Management
+
+module assignRolesToApimSystemAssignedIdentity 'assign-roles-to-principal.bicep' = {
+  name: 'assignRolesToApimSystemAssignedIdentity'
+  params: {
+    principalId: apiManagementService.identity.principalId
+    keyVaultName: keyVaultName
+    storageAccountName: storageAccountName
   }
 }
 

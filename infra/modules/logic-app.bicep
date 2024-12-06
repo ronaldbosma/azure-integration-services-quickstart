@@ -72,8 +72,8 @@ resource logicAppIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023
   tags: tags
 }
 
-module assignRolesToLogicAppIdentity 'assign-roles-to-principal.bicep' = {
-  name: 'assignRolesToLogicAppIdentity'
+module assignRolesToLogicAppUserAssignedIdentity 'assign-roles-to-principal.bicep' = {
+  name: 'assignRolesToLogicAppUserAssignedIdentity'
   params: {
     principalId: logicAppIdentity.properties.principalId
     keyVaultName: keyVaultName
@@ -107,7 +107,7 @@ resource logicApp 'Microsoft.Web/sites@2024-04-01' = {
   tags: tags
   kind: 'functionapp,workflowapp'
   identity: {
-    type: 'UserAssigned'
+    type: 'SystemAssigned, UserAssigned'
     userAssignedIdentities: {
       '${logicAppIdentity.id}': {}
     }
@@ -136,5 +136,17 @@ module setLogicAppSettings 'merge-app-settings.bicep' = {
     siteName: logicAppSettings.logicAppName
     currentAppSettings: list('${logicApp.id}/config/appsettings', logicApp.apiVersion).properties
     newAppSettings: appSettings
+  }
+}
+
+
+// Assign roles to system-assigned identity of Logic App
+
+module assignRolesToLogicAppSystemAssignedIdentity 'assign-roles-to-principal.bicep' = {
+  name: 'assignRolesToLogicAppSystemAssignedIdentity'
+  params: {
+    principalId: logicApp.identity.principalId
+    keyVaultName: keyVaultName
+    storageAccountName: storageAccountName
   }
 }

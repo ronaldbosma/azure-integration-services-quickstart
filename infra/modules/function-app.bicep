@@ -70,8 +70,8 @@ resource functionAppIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2
   tags: tags
 }
 
-module assignRolesToFunctionAppIdentity 'assign-roles-to-principal.bicep' = {
-  name: 'assignRolesToFunctionAppIdentity'
+module assignRolesToFunctionAppUserAssignedIdentity 'assign-roles-to-principal.bicep' = {
+  name: 'assignRolesToFunctionAppUserAssignedIdentity'
   params: {
     principalId: functionAppIdentity.properties.principalId
     keyVaultName: keyVaultName
@@ -103,7 +103,7 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
   tags: tags
   kind: 'functionapp'
   identity: {
-    type: 'UserAssigned'
+    type: 'SystemAssigned, UserAssigned'
     userAssignedIdentities: {
       '${functionAppIdentity.id}': {}
     }
@@ -131,5 +131,17 @@ module setFunctionAppSettings 'merge-app-settings.bicep' = {
     siteName: functionAppSettings.functionAppName
     currentAppSettings: list('${functionApp.id}/config/appsettings', functionApp.apiVersion).properties
     newAppSettings: appSettings
+  }
+}
+
+
+// Assign roles to system-assigned identity of Function App
+
+module assignRolesToFunctionAppSystemAssignedIdentity 'assign-roles-to-principal.bicep' = {
+  name: 'assignRolesToFunctionAppSystemAssignedIdentity'
+  params: {
+    principalId: functionApp.identity.principalId
+    keyVaultName: keyVaultName
+    storageAccountName: storageAccountName
   }
 }
