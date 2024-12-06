@@ -91,7 +91,7 @@ module assignRolesToLogicAppUserAssignedIdentity '../shared/assign-roles-to-prin
 resource hostingPlan 'Microsoft.Web/serverfarms@2024-04-01' = {
   name: logicAppSettings.appServicePlanName
   location: location
-  tags: serviceTags
+  tags: tags
   kind: 'elastic'
   sku: {
     name: 'WS1'
@@ -108,7 +108,7 @@ resource hostingPlan 'Microsoft.Web/serverfarms@2024-04-01' = {
 resource logicApp 'Microsoft.Web/sites@2024-04-01' = {
   name: logicAppSettings.logicAppName
   location: location
-  tags: tags
+  tags: serviceTags
   kind: 'functionapp,workflowapp'
   identity: {
     type: 'SystemAssigned, UserAssigned'
