@@ -12,6 +12,9 @@ param principalId string
 @description('The type of the principal that will be assigned the roles')
 param principalType string = 'ServicePrincipal'
 
+@description('The flag to determine if the principal is an admin or not')
+param isAdmin bool = false
+
 @description('The name of the Key Vault on which to assign roles')
 param keyVaultName string
 
@@ -22,9 +25,9 @@ param storageAccountName string
 // Variables
 //=============================================================================
 
-var keyVaultRoles = [
-  '4633458b-17de-408a-b874-0445c86b69e6'  // Key Vault Secrets User
-]
+var keyVaultRole = isAdmin 
+  ? '00482a5a-887f-4fb3-b363-3b7fe8e74483' // Key Vault Administrator
+  : '4633458b-17de-408a-b874-0445c86b69e6' // Key Vault Secrets User
 
 var storageAccountRoles = [
   'ba92f5b4-2d11-453d-a403-e96b0029c9fe'  // Storage Blob Data Contributor
@@ -50,17 +53,17 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' existing 
 // Resources
 //=============================================================================
 
-// Assign roles on Key Vault to the principal
+// Assign role on Key Vault to the principal
 
-resource assignRolesOnKeyVaultToManagedIdentity 'Microsoft.Authorization/roleAssignments@2022-04-01' = [for role in keyVaultRoles: {
-  name: guid(principalId, keyVault.id, subscriptionResourceId('Microsoft.Authorization/roleDefinitions', role))
+resource assignRolesOnKeyVaultToManagedIdentity 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(principalId, keyVault.id, subscriptionResourceId('Microsoft.Authorization/roleDefinitions', keyVaultRole))
   scope: keyVault
   properties: {
-    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', role)
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', keyVaultRole)
     principalId: principalId
     principalType: principalType
   }
-}]
+}
 
 // Assign roles on Storage Account to the principal
 

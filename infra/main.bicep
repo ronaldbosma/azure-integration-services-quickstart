@@ -30,8 +30,11 @@ param environmentName string
 @description('The instance that will be added to the deployed resources names to make them unique. Will be generated if not provided.')
 param instance string = ''
 
-@description('The principal ID of the user that will be assigned roles to the Key Vault and Storage Account.')
-param currentUserPrincipalId string = ''
+@description('The current principal ID that will be assigned roles to the Key Vault and Storage Account.')
+param currentPrincipalId string = ''
+
+@description('The type of current principal.')
+param currentPrincipalType string = 'User'
 
 
 //=============================================================================
@@ -167,12 +170,13 @@ module logicApp 'modules/services/logic-app.bicep' = {
   ]
 }
 
-module assignRolesToCurrentUser 'modules/shared/assign-roles-to-principal.bicep' = if (currentUserPrincipalId != '') {
-  name: 'assignRolesToCurrentUser'
+module assignRolesToCurrentPrincipal 'modules/shared/assign-roles-to-principal.bicep' = if (currentPrincipalId != '') {
+  name: 'assignRolesToCurrentPrincipal'
   scope: resourceGroup
   params: {
-    principalId: currentUserPrincipalId
-    principalType: 'User'
+    principalId: currentPrincipalId
+    principalType: currentPrincipalType
+    isAdmin: true
     keyVaultName: keyVaultName
     storageAccountName: storageAccountName
   }
@@ -198,3 +202,6 @@ output logicAppName string = logicAppSettings.logicAppName
 output logicAppServicePlanName string = logicAppSettings.appServicePlanName
 output resourceGroupName string = resourceGroupName
 output storageAccountName string = storageAccountName
+
+
+output currentPrincipalId string = currentPrincipalId
