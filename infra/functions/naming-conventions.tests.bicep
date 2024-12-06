@@ -157,3 +157,88 @@ test testKeyVaultNameWhenEnvironmentNameIsTooLong 'naming-conventions.test-modul
     expectedResult: 'kvthisenvironmeus2abcde'
   }
 }
+
+
+//=============================================================================
+// Sanitizing Name
+//=============================================================================
+
+test testSanitizeColon 'naming-conventions.test-module.bicep' = {
+  params: {
+    resourceType: 'virtualNetwork'
+    environment: 'ais;quick'
+    region: 'norwayeast'
+    instance: '0;01'
+    expectedResult: 'vnet-aisquick-nwe-001'
+  }
+}
+
+test testSanitizeComma 'naming-conventions.test-module.bicep' = {
+  params: {
+    resourceType: 'virtualNetwork'
+    environment: 'ais,quick'
+    region: 'norwayeast'
+    instance: '0,01'
+    expectedResult: 'vnet-aisquick-nwe-001'
+  }
+}
+
+test testSanitizeDot 'naming-conventions.test-module.bicep' = {
+  params: {
+    resourceType: 'virtualNetwork'
+    environment: 'ais.quick'
+    region: 'norwayeast'
+    instance: '0.01'
+    expectedResult: 'vnet-aisquick-nwe-001'
+  }
+}
+
+test testSanitizeSemicolon 'naming-conventions.test-module.bicep' = {
+  params: {
+    resourceType: 'virtualNetwork'
+    environment: 'ais:quick'
+    region: 'norwayeast'
+    instance: '0:01'
+    expectedResult: 'vnet-aisquick-nwe-001'
+  }
+}
+
+test testSanitizeUnderscore 'naming-conventions.test-module.bicep' = {
+  params: {
+    resourceType: 'virtualNetwork'
+    environment: 'ais_quick'
+    region: 'norwayeast'
+    instance: '0_01'
+    expectedResult: 'vnet-aisquick-nwe-001'
+  }
+}
+
+test testSanitizeWhiteSpace 'naming-conventions.test-module.bicep' = {
+  params: {
+    resourceType: 'virtualNetwork'
+    environment: 'ais quick'
+    region: 'norwayeast'
+    instance: '0 01'
+    expectedResult: 'vnet-aisquick-nwe-001'
+  }
+}
+
+test testSanitizUpperCaseToLowerCase 'naming-conventions.test-module.bicep' = {
+  params: {
+    resourceType: 'virtualNetwork'
+    environment: 'AIS Quick'
+    region: 'norwayeast'
+    instance: 'Main'
+    expectedResult: 'vnet-aisquick-nwe-main'
+  }
+}
+
+test testSanitizeTrailingHyphenWhenInstanceIsEmpty 'naming-conventions.test-module.bicep' = {
+  params: {
+    resourceType: 'virtualNetwork'
+    environment: 'aisquick'
+    region: 'norwayeast'
+    instance: ''
+    expectedResult: 'vnet-aisquick-nwe'
+  }
+}
