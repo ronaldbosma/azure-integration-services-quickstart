@@ -22,7 +22,7 @@ import * as settings from './types/settings.bicep'
 param location string
 
 @minLength(1)
-@maxLength(12) // The maximum length of the storage account name and key vault name is 24 characters. To prevent errors the environment name should be short.
+@maxLength(32)
 @description('The name of the environment to deploy to')
 param environmentName string
 
