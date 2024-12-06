@@ -7,7 +7,7 @@
 //=============================================================================
 
 @description('Location to use for all resources')
-param location string
+param location string = resourceGroup().location
 
 @description('The tags to associate with the resource')
 param tags object
