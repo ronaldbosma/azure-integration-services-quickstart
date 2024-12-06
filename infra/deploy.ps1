@@ -1,5 +1,5 @@
 param (
-    [ValidateLength(5,15)][string]$Environment = "aisquick-demo",
+    [ValidateLength(5,15)][string]$Environment = "aisquick-dev",
     [string]$Location = "norwayeast",
     [ValidateLength(0,5)][string]$Instance = $null,
     [string]$CurrentUserPrincipalId = $null
