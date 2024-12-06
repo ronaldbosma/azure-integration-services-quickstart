@@ -1,4 +1,8 @@
 {
+  "experimentalFeaturesEnabled": {
+    "testFramework": true,
+    "assertions": true
+  },
   "analyzers": {
     "core": {
       "enabled": true,
