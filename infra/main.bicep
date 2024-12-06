@@ -86,7 +86,7 @@ var tags = {
 // Resources
 //=============================================================================
 
-resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
+resource resourceGroup 'Microsoft.Resources/resourceGroups@2024-07-01' = {
   name: resourceGroupName
   location: location
   tags: tags
