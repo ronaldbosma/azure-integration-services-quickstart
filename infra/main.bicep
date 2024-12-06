@@ -17,9 +17,6 @@ import * as settings from './types/settings.bicep'
 // Parameters
 //=============================================================================
 
-@description('Specifies the Azure Active Directory tenant ID that should be used for authenticating requests to the key vault.')
-param tenantId string = subscription().tenantId
-
 @minLength(1)
 @description('Location to use for all resources')
 param location string
@@ -96,7 +93,6 @@ module keyVault 'modules/services/key-vault.bicep' = {
   name: 'keyVault'
   scope: resourceGroup
   params: {
-    tenantId: tenantId
     tags: tags
     keyVaultName: keyVaultName
   }

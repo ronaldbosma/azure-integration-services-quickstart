@@ -7,7 +7,7 @@
 //=============================================================================
 
 @description('Specifies the Azure Active Directory tenant ID that should be used for authenticating requests to the key vault. Get it by using Get-AzSubscription cmdlet.')
-param tenantId string
+param tenantId string = subscription().tenantId
 
 @description('Location to use for all resources')
 param location string = resourceGroup().location
