@@ -1,12 +1,12 @@
 //=============================================================================
-// Function App
+// Logic App
 //=============================================================================
 
 //=============================================================================
 // Imports
 //=============================================================================
 
-import { functionAppSettingsType } from '../types/settings.bicep'
+import { logicAppSettingsType } from '../../types/settings.bicep'
 
 //=============================================================================
 // Parameters
@@ -18,16 +18,16 @@ param location string
 @description('The tags to associate with the resource')
 param tags object
 
-@description('The settings for the Function App that will be created')
-param functionAppSettings functionAppSettingsType
+@description('The settings for the Logic App that will be created')
+param logicAppSettings logicAppSettingsType
 
-@description('The name of the App Insights instance that will be used by the Function App')
+@description('The name of the App Insights instance that will be used by the Logic App')
 param appInsightsName string
 
 @description('The name of the Key Vault that will contain the secrets')
 param keyVaultName string
 
-@description('Name of the storage account that will be used by the Function App')
+@description('Name of the storage account that will be used by the Logic App')
 param storageAccountName string
 
 //=============================================================================
@@ -36,15 +36,17 @@ param storageAccountName string
 
 var storageAccountConnectionString = 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount.listKeys().keys[0].value}'
 var appSettings = {
+  APP_KIND: 'workflowApp'
   APPLICATIONINSIGHTS_CONNECTION_STRING: appInsights.properties.ConnectionString
+  AzureFunctionsJobHost__extensionBundle__id: 'Microsoft.Azure.Functions.ExtensionBundle.Workflows'
+  AzureFunctionsJobHost__extensionBundle__version: '[1.*, 2.0.0)'
   AzureWebJobsStorage: storageAccountConnectionString
   FUNCTIONS_EXTENSION_VERSION: '~4'
-  FUNCTIONS_WORKER_RUNTIME: 'dotnet-isolated'
+  FUNCTIONS_WORKER_RUNTIME: 'dotnet'
   WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: storageAccountConnectionString
-  WEBSITE_CONTENTSHARE: toLower(functionAppSettings.functionAppName)
-  WEBSITE_USE_PLACEHOLDER_DOTNETISOLATED: '1'
+  WEBSITE_CONTENTSHARE: toLower(logicAppSettings.logicAppName)
+  WEBSITE_NODE_DEFAULT_VERSION: '~20'
 }
-
 
 //=============================================================================
 // Existing resources
@@ -62,59 +64,62 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' existing 
 // Resources
 //=============================================================================
 
-// Create Function App identity and assign roles to it
+// Create Logic App identity and assign roles to it
 
-resource functionAppIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
-  name: functionAppSettings.identityName
+resource logicAppIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
+  name: logicAppSettings.identityName
   location: location
   tags: tags
 }
 
-module assignRolesToFunctionAppUserAssignedIdentity 'assign-roles-to-principal.bicep' = {
-  name: 'assignRolesToFunctionAppUserAssignedIdentity'
+module assignRolesToLogicAppUserAssignedIdentity '../shared/assign-roles-to-principal.bicep' = {
+  name: 'assignRolesToLogicAppUserAssignedIdentity'
   params: {
-    principalId: functionAppIdentity.properties.principalId
+    principalId: logicAppIdentity.properties.principalId
     keyVaultName: keyVaultName
     storageAccountName: storageAccountName
   }
 }
 
 
-// Create the Application Service Plan for the Function App
+// Create the Application Service Plan for the Logic App
 
 resource hostingPlan 'Microsoft.Web/serverfarms@2024-04-01' = {
-  name: functionAppSettings.appServicePlanName
+  name: logicAppSettings.appServicePlanName
   location: location
   tags: tags
-  kind: 'functionapp'
+  kind: 'elastic'
   sku: {
-    name: 'Y1'
-    tier: 'Dynamic'
+    name: 'WS1'
+    tier: 'WorkflowStandard'
   }
-  properties: {}
+  properties: {
+    elasticScaleEnabled: false
+  }
 }
 
 
-// Create the Function App
+// Create the Logic App
 
-resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
-  name: functionAppSettings.functionAppName
+resource logicApp 'Microsoft.Web/sites@2024-04-01' = {
+  name: logicAppSettings.logicAppName
   location: location
   tags: tags
-  kind: 'functionapp'
+  kind: 'functionapp,workflowapp'
   identity: {
     type: 'SystemAssigned, UserAssigned'
     userAssignedIdentities: {
-      '${functionAppIdentity.id}': {}
+      '${logicAppIdentity.id}': {}
     }
   }
   properties: {
     serverFarmId: hostingPlan.id
+    keyVaultReferenceIdentity: logicAppIdentity.id
     siteConfig: {
       // NOTE: the app settings will be set separately
       ftpsState: 'FtpsOnly'
       minTlsVersion: '1.2'
-      netFrameworkVersion: functionAppSettings.netFrameworkVersion
+      netFrameworkVersion: logicAppSettings.netFrameworkVersion
     }
     httpsOnly: true
   }
@@ -125,22 +130,22 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
 //  NOTE: this is done in a separate module that merges the app settings with the existing ones 
 //        to prevent other (manually) created app settings from being removed.
 
-module setFunctionAppSettings 'merge-app-settings.bicep' = {
-  name: 'setFunctionAppSettings'
+module setLogicAppSettings '../shared/merge-app-settings.bicep' = {
+  name: 'setLogicAppSettings'
   params: {
-    siteName: functionAppSettings.functionAppName
-    currentAppSettings: list('${functionApp.id}/config/appsettings', functionApp.apiVersion).properties
+    siteName: logicAppSettings.logicAppName
+    currentAppSettings: list('${logicApp.id}/config/appsettings', logicApp.apiVersion).properties
     newAppSettings: appSettings
   }
 }
 
 
-// Assign roles to system-assigned identity of Function App
+// Assign roles to system-assigned identity of Logic App
 
-module assignRolesToFunctionAppSystemAssignedIdentity 'assign-roles-to-principal.bicep' = {
-  name: 'assignRolesToFunctionAppSystemAssignedIdentity'
+module assignRolesToLogicAppSystemAssignedIdentity '../shared/assign-roles-to-principal.bicep' = {
+  name: 'assignRolesToLogicAppSystemAssignedIdentity'
   params: {
-    principalId: functionApp.identity.principalId
+    principalId: logicApp.identity.principalId
     keyVaultName: keyVaultName
     storageAccountName: storageAccountName
   }

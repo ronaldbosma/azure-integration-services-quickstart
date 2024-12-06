@@ -92,7 +92,7 @@ resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   tags: tags
 }
 
-module keyVault 'modules/key-vault.bicep' = {
+module keyVault 'modules/services/key-vault.bicep' = {
   name: 'keyVault'
   scope: resourceGroup
   params: {
@@ -103,7 +103,7 @@ module keyVault 'modules/key-vault.bicep' = {
   }
 }
 
-module storageAccount 'modules/storage-account.bicep' = {
+module storageAccount 'modules/services/storage-account.bicep' = {
   name: 'storageAccount'
   scope: resourceGroup
   params: {
@@ -113,7 +113,7 @@ module storageAccount 'modules/storage-account.bicep' = {
   }
 }
 
-module appInsights 'modules/app-insights.bicep' = {
+module appInsights 'modules/services/app-insights.bicep' = {
   name: 'appInsights'
   scope: resourceGroup
   params: {
@@ -127,7 +127,7 @@ module appInsights 'modules/app-insights.bicep' = {
   ]
 }
 
-module apiManagement 'modules/api-management.bicep' = {
+module apiManagement 'modules/services/api-management.bicep' = {
   name: 'apiManagement'
   scope: resourceGroup
   params: {
@@ -143,7 +143,7 @@ module apiManagement 'modules/api-management.bicep' = {
   ]
 }
 
-module functionApp 'modules/function-app.bicep' = {
+module functionApp 'modules/services/function-app.bicep' = {
   name: 'functionApp'
   scope: resourceGroup
   params: {
@@ -160,7 +160,7 @@ module functionApp 'modules/function-app.bicep' = {
   ]
 }
 
-module logicApp 'modules/logic-app.bicep' = {
+module logicApp 'modules/services/logic-app.bicep' = {
   name: 'logicApp'
   scope: resourceGroup
   params: {
@@ -177,7 +177,7 @@ module logicApp 'modules/logic-app.bicep' = {
   ]
 }
 
-module assignRolesToCurrentUser 'modules/assign-roles-to-principal.bicep' = if (currentUserPrincipalId != '') {
+module assignRolesToCurrentUser 'modules/shared/assign-roles-to-principal.bicep' = if (currentUserPrincipalId != '') {
   name: 'assignRolesToCurrentUser'
   scope: resourceGroup
   params: {

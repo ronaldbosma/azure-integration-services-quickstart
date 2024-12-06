@@ -6,7 +6,7 @@
 // Imports
 //=============================================================================
 
-import { apiManagementSettingsType } from '../types/settings.bicep'
+import { apiManagementSettingsType } from '../../types/settings.bicep'
 
 //=============================================================================
 // Parameters
@@ -54,7 +54,7 @@ resource apimIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-
   tags: tags
 }
 
-module assignRolesToApimUserAssignedIdentity 'assign-roles-to-principal.bicep' = {
+module assignRolesToApimUserAssignedIdentity '../shared/assign-roles-to-principal.bicep' = {
   name: 'assignRolesToApimUserAssignedIdentity'
   params: {
     principalId: apimIdentity.properties.principalId
@@ -89,7 +89,7 @@ resource apiManagementService 'Microsoft.ApiManagement/service@2022-08-01' = {
 
 // Assign roles to system-assigned identity of API Management
 
-module assignRolesToApimSystemAssignedIdentity 'assign-roles-to-principal.bicep' = {
+module assignRolesToApimSystemAssignedIdentity '../shared/assign-roles-to-principal.bicep' = {
   name: 'assignRolesToApimSystemAssignedIdentity'
   params: {
     principalId: apiManagementService.identity.principalId

@@ -6,7 +6,7 @@
 // Imports
 //=============================================================================
 
-import { appInsightsSettingsType } from '../types/settings.bicep'
+import { appInsightsSettingsType } from '../../types/settings.bicep'
 
 //=============================================================================
 // Parameters
