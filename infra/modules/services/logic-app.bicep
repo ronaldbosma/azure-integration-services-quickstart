@@ -34,6 +34,10 @@ param storageAccountName string
 // Variables
 //=============================================================================
 
+var serviceTags = union(tags, {
+  'azd-service-name': 'logicApp'
+})
+
 var storageAccountConnectionString = 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount.listKeys().keys[0].value}'
 var appSettings = {
   APP_KIND: 'workflowApp'
@@ -87,7 +91,7 @@ module assignRolesToLogicAppUserAssignedIdentity '../shared/assign-roles-to-prin
 resource hostingPlan 'Microsoft.Web/serverfarms@2024-04-01' = {
   name: logicAppSettings.appServicePlanName
   location: location
-  tags: tags
+  tags: serviceTags
   kind: 'elastic'
   sku: {
     name: 'WS1'

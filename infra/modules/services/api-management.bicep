@@ -31,6 +31,14 @@ param keyVaultName string
 param storageAccountName string
 
 //=============================================================================
+// Variables
+//=============================================================================
+
+var serviceTags = union(tags, {
+  'azd-service-name': 'apim'
+})
+
+//=============================================================================
 // Existing resources
 //=============================================================================
 
@@ -69,7 +77,7 @@ module assignRolesToApimUserAssignedIdentity '../shared/assign-roles-to-principa
 resource apiManagementService 'Microsoft.ApiManagement/service@2022-08-01' = {
   name: apiManagementSettings.serviceName
   location: location
-  tags: tags
+  tags: serviceTags
   sku: {
     name: 'Consumption'
     capacity: 0
