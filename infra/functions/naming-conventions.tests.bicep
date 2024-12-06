@@ -72,3 +72,28 @@ test testLocationEastUS2 'naming-conventions.test-module.bicep' = {
     expectedResult: 'rg-aisquick-eus2-12345'
   }
 }
+
+
+//=============================================================================
+// Instances
+//=============================================================================
+
+test testInstance12345 'naming-conventions.test-module.bicep' = {
+  params: {
+    resourceType: 'resourceGroup'
+    environment: 'aisquick'
+    region: 'norwayeast'
+    instance: '12345'
+    expectedResult: 'rg-aisquick-nwe-12345'
+  }
+}
+
+test testInstanceAbcde 'naming-conventions.test-module.bicep' = {
+  params: {
+    resourceType: 'resourceGroup'
+    environment: 'aisquick'
+    region: 'norwayeast'
+    instance: 'abcde'
+    expectedResult: 'rg-aisquick-nwe-abcde'
+  }
+}
