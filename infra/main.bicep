@@ -198,16 +198,9 @@ module assignRolesToCurrentPrincipal 'modules/shared/assign-roles-to-principal.b
 //=============================================================================
 
 // Return the names of the resources
-output apiManagementServiceName string = apiManagementSettings.serviceName
-output appInsightsName string = appInsightsSettings.appInsightsName
-output functionAppName string = functionAppSettings.functionAppName
-output functionAppServicePlanName string = functionAppSettings.appServicePlanName
-output keyVaultName string = keyVaultName
-output logAnalyticsWorkspaceName string = appInsightsSettings.logAnalyticsWorkspaceName
-output logicAppName string = logicAppSettings.logicAppName
-output logicAppServicePlanName string = logicAppSettings.appServicePlanName
-output resourceGroupName string = resourceGroupName
-output storageAccountName string = storageAccountName
-
-
-output currentPrincipalId string = currentPrincipalId
+output AZURE_API_MANAGEMENT_NAME string = apiManagementSettings.serviceName
+output AZURE_APPLICATION_INSIGHTS_NAME string = appInsightsSettings.appInsightsName
+output AZURE_FUNCTION_APP_NAME string = functionAppSettings.functionAppName
+output AZURE_KEY_VAULT_NAME string = keyVaultName
+output AZURE_LOGIC_APP_NAME string = logicAppSettings.logicAppName
+output AZURE_STORAGE_ACCOUNT_NAME string = storageAccountName
