@@ -36,6 +36,14 @@ param currentPrincipalId string = ''
 @description('The type of current principal.')
 param currentPrincipalType string = 'User'
 
+@description('Include the API Management service in the deployment.')
+param includeApiManagement bool
+
+@description('Include the Function App in the deployment.')
+param includeFunctionApp bool
+
+@description('Include the Logic App in the deployment.')
+param includeLogicApp bool
 
 //=============================================================================
 // Variables
@@ -52,6 +60,7 @@ var apiManagementSettings = {
   identityName: getResourceName('managedIdentity', environmentName, location, 'apim-${instanceId}')
   publisherName: 'admin@example.org'
   publisherEmail: 'admin@example.org'
+  isIncluded: includeApiManagement
 }
 
 var appInsightsSettings = {
@@ -65,6 +74,7 @@ var functionAppSettings = {
   identityName: getResourceName('managedIdentity', environmentName, location, 'functionapp-${instanceId}')
   appServicePlanName: getResourceName('appServicePlan', environmentName, location, 'functionapp-${instanceId}')
   netFrameworkVersion: 'v8.0'
+  isIncluded: includeFunctionApp
 }
 
 var logicAppSettings = {
@@ -72,6 +82,7 @@ var logicAppSettings = {
   identityName: getResourceName('managedIdentity', environmentName, location, 'logicapp-${instanceId}')
   appServicePlanName: getResourceName('appServicePlan', environmentName, location, 'logicapp-${instanceId}')
   netFrameworkVersion: 'v8.0'
+  isIncluded: includeLogicApp
 }
 
 var keyVaultName = getResourceName('keyVault', environmentName, location, instanceId)
@@ -126,7 +137,7 @@ module appInsights 'modules/services/app-insights.bicep' = {
   ]
 }
 
-module apiManagement 'modules/services/api-management.bicep' = {
+module apiManagement 'modules/services/api-management.bicep' = if (includeApiManagement) {
   name: 'apiManagement'
   scope: resourceGroup
   params: {
@@ -139,10 +150,11 @@ module apiManagement 'modules/services/api-management.bicep' = {
   }
   dependsOn: [
     appInsights
+    storageAccount
   ]
 }
 
-module functionApp 'modules/services/function-app.bicep' = {
+module functionApp 'modules/services/function-app.bicep' = if (includeFunctionApp) {
   name: 'functionApp'
   scope: resourceGroup
   params: {
@@ -159,7 +171,7 @@ module functionApp 'modules/services/function-app.bicep' = {
   ]
 }
 
-module logicApp 'modules/services/logic-app.bicep' = {
+module logicApp 'modules/services/logic-app.bicep' = if (includeLogicApp){
   name: 'logicApp'
   scope: resourceGroup
   params: {
@@ -198,9 +210,14 @@ module assignRolesToCurrentPrincipal 'modules/shared/assign-roles-to-principal.b
 //=============================================================================
 
 // Return the names of the resources
-output AZURE_API_MANAGEMENT_NAME string = apiManagementSettings.serviceName
+output AZURE_API_MANAGEMENT_NAME string = (includeApiManagement ? apiManagementSettings.serviceName : '')
 output AZURE_APPLICATION_INSIGHTS_NAME string = appInsightsSettings.appInsightsName
-output AZURE_FUNCTION_APP_NAME string = functionAppSettings.functionAppName
+output AZURE_FUNCTION_APP_NAME string = (includeFunctionApp ? functionAppSettings.functionAppName : '')
 output AZURE_KEY_VAULT_NAME string = keyVaultName
-output AZURE_LOGIC_APP_NAME string = logicAppSettings.logicAppName
+output AZURE_LOGIC_APP_NAME string = (includeLogicApp ? logicAppSettings.logicAppName : '')
 output AZURE_STORAGE_ACCOUNT_NAME string = storageAccountName
+
+// Return which services are included in the deployment
+output INCLUDE_API_MANAGEMENT bool = includeApiManagement
+output INCLUDE_FUNCTION_APP bool = includeFunctionApp
+output INCLUDE_LOGIC_APP bool = includeLogicApp

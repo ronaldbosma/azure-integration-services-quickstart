@@ -10,6 +10,15 @@
       },
       "currentPrincipalId": {
         "value": "${AZURE_PRINCIPAL_ID}"
+      },
+      "includeApiManagement": {
+        "value": "${INCLUDE_API_MANAGEMENT}"
+      },
+      "includeFunctionApp": {
+        "value": "${INCLUDE_FUNCTION_APP}"
+      },
+      "includeLogicApp": {
+        "value": "${INCLUDE_LOGIC_APP}"
       }
     }
 }

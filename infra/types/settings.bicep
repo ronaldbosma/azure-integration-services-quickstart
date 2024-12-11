@@ -14,6 +14,9 @@ type apiManagementSettingsType = {
 
   @description('The email address of the owner of the API Management service')
   publisherEmail: string
+
+  @description('Indication if the API Management service is included in the deployment')
+  isIncluded: bool
 }
 
 
@@ -49,6 +52,9 @@ type functionAppSettingsType = {
 
   @description('The .NET Framework version for the Function App')
   netFrameworkVersion: string
+
+  @description('Indication if the Function App is included in the deployment')
+  isIncluded: bool
 }
 
 
@@ -68,4 +74,7 @@ type logicAppSettingsType = {
 
   @description('The .NET Framework version for the Logic App')
   netFrameworkVersion: string
+
+  @description('Indication if the Logic App is included in the deployment')
+  isIncluded: bool
 }
