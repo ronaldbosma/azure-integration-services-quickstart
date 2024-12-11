@@ -66,7 +66,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' existing 
 // Resources
 //=============================================================================
 
-// Create Function App identity and assign roles to it
+// Create Function App user-assigned identity and assign roles to it
 
 resource functionAppIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
   name: functionAppSettings.identityName

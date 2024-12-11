@@ -68,7 +68,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' existing 
 // Resources
 //=============================================================================
 
-// Create Logic App identity and assign roles to it
+// Create Logic App user-assigned identity and assign roles to it
 
 resource logicAppIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
   name: logicAppSettings.identityName
