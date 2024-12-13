@@ -10,6 +10,14 @@ This template deploys the following resources:
 
 ![Infra](diagrams/aisquick-diagrams-infra.png)
 
+This template is designed to simplify and accelerate the deployment of Azure Integration Services for:
+- Demonstrations
+- Testing configurations
+- Quick setups for experimentation
+
+To minimize cost, the cheapest possible SKUs are used for each service and virtual networks, application gateways and other security measures typically implemented in production scenarios are not included.
+
+
 ## Deployment
 
 If you haven't installed the Azure Developer CLI (`azd`) yet, follow the instructions on [Install or update the Azure Developer CLI](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/install-azd).
@@ -65,18 +73,6 @@ Ones `azd` is installed on your machine, you can deploy this template using the 
 - **Naming Convention**:
   - All resources are deployed using a naming convention based on the [Azure Resource Naming Best Practices](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-naming). 
   - The naming convention is implemented using user-defined functions in Bicep, which I blogged about in [Apply Azure naming convention using Bicep functions](https://ronaldbosma.github.io/blog/2024/06/05/apply-azure-naming-convention-using-bicep-functions/).
-
-
-## Purpose
-
-This template is designed to simplify and accelerate the deployment of Azure Integration Services for:
-- Demonstrations
-- Testing configurations
-- Quick setups for experimentation
-
-To minimize cost, the cheapest possible SKUs are used for each service, and virtual networks, application gateways and other security measures typically implemented in production scenarios are not included.
-
-**Note:** This template does not deploy any APIs, functions, or workflows. Users can add these after deployment based on their requirements.
 
 
 ## Troubleshooting
