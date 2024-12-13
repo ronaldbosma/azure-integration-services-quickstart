@@ -1,6 +1,6 @@
 # Azure Integration Services Quickstart
 
-An azd template (Bicep) for quickly deploying Azure Integration Services such as **Azure API Management**, **Function App**, and **Logic App**, along with supporting resources like **Application Insights**, **Key Vault**, and **Storage Account**. This template is ideal for demos, testing or getting started with Azure Integration Services.
+An `azd` template (Bicep) for quickly deploying Azure Integration Services such as **Azure API Management**, **Function App**, and **Logic App**, along with supporting resources like **Application Insights**, **Key Vault**, and **Storage Account**. This template is ideal for demos, testing or getting started with Azure Integration Services.
 
 ## Overview
 
@@ -12,9 +12,9 @@ This template deploys the following resources:
 
 ## Deployment
 
-If you haven't installed the Azure Developer CLI yet, follow the instructions on [Install or update the Azure Developer CLI](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/install-azd).
+If you haven't installed the Azure Developer CLI (`azd`) yet, follow the instructions on [Install or update the Azure Developer CLI](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/install-azd).
 
-Ones azd is installed on your machine, you can deploy this template using the following steps:
+Ones `azd` is installed on your machine, you can deploy this template using the following steps:
 
 1. Run the `azd init` command in an empty directory with the `--template` parameter to clone this template into the current directory.
 
