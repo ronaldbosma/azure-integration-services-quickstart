@@ -401,5 +401,8 @@ FodyWeavers.xsd
 deploy.local.ps1
 test.local.http
 
+# Ignore Draw.io backup files
+*.drawio.bkp
+
 # Ignore .azure folder (used by azd)
 .azure
