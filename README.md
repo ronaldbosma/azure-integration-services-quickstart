@@ -1,6 +1,44 @@
 # Azure Integration Services Quickstart
 
-A azd template (Bicep) for quickly deploying Azure Integration Services such as **Azure API Management**, **Function App**, and **Logic App**, along with supporting resources like **Application Insights**, **Key Vault**, and **Storage Account**. This template is ideal for demos, testing or getting started with Azure Integration Services.
+An azd template (Bicep) for quickly deploying Azure Integration Services such as **Azure API Management**, **Function App**, and **Logic App**, along with supporting resources like **Application Insights**, **Key Vault**, and **Storage Account**. This template is ideal for demos, testing or getting started with Azure Integration Services.
+
+## Overview
+
+This template deploys the following resources:
+
+![Infra](diagrams/aisquick-diagrams-infra.png)
+
+## Deployment
+
+If you haven't installed the Azure Developer CLI yet, follow the instructions on [Install or update the Azure Developer CLI](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/install-azd)
+
+Ones azd is installed on your machine, using this template is as simple as running this command in a new directory.
+
+1. Run the `azd init` command in an empty directory with the `--template` parameter to clone this template into the current directory.
+
+    ```
+    azd init --template ronaldbosma/azure-integration-services-quickstart
+    ```
+
+1. Run the `azd auth login` command to authenticate to your Azure subscription.
+  
+    ```
+    azd auth login
+    ```
+
+1. Run the `azd up` command to provision the resources in your Azure subscription. This will deploy both the infrastructure-as-code (IaC) and the sample application. _(Use `azd provision` to only deploy the infrastructure.)_
+
+    ```
+    azd up
+    ```
+
+1. Once the deployment is complete, you can locally modify the application or infrastructure and run `azd up` again to update the resources in Azure.
+
+1. Once your done and want to clean up the resources, run the `azd down` command. By including `--purge`, you make sure that the API Management service doesn't remain in a soft-deleted state which could block future deployments of the same environment.
+
+    ```
+    azd down --purge
+    ```
 
 ## Features
 
@@ -37,7 +75,7 @@ To minimize cost, the cheapest possible SKUs are used for each service, and virt
 **Note:** This template does not deploy any APIs, functions, or workflows. Users can add these after deployment based on their requirements.
 
 
-## Know Errors
+## Troubleshooting
 
 ### API Management deployment failed because service already exists in soft-deleted state
 
