@@ -6,6 +6,8 @@ An azd template (Bicep) for quickly deploying Azure Integration Services such as
 
 This template deploys the following resources:
 
+> TODO: Include Azure Service Bus
+
 ![Infra](diagrams/aisquick-diagrams-infra.png)
 
 ## Deployment
