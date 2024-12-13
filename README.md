@@ -100,3 +100,53 @@ Use the [az apim deletedservice list](https://learn.microsoft.com/en-us/cli/azur
 ```
 az apim deletedservice purge --location "norwayeast" --service-name "apim-aisquick-dev-nwe-00001"
 ```
+
+### Function App deployment failed because of quota limitations
+
+If you already have a Consumption tier (`SKU=Y1`) Function App deployed in the same region, you may encounter the following error when deploying the template. This error occurs because you have reached the region's quota for your subscription.
+
+```
+{
+  "code": "InvalidTemplateDeployment",
+  "message": "The template deployment 'functionApp' is not valid according to the validation procedure. The tracking id is 'fffc2e2d-7c4c-4675-a211-b24cc7795ccf'. See inner errors for details.",
+  "details": [
+    {
+      "code": "ValidationForResourceFailed",
+      "message": "Validation failed for a resource. Check 'Error.Details[0]' for more information.",
+      "details": [
+        {
+          "code": "SubscriptionIsOverQuotaForSku",
+          "message": "This region has quota of 1 instances for your subscription. Try selecting different region or SKU."
+        }
+      ]
+    }
+  ]
+}
+```
+
+Use the `azd down --purge` command to delete the resources and then deploy the template in a different region.
+
+### Logic App deployment failed because of quota limitations
+
+If you already have a Workflow Standard WS1 tier (`SKU=WS1`) Logic App deployed in the same region, you may encounter the following error when deploying the template. This error occurs because you have reached the region's quota for your subscription.
+
+```
+{
+  "code": "InvalidTemplateDeployment",
+  "message": "The template deployment 'logicApp' is not valid according to the validation procedure. The tracking id is '00000000-0000-0000-0000-000000000000'. See inner errors for details.",
+  "details": [
+    {
+      "code": "ValidationForResourceFailed",
+      "message": "Validation failed for a resource. Check 'Error.Details[0]' for more information.",
+      "details": [
+        {
+          "code": "SubscriptionIsOverQuotaForSku",
+          "message": "This region has quota of 1 instances for your subscription. Try selecting different region or SKU."
+        }
+      ]
+    }
+  ]
+}
+```
+
+Use the `azd down --purge` command to delete the resources and then deploy the template in a different region.
