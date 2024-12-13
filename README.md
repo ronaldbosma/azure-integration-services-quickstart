@@ -12,9 +12,9 @@ This template deploys the following resources:
 
 ## Deployment
 
-If you haven't installed the Azure Developer CLI yet, follow the instructions on [Install or update the Azure Developer CLI](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/install-azd)
+If you haven't installed the Azure Developer CLI yet, follow the instructions on [Install or update the Azure Developer CLI](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/install-azd).
 
-Ones azd is installed on your machine, using this template is as simple as running this command in a new directory.
+Ones azd is installed on your machine, you can deploy this template using the following steps:
 
 1. Run the `azd init` command in an empty directory with the `--template` parameter to clone this template into the current directory.
 
@@ -22,21 +22,23 @@ Ones azd is installed on your machine, using this template is as simple as runni
     azd init --template ronaldbosma/azure-integration-services-quickstart
     ```
 
-1. Run the `azd auth login` command to authenticate to your Azure subscription.
+1. Run the `azd auth login` command to authenticate to your Azure subscription _(if you haven't already)_.
   
     ```
     azd auth login
     ```
 
-1. Run the `azd up` command to provision the resources in your Azure subscription. This will deploy both the infrastructure-as-code (IaC) and the sample application. _(Use `azd provision` to only deploy the infrastructure.)_
+1. Run the `azd up` command to provision the resources in your Azure subscription. This will deploy both the infrastructure and the sample application (**TODO:** include a sample application). _(Use `azd provision` to only deploy the infrastructure.)_
 
     ```
     azd up
     ```
+   
+   See [Troubleshooting](#troubleshooting) if you encounter any issues during deployment.
 
 1. Once the deployment is complete, you can locally modify the application or infrastructure and run `azd up` again to update the resources in Azure.
 
-1. Once your done and want to clean up the resources, run the `azd down` command. By including `--purge`, you make sure that the API Management service doesn't remain in a soft-deleted state which could block future deployments of the same environment.
+1. Once your done and want to clean up, run the `azd down` command. By including the `--purge` parameter, you make sure that the API Management service doesn't remain in a soft-deleted state that could block future deployments of the same environment.
 
     ```
     azd down --purge
