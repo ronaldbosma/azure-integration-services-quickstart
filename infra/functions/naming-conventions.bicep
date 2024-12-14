@@ -14,6 +14,15 @@ func getResourceNameByConvention(resourceType string, environment string, region
   sanitizeResourceName('${getPrefix(resourceType)}-${environment}-${abbreviateRegion(region)}-${instance}')
 
 
+// Get the instance ID based on the provided instance name or generate a new one using the subscription, environment and location.
+@export()
+func getInstanceId(environment string, region string, instance string) string =>
+  removeWhiteSpaces(instance) == '' ? generateInstanceId(environment, region) : instance
+
+func generateInstanceId(environment string, region string) string =>
+  substring(uniqueString(subscription().subscriptionId, environment, region), 0, 5)
+
+
 //=============================================================================
 // Shorten Names
 //=============================================================================
@@ -57,7 +66,6 @@ func removeCommas(value string) string => replace(value, ',', '')
 func removeDots(value string) string => replace(value, '.', '')
 func removeSemicolons(value string) string => replace(value, ';', '')
 func removeUnderscores(value string) string => replace(value, '_', '')
-@export()
 func removeWhiteSpaces(value string) string => replace(value, ' ', '')
 
 

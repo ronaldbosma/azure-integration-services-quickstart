@@ -9,7 +9,7 @@ targetScope = 'subscription'
 // Imports
 //=============================================================================
 
-import { getResourceName, removeWhiteSpaces } from './functions/naming-conventions.bicep'
+import { getResourceName, getInstanceId } from './functions/naming-conventions.bicep'
 import * as settings from './types/settings.bicep'
 
 
@@ -49,9 +49,8 @@ param includeLogicApp bool
 // Variables
 //=============================================================================
 
-// Use a generated instance ID in the resource names if no instance is provided
-var generatedInstanceId = substring(uniqueString(subscription().subscriptionId, environmentName, location), 0, 5)
-var instanceId = (removeWhiteSpaces(instance) == '') ? generatedInstanceId : instance
+// Determine the instance id based on the provided instance or by generating a new one
+var instanceId = getInstanceId(environmentName, location, instance)
 
 var resourceGroupName = getResourceName('resourceGroup', environmentName, location, instanceId)
 
