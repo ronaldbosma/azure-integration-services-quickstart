@@ -15,7 +15,7 @@ This template is designed to simplify and accelerate the deployment of Azure Int
 - Testing configurations
 - Quick setups for experimentation
 
-To minimize cost, the cheapest possible SKUs are used for each service and virtual networks, application gateways and other security measures typically implemented in production scenarios are not included.
+To minimize cost and reduce deployment time, the cheapest possible SKUs are used for each service. Virtual networks, application gateways and other security measures typically implemented in production scenarios are not included.
 
 
 ## Getting Started
