@@ -54,7 +54,7 @@ Ones `azd` is installed on your machine, you can deploy this template using the 
 
 ### Clean up
 
-Once your done and want to clean up, run the `azd down` command. By including the `--purge` parameter, you make sure that the API Management service doesn't remain in a soft-deleted state that could block future deployments of the same environment.
+Once you're done and want to clean up, run the `azd down` command. By including the `--purge` parameter, you make sure that the API Management service doesn't remain in a soft-deleted state that could block future deployments of the same environment.
 
 ```
 azd down --purge
