@@ -8,7 +8,7 @@ This template deploys the following resources:
 
 > TODO: Include Azure Service Bus
 
-![Infra](diagrams/aisquick-diagrams-infra.png)
+![Infra](images/aisquick-diagrams-infra.png)
 
 This template is designed to simplify and accelerate the deployment of Azure Integration Services for:
 - Demonstrations
