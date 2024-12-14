@@ -42,6 +42,10 @@ Ones `azd` is installed on your machine, you can deploy this template using the 
     azd up
     ```
    
+   You'll be asked to select the Azure Integration Services to include in the deployment. Use the arrow keys to select `True` for the resources you want to include and press `Enter` to continue.  
+   
+   ![](images/azd-up-select-resources-to-include.png)
+
    See [Troubleshooting](#troubleshooting) if you encounter any issues during deployment.
 
 1. Once the deployment is complete, you can locally modify the application or infrastructure and run `azd up` again to update the resources in Azure.
