@@ -18,9 +18,11 @@ This template is designed to simplify and accelerate the deployment of Azure Int
 To minimize cost, the cheapest possible SKUs are used for each service and virtual networks, application gateways and other security measures typically implemented in production scenarios are not included.
 
 
-## Deployment
+## Getting Started
 
 If you haven't installed the Azure Developer CLI (`azd`) yet, follow the instructions on [Install or update the Azure Developer CLI](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/install-azd).
+
+### Deployment
 
 Ones `azd` is installed on your machine, you can deploy this template using the following steps:
 
@@ -42,19 +44,21 @@ Ones `azd` is installed on your machine, you can deploy this template using the 
     azd up
     ```
    
-   You'll be asked to select the Azure Integration Services to include in the deployment. Use the arrow keys to select `True` for the resources you want to include and press `Enter` to continue.  
-   
-   ![](images/azd-up-select-resources-to-include.png)
+   You'll be asked to select the Azure Integration Services you want to include in the deployment. Per service, use the arrow keys to select `True` to include it or `False` to skip it, and press `Enter` to continue.  
+
+   ![Select resources to include during azd up](images/azd-up-select-resources-to-include.png)
 
    See [Troubleshooting](#troubleshooting) if you encounter any issues during deployment.
 
 1. Once the deployment is complete, you can locally modify the application or infrastructure and run `azd up` again to update the resources in Azure.
 
-1. Once your done and want to clean up, run the `azd down` command. By including the `--purge` parameter, you make sure that the API Management service doesn't remain in a soft-deleted state that could block future deployments of the same environment.
+### Clean up
 
-    ```
-    azd down --purge
-    ```
+Once your done and want to clean up, run the `azd down` command. By including the `--purge` parameter, you make sure that the API Management service doesn't remain in a soft-deleted state that could block future deployments of the same environment.
+
+```
+azd down --purge
+```
 
 ## Features
 
@@ -77,6 +81,11 @@ Ones `azd` is installed on your machine, you can deploy this template using the 
 - **Naming Convention**:
   - All resources are deployed using a naming convention based on the [Azure Resource Naming Best Practices](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-naming). 
   - The naming convention is implemented using user-defined functions in Bicep, which I blogged about in [Apply Azure naming convention using Bicep functions](https://ronaldbosma.github.io/blog/2024/06/05/apply-azure-naming-convention-using-bicep-functions/).
+
+
+The following image displays an example of the resources that are deployed with this template:
+
+![](images/deployed-resources.png)
 
 
 ## Troubleshooting
