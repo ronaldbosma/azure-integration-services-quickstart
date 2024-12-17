@@ -45,6 +45,9 @@ param includeFunctionApp bool
 @description('Include the Logic App in the deployment.')
 param includeLogicApp bool
 
+@description('Include the Service Bus in the deployment.')
+param includeServiceBus bool
+
 //=============================================================================
 // Variables
 //=============================================================================
@@ -85,6 +88,8 @@ var logicAppSettings = {
 }
 
 var keyVaultName = getResourceName('keyVault', environmentName, location, instanceId)
+
+var serviceBusNamespaceName = getResourceName('serviceBusNamespace', environmentName, location, instanceId)
 
 var storageAccountName = getResourceName('storageAccount', environmentName, location, instanceId)
 
@@ -134,6 +139,16 @@ module appInsights 'modules/services/app-insights.bicep' = {
   dependsOn: [
     keyVault
   ]
+}
+
+module serviceBus 'modules/services/service-bus.bicep' = if (includeServiceBus) {
+  name: 'serviceBus'
+  scope: resourceGroup
+  params: {
+    location: location
+    tags: tags
+    serviceBusNamespaceName: serviceBusNamespaceName
+  }
 }
 
 module apiManagement 'modules/services/api-management.bicep' = if (includeApiManagement) {

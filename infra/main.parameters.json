@@ -1,24 +1,27 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-      "environmentName": {
-        "value": "${AZURE_ENV_NAME}"
-      },
-      "location": {
-        "value": "${AZURE_LOCATION}"
-      },
-      "currentPrincipalId": {
-        "value": "${AZURE_PRINCIPAL_ID}"
-      },
-      "includeApiManagement": {
-        "value": "${INCLUDE_API_MANAGEMENT}"
-      },
-      "includeFunctionApp": {
-        "value": "${INCLUDE_FUNCTION_APP}"
-      },
-      "includeLogicApp": {
-        "value": "${INCLUDE_LOGIC_APP}"
-      }
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "environmentName": {
+      "value": "${AZURE_ENV_NAME}"
+    },
+    "location": {
+      "value": "${AZURE_LOCATION}"
+    },
+    "currentPrincipalId": {
+      "value": "${AZURE_PRINCIPAL_ID}"
+    },
+    "includeApiManagement": {
+      "value": "${INCLUDE_API_MANAGEMENT}"
+    },
+    "includeFunctionApp": {
+      "value": "${INCLUDE_FUNCTION_APP}"
+    },
+    "includeLogicApp": {
+      "value": "${INCLUDE_LOGIC_APP}"
+    },
+    "includeServiceBus": {
+      "value": "${INCLUDE_SERVICE_BUS}"
     }
+  }
 }
