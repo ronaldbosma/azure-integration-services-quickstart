@@ -102,7 +102,7 @@ If you've previously deployed this template and deleted the resources, you may e
     "details": [
         {
             "code": "ServiceAlreadyExistsInSoftDeletedState",
-            "message": "Api service apim-aisquick-dev-nwe-00001 was soft-deleted. In order to create the new service with the same name, you have to either undelete the service or purge it. See https://aka.ms/apimsoftdelete."
+            "message": "Api service apim-aisquick-sdc-5spzh was soft-deleted. In order to create the new service with the same name, you have to either undelete the service or purge it. See https://aka.ms/apimsoftdelete."
         }
     ]
 }
@@ -111,7 +111,7 @@ If you've previously deployed this template and deleted the resources, you may e
 Use the [az apim deletedservice list](https://learn.microsoft.com/en-us/cli/azure/apim/deletedservice?view=azure-cli-latest#az-apim-deletedservice-list) Azure CLI command to list all deleted API Management services in your subscription. Locate the service that is in a soft-deleted state and purge it using the [purge](https://learn.microsoft.com/en-us/cli/azure/apim/deletedservice?view=azure-cli-latest#az-apim-deletedservice-purge) command. See the following example:
 
 ```
-az apim deletedservice purge --location "norwayeast" --service-name "apim-aisquick-dev-nwe-00001"
+az apim deletedservice purge --location "swedencentral" --service-name "apim-aisquick-sdc-5spzh"
 ```
 
 ### Function App deployment failed because of quota limitations
