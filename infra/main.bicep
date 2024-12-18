@@ -134,7 +134,6 @@ module appInsights 'modules/services/app-insights.bicep' = {
     location: location
     tags: tags
     appInsightsSettings: appInsightsSettings
-    keyVaultName: keyVaultName
   }
   dependsOn: [
     keyVault
