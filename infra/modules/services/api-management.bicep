@@ -112,23 +112,14 @@ module assignRolesToApimSystemAssignedIdentity '../shared/assign-roles-to-princi
 }
 
 
-// Get reference to secret containing the App Insights instrumentation key and store the secret URI in a named value
-
-resource appInsightsInstrumentationKeySecret 'Microsoft.KeyVault/vaults/secrets@2023-07-01' existing = {
-  name: 'applicationinsights-instrumentationkey'
-  parent: keyVault
-}
+// Store the app insights instrumentation key in a named value
 
 resource appInsightsInstrumentationKeyNamedValue 'Microsoft.ApiManagement/service/namedValues@2022-08-01' = {
   name: 'appin-instrumentation-key'
   parent: apiManagementService
   properties: {
     displayName: 'appin-instrumentation-key'
-    secret: true
-    keyVault: {
-      secretIdentifier: appInsightsInstrumentationKeySecret.properties.secretUri
-      identityClientId: apimIdentity.properties.clientId
-    }
+    value: appInsights.properties.InstrumentationKey
   }
 }
 
