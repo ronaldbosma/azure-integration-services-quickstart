@@ -57,12 +57,11 @@ var instanceId = getInstanceId(environmentName, location, instance)
 
 var resourceGroupName = getResourceName('resourceGroup', environmentName, location, instanceId)
 
-var apiManagementSettings = {
+var apiManagementSettings = !includeApiManagement ? null : {
   serviceName: getResourceName('apiManagement', environmentName, location, instanceId)
   identityName: getResourceName('managedIdentity', environmentName, location, 'apim-${instanceId}')
   publisherName: 'admin@example.org'
   publisherEmail: 'admin@example.org'
-  isIncluded: includeApiManagement
 }
 
 var appInsightsSettings = {
@@ -150,13 +149,13 @@ module serviceBus 'modules/services/service-bus.bicep' = if (includeServiceBus) 
   }
 }
 
-module apiManagement 'modules/services/api-management.bicep' = if (includeApiManagement) {
+module apiManagement 'modules/services/api-management.bicep' = if (apiManagementSettings != null) {
   name: 'apiManagement'
   scope: resourceGroup
   params: {
     location: location
     tags: tags
-    apiManagementSettings: apiManagementSettings
+    apiManagementSettings: apiManagementSettings!
     appInsightsName: appInsightsSettings.appInsightsName
     keyVaultName: keyVaultName
     storageAccountName: storageAccountName
@@ -174,6 +173,7 @@ module functionApp 'modules/services/function-app.bicep' = if (includeFunctionAp
     location: location
     tags: tags
     functionAppSettings: functionAppSettings
+    apiManagementSettings: apiManagementSettings
     appInsightsName: appInsightsSettings.appInsightsName
     keyVaultName: keyVaultName
     storageAccountName: storageAccountName
@@ -223,7 +223,7 @@ module assignRolesToCurrentPrincipal 'modules/shared/assign-roles-to-principal.b
 //=============================================================================
 
 // Return the names of the resources
-output AZURE_API_MANAGEMENT_NAME string = (includeApiManagement ? apiManagementSettings.serviceName : '')
+output AZURE_API_MANAGEMENT_NAME string = (apiManagementSettings != null ? apiManagementSettings!.serviceName : '')
 output AZURE_APPLICATION_INSIGHTS_NAME string = appInsightsSettings.appInsightsName
 output AZURE_FUNCTION_APP_NAME string = (includeFunctionApp ? functionAppSettings.functionAppName : '')
 output AZURE_KEY_VAULT_NAME string = keyVaultName

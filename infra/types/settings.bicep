@@ -14,9 +14,6 @@ type apiManagementSettingsType = {
 
   @description('The email address of the owner of the API Management service')
   publisherEmail: string
-
-  @description('Indication if the API Management service is included in the deployment')
-  isIncluded: bool
 }
 
 

@@ -6,7 +6,7 @@
 // Imports
 //=============================================================================
 
-import { functionAppSettingsType } from '../../types/settings.bicep'
+import { functionAppSettingsType, apiManagementSettingsType } from '../../types/settings.bicep'
 
 //=============================================================================
 // Parameters
@@ -20,6 +20,9 @@ param tags object
 
 @description('The settings for the Function App that will be created')
 param functionAppSettings functionAppSettingsType
+
+@description('The settings for the API Management Service')
+param apiManagementSettings apiManagementSettingsType?
 
 @description('The name of the App Insights instance that will be used by the Function App')
 param appInsightsName string
@@ -39,7 +42,7 @@ var serviceTags = union(tags, {
 })
 
 var storageAccountConnectionString = 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount.listKeys().keys[0].value}'
-var appSettings = {
+var baseAppSettings = {
   APPINSIGHTS_INSTRUMENTATIONKEY: appInsights.properties.InstrumentationKey
   APPLICATIONINSIGHTS_CONNECTION_STRING: appInsights.properties.ConnectionString
   AzureWebJobsStorage: storageAccountConnectionString
@@ -50,6 +53,13 @@ var appSettings = {
   WEBSITE_USE_PLACEHOLDER_DOTNETISOLATED: '1'
 }
 
+// If API Management is deployed, add app settings to connect to it
+var apimAppSettings = apiManagementSettings == null ? {} : {
+  API_MANAGEMENT_BASE_URL: 'https://${apiManagementSettings!.serviceName}.azure-api.net'
+  API_MANAGEMENT_MASTER_SUBSCRIPTION_KEY: '@Microsoft.KeyVault(SecretUri=https://${keyVaultName}.vault.azure.net/secrets/apim-master-subscription-key)'
+}
+
+var appSettings = union(baseAppSettings, apimAppSettings)
 
 //=============================================================================
 // Existing resources
