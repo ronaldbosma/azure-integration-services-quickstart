@@ -234,3 +234,4 @@ output AZURE_STORAGE_ACCOUNT_NAME string = storageAccountName
 output INCLUDE_API_MANAGEMENT bool = includeApiManagement
 output INCLUDE_FUNCTION_APP bool = includeFunctionApp
 output INCLUDE_LOGIC_APP bool = includeLogicApp
+output INCLUDE_SERVICE_BUS bool = includeServiceBus
