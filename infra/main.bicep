@@ -94,6 +94,7 @@ var storageAccountName = getResourceName('storageAccount', environmentName, loca
 
 var tags = {
   'azd-env-name': environmentName
+  'azd-template': 'ronaldbosma/azure-integration-services-quickstart'
 }
 
 //=============================================================================
