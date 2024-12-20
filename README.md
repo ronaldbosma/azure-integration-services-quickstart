@@ -64,9 +64,10 @@ azd down --purge
 
 There are a couple of ways to change which Azure Integration Services are deployed. 
 
-1. Remove you environment folder from the `.azure` folder. After deletion, use `azd init` to reinitialize the environment. You'll be asked again which services to deploy when running `azd up`.
+1. Remove your environment folder from the `.azure` folder. After deletion, use `azd init` to reinitialize the environment (with the same name). You'll be asked again which services to deploy when running `azd up`.
 
 1. If the environment is currently deployed, locate the file `.azure/<environment-name/.env` and change the values of the `INCLUDE_*` variables to `true` or `false`.  
+
    For example, to deploy API Management and the Function App, but not the Logic App and Service Bus, use the following settings:  
 
    ```
@@ -78,6 +79,7 @@ There are a couple of ways to change which Azure Integration Services are deploy
    ```
 
 1. If the environment has been taken down, most variables in the `.env` file are removed. Instead, locate the `.azure/<environment-name/config.json` file and change the values of the parameters to `true` or `false`.  
+
    For example, to deploy API Management and the Function App, but not the Logic App and Service Bus, use the following settings:  
 
    ```json
