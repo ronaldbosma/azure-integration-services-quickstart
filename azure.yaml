@@ -3,3 +3,8 @@
 name: azure-integration-services-quickstart
 metadata:
   template: azure-integration-services-quickstart@0.0.1-beta
+services:
+  logicApp:
+    project: ./src/logicApp
+    host: function
+    language: js
