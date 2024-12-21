@@ -44,10 +44,12 @@ var serviceBusRoles = [
 ]
 
 var storageAccountRoles = [
-  'ba92f5b4-2d11-453d-a403-e96b0029c9fe'  // Storage Blob Data Contributor
-  '0c867c2a-1d8c-454a-a3db-ab2ea1bdc8bb'  // Storage File Data SMB Share Contributor
-  '974c5e8b-45b9-4653-ba55-5f855dd0fb88'  // Storage Queue Data Contributor
-  '0a9a7e1f-b9d0-4cc4-a60d-0319b160aaa3'  // Storage Table Data Contributor
+  'ba92f5b4-2d11-453d-a403-e96b0029c9fe'      // Storage Blob Data Contributor
+  isAdmin 
+    ? '69566ab7-960f-475b-8e7c-b3118f30c6bd'  // Storage File Data Privileged Contributor (is able to browse file shares in Azure Portal)
+    : '0c867c2a-1d8c-454a-a3db-ab2ea1bdc8bb'  // Storage File Data SMB Share Contributor
+  '974c5e8b-45b9-4653-ba55-5f855dd0fb88'      // Storage Queue Data Contributor
+  '0a9a7e1f-b9d0-4cc4-a60d-0319b160aaa3'      // Storage Table Data Contributor
 ]
 
 
