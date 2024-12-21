@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: Sample
-  description: 'Sample API'
+  description: Sample API
   version: '1.0'
 paths:
   /messages:
@@ -18,29 +18,60 @@ paths:
               message: Hello world!
       responses:
         '201':
-          description: 'Successful response'
+          description: Successful response
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/publishMessageResponse'
               example:
                 id: 8599d9e6-24cf-4d65-a79a-9ccb085987df
+  '/blobs/{id}':
+    get:
+      summary: Get Blob
+      operationId: get-blob
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: 'string'
+            format: 'uuid'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getBlobResponse'
+              example:
+                id: 8599d9e6-24cf-4d65-a79a-9ccb085987df
+                message: Hello world!
 components:
   schemas:
-    publishMessageRequest:
-      type: object
-      properties:
-        message:
-          type: string
+    getBlobResponse:
       required:
+        - id
         - message
-    publishMessageResponse:
       type: object
       properties:
         id:
           type: string
+        message:
+          type: string
+    publishMessageRequest:
+      required:
+        - message
+      type: object
+      properties:
+        message:
+          type: string
+    publishMessageResponse:
       required:
         - id
+      type: object
+      properties:
+        id:
+          type: string
   securitySchemes:
     apiKeyHeader:
       type: apiKey

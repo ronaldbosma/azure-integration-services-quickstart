@@ -36,6 +36,19 @@ resource sampleApi 'Microsoft.ApiManagement/service/apis@2022-08-01' = {
   }
 }
 
+resource getBlobOperation 'Microsoft.ApiManagement/service/apis/operations@2022-08-01' existing = {
+  name: 'get-blob'
+  parent: sampleApi
+
+  resource policies 'policies' = {
+    name: 'policy'
+    properties:{
+      format: 'rawxml'
+      value: loadTextContent('get-blob.xml') 
+    }
+  }
+}
+
 resource publishMessageOperation 'Microsoft.ApiManagement/service/apis/operations@2022-08-01' existing = {
   name: 'publish-message'
   parent: sampleApi

@@ -17,7 +17,7 @@ Ocp-Apim-Trace: true
 ###
 
 
-# Get the published message
-GET https://{{apimHostname}}/sample/messages/{{publishMessage.response.body.id}}
+# Get the blob with the stored message
+GET https://{{apimHostname}}/sample/blobs/{{publishMessage.response.body.id}}
 Ocp-Apim-Subscription-Key: {{apimSubscriptionKey}}
 Ocp-Apim-Trace: true
