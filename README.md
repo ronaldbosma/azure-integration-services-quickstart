@@ -14,6 +14,7 @@ This template is designed to simplify and accelerate the deployment of Azure Int
 - Demonstrations
 - Testing configurations
 - Quick setups for experimentation
+- CI scenarios in your pipeline
 
 To minimize cost and reduce deployment time, the cheapest possible SKUs are used for each service. Virtual networks, application gateways and other security measures typically implemented in production scenarios are not included. Keep in mind that some resources may still incur costs, so it's a good idea to clean up when you're finished to avoid unexpected charges.
 
