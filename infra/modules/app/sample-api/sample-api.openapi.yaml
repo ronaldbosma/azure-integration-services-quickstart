@@ -1,0 +1,42 @@
+openapi: 3.0.1
+info:
+  title: Sample
+  description: 'Sample API'
+  version: '1.0'
+paths:
+  /messages:
+    post:
+      summary: Publish Message
+      description: Publish Message
+      operationId: publish-message
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/publishMessageRequest'
+            example:
+              message: Hello world!
+      responses:
+        '200':
+          description: 'null'
+components:
+  schemas:
+    publishMessageRequest:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+        - message
+  securitySchemes:
+    apiKeyHeader:
+      type: apiKey
+      name: Ocp-Apim-Subscription-Key
+      in: header
+    apiKeyQuery:
+      type: apiKey
+      name: subscription-key
+      in: query
+security:
+  - apiKeyHeader: []
+  - apiKeyQuery: []
