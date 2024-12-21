@@ -75,3 +75,13 @@ type logicAppSettingsType = {
   @description('Indication if the Logic App is included in the deployment')
   isIncluded: bool
 }
+
+
+// Service Bus
+
+@description('The settings for the Service Bus namespace')
+@export()
+type serviceBusSettingsType = {
+  @description('The name of the Service Bus namespace')
+  namespaceName: string
+}

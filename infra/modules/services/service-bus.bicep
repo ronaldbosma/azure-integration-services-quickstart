@@ -3,6 +3,12 @@
 //=============================================================================
 
 //=============================================================================
+// Imports
+//=============================================================================
+
+import { serviceBusSettingsType } from '../../types/settings.bicep'
+
+//=============================================================================
 // Parameters
 //=============================================================================
 
@@ -12,15 +18,15 @@ param location string
 @description('The tags to associate with the resource')
 param tags object
 
-@description('The name of the Service Bus namespace')
-param serviceBusNamespaceName string
+@description('The settings for the Service Bus namespace')
+param serviceBusSettings serviceBusSettingsType
 
 //=============================================================================
 // Resources
 //=============================================================================
 
 resource serviceBusNamespace 'Microsoft.ServiceBus/namespaces@2024-01-01' = {
-  name: serviceBusNamespaceName
+  name: serviceBusSettings.namespaceName
   location: location
   tags: tags
   sku: {

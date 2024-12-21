@@ -88,7 +88,9 @@ var logicAppSettings = {
 
 var keyVaultName = getResourceName('keyVault', environmentName, location, instanceId)
 
-var serviceBusNamespaceName = getResourceName('serviceBusNamespace', environmentName, location, instanceId)
+var serviceBusSettings = !includeServiceBus ? null : {
+  namespaceName: getResourceName('serviceBusNamespace', environmentName, location, instanceId)
+}
 
 var storageAccountName = getResourceName('storageAccount', environmentName, location, instanceId)
 
@@ -140,13 +142,13 @@ module appInsights 'modules/services/app-insights.bicep' = {
   ]
 }
 
-module serviceBus 'modules/services/service-bus.bicep' = if (includeServiceBus) {
+module serviceBus 'modules/services/service-bus.bicep' = if (serviceBusSettings != null) {
   name: 'serviceBus'
   scope: resourceGroup
   params: {
     location: location
     tags: tags
-    serviceBusNamespaceName: serviceBusNamespaceName
+    serviceBusSettings: serviceBusSettings!
   }
 }
 
@@ -159,6 +161,7 @@ module apiManagement 'modules/services/api-management.bicep' = if (apiManagement
     apiManagementSettings: apiManagementSettings!
     appInsightsName: appInsightsSettings.appInsightsName
     keyVaultName: keyVaultName
+    serviceBusSettings: serviceBusSettings
     storageAccountName: storageAccountName
   }
   dependsOn: [
@@ -177,6 +180,7 @@ module functionApp 'modules/services/function-app.bicep' = if (includeFunctionAp
     apiManagementSettings: apiManagementSettings
     appInsightsName: appInsightsSettings.appInsightsName
     keyVaultName: keyVaultName
+    serviceBusSettings: serviceBusSettings
     storageAccountName: storageAccountName
   }
   dependsOn: [
@@ -194,6 +198,7 @@ module logicApp 'modules/services/logic-app.bicep' = if (includeLogicApp){
     logicAppSettings: logicAppSettings
     appInsightsName: appInsightsSettings.appInsightsName
     keyVaultName: keyVaultName
+    serviceBusSettings: serviceBusSettings
     storageAccountName: storageAccountName
   }
   dependsOn: [
@@ -210,6 +215,7 @@ module assignRolesToCurrentPrincipal 'modules/shared/assign-roles-to-principal.b
     principalType: currentPrincipalType
     isAdmin: true
     keyVaultName: keyVaultName
+    serviceBusSettings: serviceBusSettings
     storageAccountName: storageAccountName
   }
   dependsOn: [

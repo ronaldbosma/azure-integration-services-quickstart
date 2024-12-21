@@ -6,7 +6,7 @@
 // Imports
 //=============================================================================
 
-import { functionAppSettingsType, apiManagementSettingsType } from '../../types/settings.bicep'
+import { apiManagementSettingsType, functionAppSettingsType, serviceBusSettingsType } from '../../types/settings.bicep'
 
 //=============================================================================
 // Parameters
@@ -29,6 +29,9 @@ param appInsightsName string
 
 @description('The name of the Key Vault that will contain the secrets')
 param keyVaultName string
+
+@description('The settings for the Service Bus namespace')
+param serviceBusSettings serviceBusSettingsType?
 
 @description('Name of the storage account that will be used by the Function App')
 param storageAccountName string
@@ -90,6 +93,7 @@ module assignRolesToFunctionAppUserAssignedIdentity '../shared/assign-roles-to-p
   params: {
     principalId: functionAppIdentity.properties.principalId
     keyVaultName: keyVaultName
+    serviceBusSettings: serviceBusSettings
     storageAccountName: storageAccountName
   }
 }
@@ -157,6 +161,7 @@ module assignRolesToFunctionAppSystemAssignedIdentity '../shared/assign-roles-to
   params: {
     principalId: functionApp.identity.principalId
     keyVaultName: keyVaultName
+    serviceBusSettings: serviceBusSettings
     storageAccountName: storageAccountName
   }
 }

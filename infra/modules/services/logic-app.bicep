@@ -6,7 +6,7 @@
 // Imports
 //=============================================================================
 
-import { logicAppSettingsType } from '../../types/settings.bicep'
+import { logicAppSettingsType, serviceBusSettingsType } from '../../types/settings.bicep'
 
 //=============================================================================
 // Parameters
@@ -26,6 +26,9 @@ param appInsightsName string
 
 @description('The name of the Key Vault that will contain the secrets')
 param keyVaultName string
+
+@description('The settings for the Service Bus namespace')
+param serviceBusSettings serviceBusSettingsType?
 
 @description('Name of the storage account that will be used by the Logic App')
 param storageAccountName string
@@ -82,6 +85,7 @@ module assignRolesToLogicAppUserAssignedIdentity '../shared/assign-roles-to-prin
   params: {
     principalId: logicAppIdentity.properties.principalId
     keyVaultName: keyVaultName
+    serviceBusSettings: serviceBusSettings
     storageAccountName: storageAccountName
   }
 }
@@ -152,6 +156,7 @@ module assignRolesToLogicAppSystemAssignedIdentity '../shared/assign-roles-to-pr
   params: {
     principalId: logicApp.identity.principalId
     keyVaultName: keyVaultName
+    serviceBusSettings: serviceBusSettings
     storageAccountName: storageAccountName
   }
 }
