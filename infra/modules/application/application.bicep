@@ -25,6 +25,9 @@ param logicAppSettings logicAppSettingsType?
 @description('The settings for the Service Bus namespace')
 param serviceBusSettings serviceBusSettingsType?
 
+@description('Name of the storage account')
+param storageAccountName string
+
 //=============================================================================
 // Resources
 //=============================================================================
@@ -42,5 +45,12 @@ module topicsAndSubscriptions 'service-bus/topics-and-subscriptions.bicep' = if 
     serviceBusSettings: serviceBusSettings!
     functionAppSettings: functionAppSettings
     logicAppSettings: logicAppSettings
+  }
+}
+
+module storageAccount 'storage-account/storage-account.bicep' = {
+  name: 'storageAccount'
+  params: {
+    storageAccountName: storageAccountName
   }
 }

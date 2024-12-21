@@ -61,7 +61,11 @@ var serviceBusAppSettings = serviceBusSettings == null ? {} : {
   serviceBus_fullyQualifiedNamespace: '${serviceBusSettings!.namespaceName}.servicebus.windows.net'
 }
 
-var appSettings = union(baseAppSettings, serviceBusAppSettings)
+var storageAccountAppSettings = {
+  AzureBlob_blobStorageEndpoint: storageAccount.properties.primaryEndpoints.blob
+}
+
+var appSettings = union(baseAppSettings, serviceBusAppSettings, storageAccountAppSettings)
 
 //=============================================================================
 // Existing resources

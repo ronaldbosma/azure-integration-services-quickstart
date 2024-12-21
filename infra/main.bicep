@@ -237,6 +237,7 @@ module applicationResources 'modules/application/application.bicep' = {
     functionAppSettings: functionAppSettings
     logicAppSettings: logicAppSettings
     serviceBusSettings: serviceBusSettings
+    storageAccountName: storageAccountName
   }
   dependsOn: [
     apiManagement
