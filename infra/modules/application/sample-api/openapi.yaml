@@ -17,8 +17,14 @@ paths:
             example:
               message: Hello world!
       responses:
-        '200':
-          description: 'null'
+        '201':
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/publishMessageResponse'
+              example:
+                id: 8599d9e6-24cf-4d65-a79a-9ccb085987df
 components:
   schemas:
     publishMessageRequest:
@@ -28,6 +34,13 @@ components:
           type: string
       required:
         - message
+    publishMessageResponse:
+      type: object
+      properties:
+        id:
+          type: string
+      required:
+        - id
   securitySchemes:
     apiKeyHeader:
       type: apiKey
