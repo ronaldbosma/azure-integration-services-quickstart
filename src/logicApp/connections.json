@@ -1,6 +1,19 @@
 {
     "managedApiConnections": {},
     "serviceProviderConnections": {
+        "AzureBlob": {
+            "displayName": "blob-storage",
+            "parameterSetName": "ManagedServiceIdentity",
+            "parameterValues": {
+                "authProvider": {
+                    "Type": "ManagedServiceIdentity"
+                },
+                "blobStorageEndpoint": "@appsetting('AzureBlob_blobStorageEndpoint')"
+            },
+            "serviceProvider": {
+                "id": "/serviceProviders/AzureBlob"
+            }
+        },
         "serviceBus": {
             "displayName": "service-bus",
             "parameterSetName": "ManagedServiceIdentity",
