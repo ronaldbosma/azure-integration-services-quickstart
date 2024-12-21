@@ -25,7 +25,7 @@
                 "inputs": {
                     "parameters": {
                         "containerName": "sample",
-                        "blobName": "@body('Parse_JSON')?['id']",
+                        "blobName": "@{body('Parse_JSON')?['id']}.json",
                         "content": "@triggerBody()?['contentData']"
                     },
                     "serviceProviderConfiguration": {
