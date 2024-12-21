@@ -27,7 +27,7 @@ resource sampleApi 'Microsoft.ApiManagement/service/apis@2022-08-01' = {
   properties: {
     path: 'sample'
     format: 'openapi'
-    value: loadTextContent('sample-api.openapi.yaml')
+    value: loadTextContent('openapi.yaml')
     type: 'http'
     protocols: [
       'https'
