@@ -11,6 +11,14 @@
         <set-backend-service base-url="https://sbns-aisquick-sdc-5spzh.servicebus.windows.net/" />
         <rewrite-uri template="sample/messages" copy-unmatched-params="false" />
         <authentication-managed-identity resource="https://servicebus.azure.net" />
+
+        <!-- Add message ID to body -->
+        <set-variable name="message-id" value="@(Guid.NewGuid().ToString())" />
+        <set-body>@{
+            var body = context.Request.Body.As<JObject>();
+            body["id"] = context.Variables.GetValueOrDefault<string>("message-id");
+            return body.ToString();
+        }</set-body>
     </inbound>
 
     <backend>
@@ -19,6 +27,20 @@
 
     <outbound>
         <base />
+
+        <!-- Return the generated message ID if the message was successfully published -->
+        <choose>
+            <when condition="@(context.Response.StatusCode == 201)">
+                <set-header name="Content-Type" exists-action="override">
+                    <value>application/json</value>
+                </set-header>
+                <set-body template="liquid">
+                {
+                    "id": "{{context.Variables["message-id"]}}"
+                }
+                </set-body>
+            </when>
+        </choose>
     </outbound>
 
     <on-error>
