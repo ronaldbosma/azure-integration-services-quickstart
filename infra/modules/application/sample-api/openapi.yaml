@@ -28,14 +28,16 @@ paths:
   '/blobs/{id}':
     get:
       summary: Get Blob
+      description: Get Blob
       operationId: get-blob
       parameters:
         - name: id
           in: path
+          description: Id of the Blob
           required: true
           schema:
-            type: 'string'
-            format: 'uuid'
+            type: string
+            format: uuid
       responses:
         '200':
           description: Successful response
@@ -56,6 +58,7 @@ components:
       properties:
         id:
           type: string
+          format: uuid
         message:
           type: string
     publishMessageRequest:
@@ -72,6 +75,7 @@ components:
       properties:
         id:
           type: string
+          format: uuid
   securitySchemes:
     apiKeyHeader:
       type: apiKey
