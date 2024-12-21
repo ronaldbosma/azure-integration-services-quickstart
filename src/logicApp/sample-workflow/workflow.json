@@ -1,0 +1,27 @@
+{
+  "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "actions": {},
+      "contentVersion": "1.0.0.0",
+      "outputs": {},
+      "triggers": {
+          "When_messages_are_available_in_sample_topic": {
+              "type": "ServiceProvider",
+              "inputs": {
+                  "parameters": {
+                      "topicName": "sample",
+                      "subscriptionName": "logic-app-subscription-on-sample",
+                      "isSessionsEnabled": false
+                  },
+                  "serviceProviderConfiguration": {
+                      "connectionName": "serviceBus",
+                      "operationId": "receiveTopicMessages",
+                      "serviceProviderId": "/serviceProviders/serviceBus"
+                  }
+              },
+              "splitOn": "@triggerOutputs()?['body']"
+          }
+      }
+  },
+  "kind": "Stateful"
+}

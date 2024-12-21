@@ -42,7 +42,7 @@ var serviceTags = union(tags, {
 })
 
 var storageAccountConnectionString = 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount.listKeys().keys[0].value}'
-var appSettings = {
+var baseAppSettings = {
   APP_KIND: 'workflowApp'
   APPINSIGHTS_INSTRUMENTATIONKEY: appInsights.properties.InstrumentationKey
   APPLICATIONINSIGHTS_CONNECTION_STRING: appInsights.properties.ConnectionString
@@ -55,6 +55,13 @@ var appSettings = {
   WEBSITE_CONTENTSHARE: toLower(logicAppSettings.logicAppName)
   WEBSITE_NODE_DEFAULT_VERSION: '~20'
 }
+
+// If the Service Bus is deployed, add app settings to connect to it
+var serviceBusAppSettings = serviceBusSettings == null ? {} : {
+  serviceBus_fullyQualifiedNamespace: '${serviceBusSettings!.namespaceName}.servicebus.windows.net'
+}
+
+var appSettings = union(baseAppSettings, serviceBusAppSettings)
 
 //=============================================================================
 // Existing resources
