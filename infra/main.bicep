@@ -227,17 +227,18 @@ module assignRolesToCurrentPrincipal 'modules/shared/assign-roles-to-principal.b
 
 //=============================================================================
 // Application Resources
-// These are pure Bicep and can't be deployed separately by azd yet
 //=============================================================================
 
-module sampleApi 'modules/app/sample-api/sample-api.bicep' = if (apiManagementSettings != null) {
-  name: 'sampleApi'
+module applicationResources 'modules/app/app.bicep' = {
+  name: 'applicationResources'
   scope: resourceGroup
   params: {
-    apiManagementServiceName: apiManagementSettings!.serviceName
+    apiManagementSettings: apiManagementSettings
+    serviceBusSettings: serviceBusSettings
   }
   dependsOn: [
     apiManagement
+    serviceBus
   ]
 }
 

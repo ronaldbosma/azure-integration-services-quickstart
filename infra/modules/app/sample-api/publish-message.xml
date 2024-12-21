@@ -1,0 +1,27 @@
+<policies>
+    <inbound>
+        <base />
+
+        <!-- Validate that the body complies to the schema -->
+        <validate-content unspecified-content-type-action="prevent" max-size="102400" size-exceeded-action="prevent">
+            <content type="application/json" validate-as="json" action="prevent" />
+        </validate-content>
+        
+        <!-- Forward the request to the sample-topic on the service bus -->
+        <set-backend-service base-url="https://sbns-aisquick-sdc-5spzh.servicebus.windows.net/" />
+        <rewrite-uri template="sample/messages" copy-unmatched-params="false" />
+        <authentication-managed-identity resource="https://servicebus.azure.net" />
+    </inbound>
+
+    <backend>
+        <base />
+    </backend>
+
+    <outbound>
+        <base />
+    </outbound>
+
+    <on-error>
+        <base />
+    </on-error>
+</policies>

@@ -35,3 +35,16 @@ resource sampleApi 'Microsoft.ApiManagement/service/apis@2022-08-01' = {
     subscriptionRequired: true
   }
 }
+
+resource publishMessageOperation 'Microsoft.ApiManagement/service/apis/operations@2022-08-01' existing = {
+  name: 'publish-message'
+  parent: sampleApi
+
+  resource policies 'policies' = {
+    name: 'policy'
+    properties:{
+      format: 'rawxml'
+      value: loadTextContent('publish-message.xml') 
+    }
+  }
+}
