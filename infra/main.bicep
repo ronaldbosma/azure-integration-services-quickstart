@@ -229,7 +229,7 @@ module assignRolesToCurrentPrincipal 'modules/shared/assign-roles-to-principal.b
 // Application Resources
 //=============================================================================
 
-module applicationResources 'modules/app/app.bicep' = {
+module applicationResources 'modules/application/application.bicep' = {
   name: 'applicationResources'
   scope: resourceGroup
   params: {
