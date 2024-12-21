@@ -21,7 +21,7 @@ param tags object
 @description('The settings for the API Management Service that will be created')
 param apiManagementSettings apiManagementSettingsType
 
-@description('The name of the App Insights instance that will be created and used by API Management')
+@description('The name of the App Insights instance that will be used by API Management')
 param appInsightsName string
 
 @description('The name of the Key Vault that will contain the secrets')
