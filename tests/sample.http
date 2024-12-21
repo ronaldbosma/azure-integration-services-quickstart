@@ -3,7 +3,7 @@
 # =============================================================================
 
 # Publish a message to the sample topic via the Sample API in API Management
-
+# @name publishMessage
 POST https://{{apimHostname}}/sample/messages
 Content-Type: application/json
 Ocp-Apim-Subscription-Key: {{apimSubscriptionKey}}
@@ -13,4 +13,11 @@ Ocp-Apim-Trace: true
     "message": "Hello, world!"
 }
 
+
 ###
+
+
+# Get the published message
+GET https://{{apimHostname}}/sample/messages/{{publishMessage.response.body.id}}
+Ocp-Apim-Subscription-Key: {{apimSubscriptionKey}}
+Ocp-Apim-Trace: true
