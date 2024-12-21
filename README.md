@@ -115,6 +115,8 @@ When disabling an already deployed service, it will not be removed when running 
 - **Managed Identities**:
   - Each integration service has both a **user-assigned** and **system-assigned managed identity**.
   - These identities are assigned the following roles:
+    - Azure Service Bus Data Receiver
+    - Azure Service Bus Data Sender
     - Key Vault Secrets User
     - Storage Blob Data Contributor
     - Storage File Data SMB Share Contributor
