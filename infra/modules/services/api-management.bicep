@@ -58,6 +58,10 @@ resource masterSubscription 'Microsoft.ApiManagement/service/subscriptions@2022-
   parent: apiManagementService
 }
 
+resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' existing = {
+  name: storageAccountName
+}
+
 //=============================================================================
 // Resources
 //=============================================================================
@@ -165,5 +169,36 @@ resource apimMasterSubscriptionKeySecret 'Microsoft.KeyVault/vaults/secrets@2023
   parent: keyVault
   properties: {
     value: masterSubscription.listSecrets(apiManagementService.apiVersion).primaryKey
+  }
+}
+
+
+// Add backends for the various services
+
+resource serviceBusBackend 'Microsoft.ApiManagement/service/backends@2022-08-01' = if (serviceBusSettings != null) {
+  parent: apiManagementService
+  name: 'service-bus'
+  properties: {
+    description: 'The backend for the service bus'
+    url: 'https://${serviceBusSettings!.namespaceName}.servicebus.windows.net'
+    protocol: 'http'
+    tls: {
+      validateCertificateChain: true
+      validateCertificateName: true
+    }
+  }
+}
+
+resource blobStorageBackend 'Microsoft.ApiManagement/service/backends@2022-08-01' = {
+  parent: apiManagementService
+  name: 'blob-storage'
+  properties: {
+    description: 'The backend for blob storage'
+    url: storageAccount.properties.primaryEndpoints.blob
+    protocol: 'http'
+    tls: {
+      validateCertificateChain: true
+      validateCertificateName: true
+    }
   }
 }
