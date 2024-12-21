@@ -16,6 +16,9 @@ This template is designed to simplify and accelerate the deployment of Azure Int
 
 To minimize cost and reduce deployment time, the cheapest possible SKUs are used for each service. Virtual networks, application gateways and other security measures typically implemented in production scenarios are not included. Keep in mind that some resources may still incur costs, so it's a good idea to clean up when you're finished to avoid unexpected charges.
 
+A sample application is included in the template to demonstrate how the services can be used together. It consists of an API with which a message can be published on a service bus topic. A function and workflow trigger on the message. The function will store the message in table storage (**TODO**) and the workflow will store the message in blob storage. Using the API, the stored messages can be retrieved. See the following diagram for an overview:
+
+![Infra](images/aisquick-diagrams-app.png)
 
 ## Getting Started
 
