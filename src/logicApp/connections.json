@@ -14,6 +14,45 @@
                 "id": "/serviceProviders/AzureBlob"
             }
         },
+        "azureTables": {
+            "displayName": "table-storage",
+            "parameterSetName": "ManagedServiceIdentity",
+            "parameterValues": {
+                "authProvider": {
+                    "Type": "ManagedServiceIdentity"
+                },
+                "tableStorageEndpoint": "@appsetting('azureTables_tableStorageEndpoint')"
+            },
+            "serviceProvider": {
+                "id": "/serviceProviders/azureTables"
+            }
+        },
+        "AzureFile": {
+            "displayName": "file-storage",
+            "parameterSetName": "ManagedServiceIdentity",
+            "parameterValues": {
+                "authProvider": {
+                    "Type": "ManagedServiceIdentity"
+                },
+                "storageAccountUri": "@appsetting('AzureFile_storageAccountUri')"
+            },
+            "serviceProvider": {
+                "id": "/serviceProviders/AzureFile"
+            }
+        },
+        "azurequeues": {
+            "displayName": "queue-storage",
+            "parameterSetName": "ManagedServiceIdentity",
+            "parameterValues": {
+                "authProvider": {
+                    "Type": "ManagedServiceIdentity"
+                },
+                "queueServiceUri": "@appsetting('azurequeues_queueServiceUri')"
+            },
+            "serviceProvider": {
+                "id": "/serviceProviders/azurequeues"
+            }
+        },
         "serviceBus": {
             "displayName": "service-bus",
             "parameterSetName": "ManagedServiceIdentity",

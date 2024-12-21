@@ -63,6 +63,9 @@ var serviceBusAppSettings = serviceBusSettings == null ? {} : {
 
 var storageAccountAppSettings = {
   AzureBlob_blobStorageEndpoint: storageAccount.properties.primaryEndpoints.blob
+  AzureFile_storageAccountUri: storageAccount.properties.primaryEndpoints.file
+  azureTables_tableStorageEndpoint: storageAccount.properties.primaryEndpoints.table
+  azurequeues_queueServiceUri: storageAccount.properties.primaryEndpoints.queue
 }
 
 var appSettings = union(baseAppSettings, serviceBusAppSettings, storageAccountAppSettings)
