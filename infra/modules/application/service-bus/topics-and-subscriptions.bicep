@@ -6,7 +6,7 @@
 // Imports
 //=============================================================================
 
-import { serviceBusSettingsType } from '../../../types/settings.bicep'
+import { functionAppSettingsType, logicAppSettingsType, serviceBusSettingsType } from '../../../types/settings.bicep'
 
 //=============================================================================
 // Parameters
@@ -14,6 +14,12 @@ import { serviceBusSettingsType } from '../../../types/settings.bicep'
 
 @description('The settings for the Service Bus namespace')
 param serviceBusSettings serviceBusSettingsType
+
+@description('The settings for the Function App')
+param functionAppSettings functionAppSettingsType?
+
+@description('The settings for the Logic App')
+param logicAppSettings logicAppSettingsType?
 
 //=============================================================================
 // Existing Resources
@@ -30,4 +36,14 @@ resource serviceBusNamespace 'Microsoft.ServiceBus/namespaces@2024-01-01' existi
 resource sampleTopic 'Microsoft.ServiceBus/namespaces/topics@2024-01-01' = {
   name: 'sample'
   parent: serviceBusNamespace
+}
+
+resource functionAppSubscriptionOnSampleTopic 'Microsoft.ServiceBus/namespaces/topics/subscriptions@2024-01-01' = if (functionAppSettings != null) {
+  name: 'function-app-subscription-on-sample'
+  parent: sampleTopic
+}
+
+resource logicAppSubscriptionOnSampleTopic 'Microsoft.ServiceBus/namespaces/topics/subscriptions@2024-01-01' = if (logicAppSettings != null) {
+  name: 'logic-app-subscription-on-sample'
+  parent: sampleTopic
 }

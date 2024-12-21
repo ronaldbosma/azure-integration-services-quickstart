@@ -7,7 +7,7 @@
 // Imports
 //=============================================================================
 
-import { apiManagementSettingsType, serviceBusSettingsType } from '../../types/settings.bicep'
+import { apiManagementSettingsType, functionAppSettingsType, logicAppSettingsType, serviceBusSettingsType } from '../../types/settings.bicep'
 
 //=============================================================================
 // Parameters
@@ -15,6 +15,12 @@ import { apiManagementSettingsType, serviceBusSettingsType } from '../../types/s
 
 @description('The settings for the API Management Service')
 param apiManagementSettings apiManagementSettingsType?
+
+@description('The settings for the Function App')
+param functionAppSettings functionAppSettingsType?
+
+@description('The settings for the Logic App')
+param logicAppSettings logicAppSettingsType?
 
 @description('The settings for the Service Bus namespace')
 param serviceBusSettings serviceBusSettingsType?
@@ -34,5 +40,7 @@ module topicsAndSubscriptions 'service-bus/topics-and-subscriptions.bicep' = if 
   name: 'topicsAndSubscriptions'
   params: {
     serviceBusSettings: serviceBusSettings!
+    functionAppSettings: functionAppSettings
+    logicAppSettings: logicAppSettings
   }
 }
