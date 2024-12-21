@@ -8,7 +8,7 @@
         </validate-content>
         
         <!-- Forward the request to the sample-topic on the service bus -->
-        <set-backend-service base-url="https://sbns-aisquick-sdc-5spzh.servicebus.windows.net/" />
+        <set-backend-service backend-id="service-bus" />
         <rewrite-uri template="sample/messages" copy-unmatched-params="false" />
         <authentication-managed-identity resource="https://servicebus.azure.net" />
 
