@@ -1,0 +1,16 @@
+# =============================================================================
+# Tests for the Sample application. See test.md for more information.
+# =============================================================================
+
+# Publish a message to the sample topic via the Sample API in API Management
+
+POST https://{{apimHostname}}/sample/messages
+Content-Type: application/json
+Ocp-Apim-Subscription-Key: {{apimSubscriptionKey}}
+Ocp-Apim-Trace: true
+
+{
+    "message": "Hello, world!"
+}
+
+###
