@@ -49,7 +49,7 @@
                 "inputs": {
                     "parameters": {
                         "topicName": "sample",
-                        "subscriptionName": "logic-app-subscription-on-sample",
+                        "subscriptionName": "logic-app",
                         "isSessionsEnabled": false
                     },
                     "serviceProviderConfiguration": {
