@@ -4,7 +4,7 @@
 
 // Arrange
 
-import { getResourceName } from './naming-conventions.bicep'
+import { getResourceName } from '../naming-conventions.bicep'
 
 param resourceType string
 param environment string
