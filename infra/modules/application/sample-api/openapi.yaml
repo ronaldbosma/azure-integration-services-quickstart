@@ -48,6 +48,29 @@ paths:
               example:
                 id: 8599d9e6-24cf-4d65-a79a-9ccb085987df
                 message: Hello world!
+  '/table-entities/{id}':
+    get:
+      summary: Get Table Entity
+      description: Get Table Entity
+      operationId: get-table-entity
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getTableEntityResponse'
+              example:
+                PartitionKey: sample
+                RowKey: 8599d9e6-24cf-4d65-a79a-9ccb085987df
+                Message: Hello world!
 components:
   schemas:
     getBlobResponse:
@@ -60,6 +83,20 @@ components:
           type: string
           format: uuid
         message:
+          type: string
+    getTableEntityResponse:
+      required:
+        - PartitionKey
+        - RowKey
+        - Message
+      type: object
+      properties:
+        PartitionKey:
+          type: string
+        RowKey:
+          type: string
+          format: uuid
+        Message:
           type: string
     publishMessageRequest:
       required:

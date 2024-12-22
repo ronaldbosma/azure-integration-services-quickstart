@@ -21,3 +21,12 @@ Ocp-Apim-Trace: true
 GET https://{{apimHostname}}/sample/blobs/{{publishMessage.response.body.id}}
 Ocp-Apim-Subscription-Key: {{apimSubscriptionKey}}
 Ocp-Apim-Trace: true
+
+
+###
+
+
+# Get the table entity with the stored message
+GET https://{{apimHostname}}/sample/table-entities/{{publishMessage.response.body.id}}
+Ocp-Apim-Subscription-Key: {{apimSubscriptionKey}}
+Ocp-Apim-Trace: true 

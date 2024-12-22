@@ -49,6 +49,19 @@ resource getBlobOperation 'Microsoft.ApiManagement/service/apis/operations@2022-
   }
 }
 
+resource getTableEntityOperation 'Microsoft.ApiManagement/service/apis/operations@2022-08-01' existing = {
+  name: 'get-table-entity'
+  parent: sampleApi
+
+  resource policies 'policies' = {
+    name: 'policy'
+    properties:{
+      format: 'rawxml'
+      value: loadTextContent('get-table-entity.xml') 
+    }
+  }
+}
+
 resource publishMessageOperation 'Microsoft.ApiManagement/service/apis/operations@2022-08-01' existing = {
   name: 'publish-message'
   parent: sampleApi

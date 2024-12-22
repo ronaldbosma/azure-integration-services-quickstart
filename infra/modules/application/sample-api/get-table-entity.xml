@@ -1,0 +1,29 @@
+<policies>
+    <inbound>
+        <base />
+
+        <!-- Get the table entity from the sample table in the table storage -->
+        <set-backend-service backend-id="table-storage" />
+        <rewrite-uri template="sample(PartitionKey='sample',RowKey='{id}')?$select=PartitionKey,RowKey,Message" copy-unmatched-params="false" />
+        <authentication-managed-identity resource="https://storage.azure.com" />
+        
+        <set-header name="x-ms-version" exists-action="override">
+            <value>2025-01-05</value>
+        </set-header>
+        <set-header name="Accept" exists-action="override">
+            <value>application/json;odata=nometadata</value>
+        </set-header>
+    </inbound>
+
+    <backend>
+        <base />
+    </backend>
+
+    <outbound>
+        <base />
+    </outbound>
+
+    <on-error>
+        <base />
+    </on-error>
+</policies>

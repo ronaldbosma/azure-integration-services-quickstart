@@ -202,3 +202,31 @@ resource blobStorageBackend 'Microsoft.ApiManagement/service/backends@2022-08-01
     }
   }
 }
+
+resource tableStorageBackend 'Microsoft.ApiManagement/service/backends@2022-08-01' = {
+  parent: apiManagementService
+  name: 'table-storage'
+  properties: {
+    description: 'The backend for table storage'
+    url: storageAccount.properties.primaryEndpoints.table
+    protocol: 'http'
+    tls: {
+      validateCertificateChain: true
+      validateCertificateName: true
+    }
+  }
+}
+
+resource queueStorageBackend 'Microsoft.ApiManagement/service/backends@2022-08-01' = {
+  parent: apiManagementService
+  name: 'queue-storage'
+  properties: {
+    description: 'The backend for queue storage'
+    url: storageAccount.properties.primaryEndpoints.queue
+    protocol: 'http'
+    tls: {
+      validateCertificateChain: true
+      validateCertificateName: true
+    }
+  }
+}
