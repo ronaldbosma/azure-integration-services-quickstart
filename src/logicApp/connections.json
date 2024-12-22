@@ -8,7 +8,7 @@
                 "authProvider": {
                     "Type": "ManagedServiceIdentity"
                 },
-                "blobStorageEndpoint": "@appsetting('AzureBlob_blobStorageEndpoint')"
+                "blobStorageEndpoint": "@appsetting('BLOB_STORAGE_ENDPOINT')"
             },
             "serviceProvider": {
                 "id": "/serviceProviders/AzureBlob"
@@ -21,7 +21,7 @@
                 "authProvider": {
                     "Type": "ManagedServiceIdentity"
                 },
-                "tableStorageEndpoint": "@appsetting('azureTables_tableStorageEndpoint')"
+                "tableStorageEndpoint": "@appsetting('TABLE_STORAGE_ENDPOINT')"
             },
             "serviceProvider": {
                 "id": "/serviceProviders/azureTables"
@@ -34,7 +34,7 @@
                 "authProvider": {
                     "Type": "ManagedServiceIdentity"
                 },
-                "storageAccountUri": "@appsetting('AzureFile_storageAccountUri')"
+                "storageAccountUri": "@appsetting('FILE_STORAGE_ENDPOINT')"
             },
             "serviceProvider": {
                 "id": "/serviceProviders/AzureFile"
@@ -47,7 +47,7 @@
                 "authProvider": {
                     "Type": "ManagedServiceIdentity"
                 },
-                "queueServiceUri": "@appsetting('azurequeues_queueServiceUri')"
+                "queueServiceUri": "@appsetting('QUEUE_STORAGE_ENDPOINT')"
             },
             "serviceProvider": {
                 "id": "/serviceProviders/azurequeues"
@@ -60,7 +60,7 @@
                 "authProvider": {
                     "Type": "ManagedServiceIdentity"
                 },
-                "fullyQualifiedNamespace": "@appsetting('serviceBus_fullyQualifiedNamespace')"
+                "fullyQualifiedNamespace": "@appsetting('SERVICE_BUS_FULLY_QUALIFIED_NAMESPACE')"
             },
             "serviceProvider": {
                 "id": "/serviceProviders/serviceBus"

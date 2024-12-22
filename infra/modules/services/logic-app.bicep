@@ -58,14 +58,14 @@ var baseAppSettings = {
 
 // If the Service Bus is deployed, add app settings to connect to it
 var serviceBusAppSettings = serviceBusSettings == null ? {} : {
-  serviceBus_fullyQualifiedNamespace: '${serviceBusSettings!.namespaceName}.servicebus.windows.net'
+  SERVICE_BUS_FULLY_QUALIFIED_NAMESPACE: '${serviceBusSettings!.namespaceName}.servicebus.windows.net'
 }
 
 var storageAccountAppSettings = {
-  AzureBlob_blobStorageEndpoint: storageAccount.properties.primaryEndpoints.blob
-  AzureFile_storageAccountUri: storageAccount.properties.primaryEndpoints.file
-  azureTables_tableStorageEndpoint: storageAccount.properties.primaryEndpoints.table
-  azurequeues_queueServiceUri: storageAccount.properties.primaryEndpoints.queue
+  BLOB_STORAGE_ENDPOINT: storageAccount.properties.primaryEndpoints.blob
+  FILE_STORAGE_ENDPOINT: storageAccount.properties.primaryEndpoints.file
+  TABLE_STORAGE_ENDPOINT: storageAccount.properties.primaryEndpoints.table
+  QUEUE_STORAGE_ENDPOINT: storageAccount.properties.primaryEndpoints.queue
 }
 
 var appSettings = union(baseAppSettings, serviceBusAppSettings, storageAccountAppSettings)
