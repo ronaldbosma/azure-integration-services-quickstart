@@ -3,5 +3,9 @@
     "azureLogicAppsStandard.projectLanguage": "JavaScript",
     "azureLogicAppsStandard.projectRuntime": "~4",
     "debug.internalConsoleOptions": "neverOpen",
-    "azureFunctions.suppressProject": true
+    "azureFunctions.suppressProject": true,
+    "azureFunctions.deploySubpath": "src\\functionApp/bin/Release/net8.0/publish",
+    "azureFunctions.projectLanguage": "C#",
+    "azureFunctions.projectRuntime": "~4",
+    "azureFunctions.preDeployTask": "publish (functions)"
 }
