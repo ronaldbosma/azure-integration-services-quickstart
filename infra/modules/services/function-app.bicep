@@ -67,14 +67,7 @@ var serviceBusAppSettings = serviceBusSettings == null ? {} : {
   ServiceBusConnection__fullyQualifiedNamespace: '${serviceBusSettings!.namespaceName}.servicebus.windows.net'
 }
 
-var storageAccountAppSettings = {
-  BLOB_STORAGE_ENDPOINT: storageAccount.properties.primaryEndpoints.blob
-  FILE_STORAGE_ENDPOINT: storageAccount.properties.primaryEndpoints.file
-  TABLE_STORAGE_ENDPOINT: storageAccount.properties.primaryEndpoints.table
-  QUEUE_STORAGE_ENDPOINT: storageAccount.properties.primaryEndpoints.queue
-}
-
-var appSettings = union(baseAppSettings, apimAppSettings, serviceBusAppSettings, storageAccountAppSettings)
+var appSettings = union(baseAppSettings, apimAppSettings, serviceBusAppSettings)
 
 //=============================================================================
 // Existing resources
