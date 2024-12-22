@@ -14,7 +14,7 @@ public class SampleFunction
     }
 
     [Function(nameof(SampleFunction))]
-    [TableOutput("aisquick-sample", Connection = "StorageAccountConnection")]
+    [TableOutput("aisquickSample", Connection = "StorageAccountConnection")]
     public SampleTableEntity Run(
         [ServiceBusTrigger("aisquick-sample", "function-app", Connection = "ServiceBusConnection", AutoCompleteMessages = true)]
         SampleMessage sampleMessage

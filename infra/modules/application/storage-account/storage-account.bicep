@@ -38,5 +38,5 @@ resource sampleContainer 'Microsoft.Storage/storageAccounts/blobServices/contain
 
 resource sampleTable 'Microsoft.Storage/storageAccounts/tableServices/tables@2023-05-01' = {
   parent: storageAccountTableServices
-  name: 'aisquick-sample'
+  name: 'aisquickSample'
 }
