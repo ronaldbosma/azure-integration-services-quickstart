@@ -22,11 +22,21 @@ resource storageAccountBlobServices 'Microsoft.Storage/storageAccounts/blobServi
   name: 'default'
 }
 
+resource storageAccountTableServices 'Microsoft.Storage/storageAccounts/tableServices@2023-05-01' existing = {
+  parent: storageAccount
+  name: 'default'
+}
+
 //=============================================================================
 // Resources
 //=============================================================================
 
 resource sampleContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-05-01' = {
   parent: storageAccountBlobServices
+  name: 'sample'
+}
+
+resource sampleTable 'Microsoft.Storage/storageAccounts/tableServices/tables@2023-05-01' = {
+  parent: storageAccountTableServices
   name: 'sample'
 }
