@@ -64,7 +64,7 @@ var apimAppSettings = apiManagementSettings == null ? {} : {
 
 // If the Service Bus is deployed, add app settings to connect to it
 var serviceBusAppSettings = serviceBusSettings == null ? {} : {
-  SERVICE_BUS_FULLY_QUALIFIED_NAMESPACE: '${serviceBusSettings!.namespaceName}.servicebus.windows.net'
+  ServiceBusConnection__fullyQualifiedNamespace: '${serviceBusSettings!.namespaceName}.servicebus.windows.net'
 }
 
 var storageAccountAppSettings = {

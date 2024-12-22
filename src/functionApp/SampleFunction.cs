@@ -17,7 +17,7 @@ namespace AISQuick.FunctionApp
 
         [Function(nameof(SampleFunction))]
         public async Task Run(
-            [ServiceBusTrigger("sample", "function-app", Connection = "")]
+            [ServiceBusTrigger("sample", "function-app", Connection = "ServiceBusConnection")]
             ServiceBusReceivedMessage message,
             ServiceBusMessageActions messageActions)
         {
