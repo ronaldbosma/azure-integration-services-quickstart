@@ -62,7 +62,19 @@ var apimAppSettings = apiManagementSettings == null ? {} : {
   API_MANAGEMENT_MASTER_SUBSCRIPTION_KEY: '@Microsoft.KeyVault(SecretUri=https://${keyVaultName}.vault.azure.net/secrets/apim-master-subscription-key)'
 }
 
-var appSettings = union(baseAppSettings, apimAppSettings)
+// If the Service Bus is deployed, add app settings to connect to it
+var serviceBusAppSettings = serviceBusSettings == null ? {} : {
+  SERVICE_BUS_FULLY_QUALIFIED_NAMESPACE: '${serviceBusSettings!.namespaceName}.servicebus.windows.net'
+}
+
+var storageAccountAppSettings = {
+  BLOB_STORAGE_ENDPOINT: storageAccount.properties.primaryEndpoints.blob
+  FILE_STORAGE_ENDPOINT: storageAccount.properties.primaryEndpoints.file
+  TABLE_STORAGE_ENDPOINT: storageAccount.properties.primaryEndpoints.table
+  QUEUE_STORAGE_ENDPOINT: storageAccount.properties.primaryEndpoints.queue
+}
+
+var appSettings = union(baseAppSettings, apimAppSettings, serviceBusAppSettings, storageAccountAppSettings)
 
 //=============================================================================
 // Existing resources
