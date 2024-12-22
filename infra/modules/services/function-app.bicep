@@ -68,9 +68,9 @@ var serviceBusAppSettings = serviceBusSettings == null ? {} : {
 }
 
 var storageAccountAppSettings = {
-  BlobStorageConnection__blobServiceUri: storageAccount.properties.primaryEndpoints.blob
-  TableStorageConnection__tableServiceUri: storageAccount.properties.primaryEndpoints.table
-  QueueStorageConnection__queueServiceUri: storageAccount.properties.primaryEndpoints.queue
+  StorageAccountConnection__blobServiceUri: storageAccount.properties.primaryEndpoints.blob
+  StorageAccountConnection__tableServiceUri: storageAccount.properties.primaryEndpoints.table
+  StorageAccountConnection__queueServiceUri: storageAccount.properties.primaryEndpoints.queue
 }
 
 var appSettings = union(baseAppSettings, apimAppSettings, serviceBusAppSettings, storageAccountAppSettings)

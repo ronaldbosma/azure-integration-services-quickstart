@@ -20,7 +20,7 @@ namespace AISQuick.FunctionApp
         }
 
         [Function(nameof(SampleFunction))]
-        [TableOutput("sample", Connection = "TableStorageConnection")]
+        [TableOutput("sample", Connection = "StorageAccountConnection")]
         public async Task<SampleTableEntity> Run(
             [ServiceBusTrigger("sample", "function-app", Connection = "ServiceBusConnection")]
             ServiceBusReceivedMessage message,
