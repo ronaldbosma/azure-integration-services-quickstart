@@ -242,3 +242,46 @@ test testSanitizeTrailingHyphenWhenInstanceIsEmpty 'naming-conventions.getResour
     expectedResult: 'vnet-aisquick-nwe'
   }
 }
+
+
+//=============================================================================
+// Get Instance Id
+// NOTE: subscription().subscriptionId = 00000000-0000-0000-0000-000000000000
+//=============================================================================
+
+
+test testGetInstanceIdReturnsGeneratedId 'naming-conventions.getInstanceId.bicep' = {
+  params: {
+    environment: 'aisquick'
+    region: 'norwayeast'
+    instance: ''
+    expectedResult: 'wzwr4'
+  }
+}
+
+test testGetInstanceIdWithDifferentEnvironment 'naming-conventions.getInstanceId.bicep' = {
+  params: {
+    environment: 'testenvironment'
+    region: 'norwayeast'
+    instance: ''
+    expectedResult: 'fn7w7'
+  }
+}
+
+test testGetInstanceIdWithDifferentRegion 'naming-conventions.getInstanceId.bicep' = {
+  params: {
+    environment: 'aisquick'
+    region: 'swedencentral'
+    instance: ''
+    expectedResult: '67euk'
+  }
+}
+
+test testGetInstanceIdReturnsInstanceIfSpecified 'naming-conventions.getInstanceId.bicep' = {
+  params: {
+    environment: 'aisquick'
+    region: 'norwayeast'
+    instance: 'myinstance'
+    expectedResult: 'myinstance'
+  }
+}
