@@ -8,7 +8,7 @@
 // Prefixes
 //=============================================================================
 
-test testPrefixResourceGroup 'naming-conventions.test-module.bicep' = {
+test testPrefixResourceGroup 'naming-conventions.getResourceName.bicep' = {
   params: {
     resourceType: 'resourceGroup'
     environment: 'aisquick'
@@ -18,7 +18,7 @@ test testPrefixResourceGroup 'naming-conventions.test-module.bicep' = {
   }
 }
 
-test testPrefixApiManagement 'naming-conventions.test-module.bicep' = {
+test testPrefixApiManagement 'naming-conventions.getResourceName.bicep' = {
   params: {
     resourceType: 'apiManagement'
     environment: 'aisquick'
@@ -28,7 +28,7 @@ test testPrefixApiManagement 'naming-conventions.test-module.bicep' = {
   }
 }
 
-test testPrefixFunctionApp 'naming-conventions.test-module.bicep' = {
+test testPrefixFunctionApp 'naming-conventions.getResourceName.bicep' = {
   params: {
     resourceType: 'functionApp'
     environment: 'aisquick'
@@ -43,7 +43,7 @@ test testPrefixFunctionApp 'naming-conventions.test-module.bicep' = {
 // Environment Names
 //=============================================================================
 
-test testEnvironmentName 'naming-conventions.test-module.bicep' = {
+test testEnvironmentName 'naming-conventions.getResourceName.bicep' = {
   params: {
     resourceType: 'resourceGroup'
     environment: 'sample-environment'
@@ -58,7 +58,7 @@ test testEnvironmentName 'naming-conventions.test-module.bicep' = {
 // Locations
 //=============================================================================
 
-test testLocationNorwayEast 'naming-conventions.test-module.bicep' = {
+test testLocationNorwayEast 'naming-conventions.getResourceName.bicep' = {
   params: {
     resourceType: 'resourceGroup'
     environment: 'aisquick'
@@ -68,7 +68,7 @@ test testLocationNorwayEast 'naming-conventions.test-module.bicep' = {
   }
 }
 
-test testLocationSwedenCentral 'naming-conventions.test-module.bicep' = {
+test testLocationSwedenCentral 'naming-conventions.getResourceName.bicep' = {
   params: {
     resourceType: 'resourceGroup'
     environment: 'aisquick'
@@ -78,7 +78,7 @@ test testLocationSwedenCentral 'naming-conventions.test-module.bicep' = {
   }
 }
 
-test testLocationEastUS2 'naming-conventions.test-module.bicep' = {
+test testLocationEastUS2 'naming-conventions.getResourceName.bicep' = {
   params: {
     resourceType: 'resourceGroup'
     environment: 'aisquick'
@@ -93,7 +93,7 @@ test testLocationEastUS2 'naming-conventions.test-module.bicep' = {
 // Instances
 //=============================================================================
 
-test testInstance12345 'naming-conventions.test-module.bicep' = {
+test testInstance12345 'naming-conventions.getResourceName.bicep' = {
   params: {
     resourceType: 'resourceGroup'
     environment: 'aisquick'
@@ -103,7 +103,7 @@ test testInstance12345 'naming-conventions.test-module.bicep' = {
   }
 }
 
-test testInstanceAbcde 'naming-conventions.test-module.bicep' = {
+test testInstanceAbcde 'naming-conventions.getResourceName.bicep' = {
   params: {
     resourceType: 'resourceGroup'
     environment: 'aisquick'
@@ -118,7 +118,7 @@ test testInstanceAbcde 'naming-conventions.test-module.bicep' = {
 // Shortened Names
 //=============================================================================
 
-test testShortenedStorageAccountName 'naming-conventions.test-module.bicep' = {
+test testShortenedStorageAccountName 'naming-conventions.getResourceName.bicep' = {
   params: {
     resourceType: 'storageAccount'
     environment: 'aisquick'
@@ -128,7 +128,7 @@ test testShortenedStorageAccountName 'naming-conventions.test-module.bicep' = {
   }
 }
 
-test testShortenedKeyVaultName 'naming-conventions.test-module.bicep' = {
+test testShortenedKeyVaultName 'naming-conventions.getResourceName.bicep' = {
   params: {
     resourceType: 'keyVault'
     environment: 'aisquick'
@@ -138,7 +138,7 @@ test testShortenedKeyVaultName 'naming-conventions.test-module.bicep' = {
   }
 }
 
-test testStorageAccountNameWhenEnvironmentNameIsTooLong 'naming-conventions.test-module.bicep' = {
+test testStorageAccountNameWhenEnvironmentNameIsTooLong 'naming-conventions.getResourceName.bicep' = {
   params: {
     resourceType: 'storageAccount'
     environment: 'thisenvironmentnameistoolong'
@@ -148,7 +148,7 @@ test testStorageAccountNameWhenEnvironmentNameIsTooLong 'naming-conventions.test
   }
 }
 
-test testKeyVaultNameWhenEnvironmentNameIsTooLong 'naming-conventions.test-module.bicep' = {
+test testKeyVaultNameWhenEnvironmentNameIsTooLong 'naming-conventions.getResourceName.bicep' = {
   params: {
     resourceType: 'keyVault'
     environment: 'thisenvironmentnameistoolong'
@@ -163,7 +163,7 @@ test testKeyVaultNameWhenEnvironmentNameIsTooLong 'naming-conventions.test-modul
 // Sanitizing Name
 //=============================================================================
 
-test testSanitizeColon 'naming-conventions.test-module.bicep' = {
+test testSanitizeColon 'naming-conventions.getResourceName.bicep' = {
   params: {
     resourceType: 'virtualNetwork'
     environment: 'ais;quick'
@@ -173,7 +173,7 @@ test testSanitizeColon 'naming-conventions.test-module.bicep' = {
   }
 }
 
-test testSanitizeComma 'naming-conventions.test-module.bicep' = {
+test testSanitizeComma 'naming-conventions.getResourceName.bicep' = {
   params: {
     resourceType: 'virtualNetwork'
     environment: 'ais,quick'
@@ -183,7 +183,7 @@ test testSanitizeComma 'naming-conventions.test-module.bicep' = {
   }
 }
 
-test testSanitizeDot 'naming-conventions.test-module.bicep' = {
+test testSanitizeDot 'naming-conventions.getResourceName.bicep' = {
   params: {
     resourceType: 'virtualNetwork'
     environment: 'ais.quick'
@@ -193,7 +193,7 @@ test testSanitizeDot 'naming-conventions.test-module.bicep' = {
   }
 }
 
-test testSanitizeSemicolon 'naming-conventions.test-module.bicep' = {
+test testSanitizeSemicolon 'naming-conventions.getResourceName.bicep' = {
   params: {
     resourceType: 'virtualNetwork'
     environment: 'ais:quick'
@@ -203,7 +203,7 @@ test testSanitizeSemicolon 'naming-conventions.test-module.bicep' = {
   }
 }
 
-test testSanitizeUnderscore 'naming-conventions.test-module.bicep' = {
+test testSanitizeUnderscore 'naming-conventions.getResourceName.bicep' = {
   params: {
     resourceType: 'virtualNetwork'
     environment: 'ais_quick'
@@ -213,7 +213,7 @@ test testSanitizeUnderscore 'naming-conventions.test-module.bicep' = {
   }
 }
 
-test testSanitizeWhiteSpace 'naming-conventions.test-module.bicep' = {
+test testSanitizeWhiteSpace 'naming-conventions.getResourceName.bicep' = {
   params: {
     resourceType: 'virtualNetwork'
     environment: 'ais quick'
@@ -223,7 +223,7 @@ test testSanitizeWhiteSpace 'naming-conventions.test-module.bicep' = {
   }
 }
 
-test testSanitizUpperCaseToLowerCase 'naming-conventions.test-module.bicep' = {
+test testSanitizUpperCaseToLowerCase 'naming-conventions.getResourceName.bicep' = {
   params: {
     resourceType: 'virtualNetwork'
     environment: 'AIS Quick'
@@ -233,7 +233,7 @@ test testSanitizUpperCaseToLowerCase 'naming-conventions.test-module.bicep' = {
   }
 }
 
-test testSanitizeTrailingHyphenWhenInstanceIsEmpty 'naming-conventions.test-module.bicep' = {
+test testSanitizeTrailingHyphenWhenInstanceIsEmpty 'naming-conventions.getResourceName.bicep' = {
   params: {
     resourceType: 'virtualNetwork'
     environment: 'aisquick'
