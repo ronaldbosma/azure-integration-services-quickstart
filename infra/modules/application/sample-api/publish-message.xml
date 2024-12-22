@@ -7,9 +7,9 @@
             <content type="application/json" validate-as="json" action="prevent" />
         </validate-content>
         
-        <!-- Forward the request to the sample-topic on the service bus -->
+        <!-- Forward the request to the aisquick-sample topic on the service bus -->
         <set-backend-service backend-id="service-bus" />
-        <rewrite-uri template="sample/messages" copy-unmatched-params="false" />
+        <rewrite-uri template="aisquick-sample/messages" copy-unmatched-params="false" />
         <authentication-managed-identity resource="https://servicebus.azure.net" />
 
         <!-- Add message ID to body -->

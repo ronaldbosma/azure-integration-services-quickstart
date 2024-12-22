@@ -33,10 +33,10 @@ resource storageAccountTableServices 'Microsoft.Storage/storageAccounts/tableSer
 
 resource sampleContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-05-01' = {
   parent: storageAccountBlobServices
-  name: 'sample'
+  name: 'aisquick-sample'
 }
 
 resource sampleTable 'Microsoft.Storage/storageAccounts/tableServices/tables@2023-05-01' = {
   parent: storageAccountTableServices
-  name: 'sample'
+  name: 'aisquick-sample'
 }

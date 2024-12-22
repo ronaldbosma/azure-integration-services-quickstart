@@ -34,7 +34,7 @@ resource serviceBusNamespace 'Microsoft.ServiceBus/namespaces@2024-01-01' existi
 //=============================================================================
 
 resource sampleTopic 'Microsoft.ServiceBus/namespaces/topics@2024-01-01' = {
-  name: 'sample'
+  name: 'aisquick-sample'
   parent: serviceBusNamespace
 }
 

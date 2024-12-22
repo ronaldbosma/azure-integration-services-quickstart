@@ -2,9 +2,9 @@
     <inbound>
         <base />
 
-        <!-- Get the blob from the sample container in the blob storage -->
+        <!-- Get the blob from the aisquick-sample container in the blob storage -->
         <set-backend-service backend-id="blob-storage" />
-        <rewrite-uri template="sample/{id}.json" copy-unmatched-params="false" />
+        <rewrite-uri template="aisquick-sample/{id}.json" copy-unmatched-params="false" />
         <authentication-managed-identity resource="https://storage.azure.com" />
         
         <set-header name="x-ms-version" exists-action="override">

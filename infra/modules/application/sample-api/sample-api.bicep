@@ -22,10 +22,10 @@ resource apiManagementService 'Microsoft.ApiManagement/service@2022-08-01' exist
 //=============================================================================
 
 resource sampleApi 'Microsoft.ApiManagement/service/apis@2022-08-01' = {
-  name: 'sample'
+  name: 'aisquick-sample'
   parent: apiManagementService
   properties: {
-    path: 'sample'
+    path: 'aisquick-sample'
     format: 'openapi'
     value: loadTextContent('openapi.yaml')
     type: 'http'

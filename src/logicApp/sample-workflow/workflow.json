@@ -24,7 +24,7 @@
                 "type": "ServiceProvider",
                 "inputs": {
                     "parameters": {
-                        "containerName": "sample",
+                        "containerName": "aisquick-sample",
                         "blobName": "@{body('Parse_JSON')?['id']}.json",
                         "content": "@triggerBody()?['contentData']"
                     },
@@ -48,7 +48,7 @@
                 "type": "ServiceProvider",
                 "inputs": {
                     "parameters": {
-                        "topicName": "sample",
+                        "topicName": "aisquick-sample",
                         "subscriptionName": "logic-app",
                         "isSessionsEnabled": false
                     },

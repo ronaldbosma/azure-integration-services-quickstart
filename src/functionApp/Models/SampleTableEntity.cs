@@ -7,7 +7,7 @@ namespace AISQuick.FunctionApp.Models
     {
         public SampleTableEntity(Guid id, string message)
         {
-            PartitionKey = "sample";
+            PartitionKey = "aisquick-sample";
             RowKey = id.ToString();
             Message = message;
         }

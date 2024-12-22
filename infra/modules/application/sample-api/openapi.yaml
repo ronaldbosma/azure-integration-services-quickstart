@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
-  title: Sample
-  description: Sample API
+  title: AISQuick Sample
+  description: AISQuick Sample API
   version: '1.0'
 paths:
   /messages:
@@ -68,7 +68,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/getTableEntityResponse'
               example:
-                PartitionKey: sample
+                PartitionKey: aisquick-sample
                 RowKey: 8599d9e6-24cf-4d65-a79a-9ccb085987df
                 Message: Hello world!
 components:
