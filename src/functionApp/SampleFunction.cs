@@ -1,40 +1,27 @@
-using System;
-using System.Text.Json;
-using System.Threading.Tasks;
 using AISQuick.FunctionApp.Models;
-using Azure.Messaging.ServiceBus;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 
-namespace AISQuick.FunctionApp
+namespace AISQuick.FunctionApp;
+
+public class SampleFunction
 {
-    public class SampleFunction
+    private readonly ILogger<SampleFunction> _logger;
+
+    public SampleFunction(ILogger<SampleFunction> logger)
     {
-        private static readonly JsonSerializerOptions JsonSerializerOptions = new(JsonSerializerDefaults.Web);
+        _logger = logger;
+    }
 
-        private readonly ILogger<SampleFunction> _logger;
+    [Function(nameof(SampleFunction))]
+    [TableOutput("sample", Connection = "StorageAccountConnection")]
+    public SampleTableEntity Run(
+        [ServiceBusTrigger("sample", "function-app", Connection = "ServiceBusConnection", AutoCompleteMessages = true)]
+        SampleMessage sampleMessage
+    )
+    {
+        _logger.LogInformation("Received message '{message}' with ID {id}", sampleMessage.Message, sampleMessage.Id);
 
-        public SampleFunction(ILogger<SampleFunction> logger)
-        {
-            _logger = logger;
-        }
-
-        [Function(nameof(SampleFunction))]
-        [TableOutput("sample", Connection = "StorageAccountConnection")]
-        public async Task<SampleTableEntity> Run(
-            [ServiceBusTrigger("sample", "function-app", Connection = "ServiceBusConnection")]
-            ServiceBusReceivedMessage message,
-            ServiceBusMessageActions messageActions)
-        {
-            var messageBody = JsonSerializer.Deserialize<SampleMessage>(message.Body, JsonSerializerOptions)
-                ?? throw new ArgumentException("Unable to deserialize message body", nameof(message));
-
-            _logger.LogInformation("Received message '{message}' with ID {id}", messageBody.Message, messageBody.Id);
-
-            // Complete the message
-            await messageActions.CompleteMessageAsync(message);
-
-            return new SampleTableEntity(messageBody.Id, messageBody.Message);
-        }
+        return new SampleTableEntity(sampleMessage.Id, sampleMessage.Message);
     }
 }
