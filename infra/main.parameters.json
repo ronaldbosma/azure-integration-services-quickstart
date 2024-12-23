@@ -22,6 +22,9 @@
     },
     "includeServiceBus": {
       "value": "${INCLUDE_SERVICE_BUS}"
+    },
+    "includeApplicationInfraResources": {
+      "value": "${INCLUDE_APPLICATION_INFRA_RESOURCES}"
     }
   }
 }

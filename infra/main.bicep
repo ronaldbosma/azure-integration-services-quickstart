@@ -48,6 +48,9 @@ param includeLogicApp bool
 @description('Include the Service Bus in the deployment.')
 param includeServiceBus bool
 
+@description('Include the application infrastructure resources, like the Sample API, topics, etc., in the deployment.')
+param includeApplicationInfraResources bool
+
 //=============================================================================
 // Variables
 //=============================================================================
@@ -230,7 +233,7 @@ module assignRolesToCurrentPrincipal 'modules/shared/assign-roles-to-principal.b
 // Application Resources
 //=============================================================================
 
-module applicationResources 'modules/application/application.bicep' = {
+module applicationResources 'modules/application/application.bicep' = if (includeApplicationInfraResources) {
   name: 'applicationResources'
   scope: resourceGroup
   params: {
@@ -266,3 +269,6 @@ output INCLUDE_API_MANAGEMENT bool = includeApiManagement
 output INCLUDE_FUNCTION_APP bool = includeFunctionApp
 output INCLUDE_LOGIC_APP bool = includeLogicApp
 output INCLUDE_SERVICE_BUS bool = includeServiceBus
+
+// Return if the application infra resources are included in the deployment
+output INCLUDE_APPLICATION_INFRA_RESOURCES bool = includeApplicationInfraResources

@@ -48,6 +48,8 @@ Ones `azd` is installed on your machine, you can deploy this template using the 
    
    You'll be asked to select the Azure Integration Services you want to include in the deployment. Per service, use the arrow keys to select `True` to include it or `False` to skip it, and press `Enter` to continue.  
 
+   The `includeApplicationInfraResources` parameter specifies whether the application infrastructure resources defined in Bicep should be deployed. These resources are used by the sample application and include the Sample API in API Management, topics & subscriptions in Azure Service Bus, as well as tables & containers in Azure Storage.  
+
    ![Select resources to include during azd up](images/azd-up-select-resources-to-include.png)
 
    See [Troubleshooting](#troubleshooting) if you encounter any issues during deployment.
@@ -62,9 +64,9 @@ Once you're done and want to clean up, run the `azd down` command. By including 
 azd down --purge
 ```
 
-### Changing which services to deploy
+### Changing which resources to deploy
 
-There are a couple of ways to change which Azure Integration Services are deployed. 
+There are a couple of ways to change which Azure Integration Services are deployed and if the application infra resources should be deployed. 
 
 1. Remove your environment folder from the `.azure` folder. After deletion, use `azd init` to reinitialize the environment (with the same name). You'll be asked again which services to deploy when running `azd up`.
 
@@ -78,6 +80,7 @@ There are a couple of ways to change which Azure Integration Services are deploy
    INCLUDE_FUNCTION_APP="true"
    INCLUDE_LOGIC_APP="false"
    INCLUDE_SERVICE_BUS="false"
+   INCLUDE_APPLICATION_INFRA_RESOURCES="false"
    ```
 
 1. If the environment has been taken down, most variables in the `.env` file are removed. Instead, locate the `.azure/<environment-name/config.json` file and change the values of the parameters to `true` or `false`.  
@@ -91,7 +94,8 @@ There are a couple of ways to change which Azure Integration Services are deploy
          "includeApiManagement": true,
          "includeFunctionApp": true,
          "includeLogicApp": false,
-         "includeServiceBus": false
+         "includeServiceBus": false,
+         "includeApplicationInfraResources": false
        }
      }
    }
