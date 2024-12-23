@@ -62,6 +62,10 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' existing 
   name: storageAccountName
 }
 
+resource serviceBusNamespace 'Microsoft.ServiceBus/namespaces@2024-01-01' existing = if (serviceBusSettings != null) {
+  name: serviceBusSettings!.namespaceName
+}
+
 //=============================================================================
 // Resources
 //=============================================================================
@@ -157,7 +161,7 @@ resource serviceBusBackend 'Microsoft.ApiManagement/service/backends@2023-09-01-
   name: 'service-bus'
   properties: {
     description: 'The backend for the service bus'
-    url: 'https://${serviceBusSettings!.namespaceName}.servicebus.windows.net'
+    url: serviceBusNamespace!.properties.serviceBusEndpoint
     protocol: 'http'
     tls: {
       validateCertificateChain: true
