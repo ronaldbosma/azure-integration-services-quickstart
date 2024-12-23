@@ -44,13 +44,12 @@ var serviceTags = union(tags, {
   'azd-service-name': 'functionApp'
 })
 
-var storageAccountConnectionString = 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount.listKeys().keys[0].value}'
 var appSettings = {
   APPLICATIONINSIGHTS_CONNECTION_STRING: appInsights.properties.ConnectionString
-  AzureWebJobsStorage: storageAccountConnectionString
+  AzureWebJobsStorage: '@Microsoft.KeyVault(SecretUri=${storageAccountConnectionStringSecret.properties.secretUri})'
   FUNCTIONS_EXTENSION_VERSION: '~4'
   FUNCTIONS_WORKER_RUNTIME: 'dotnet-isolated'
-  WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: storageAccountConnectionString
+  WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: '@Microsoft.KeyVault(SecretUri=${storageAccountConnectionStringSecret.properties.secretUri})'
   WEBSITE_CONTENTSHARE: toLower(functionAppSettings.functionAppName)
   WEBSITE_USE_PLACEHOLDER_DOTNETISOLATED: '1'
 }
@@ -63,8 +62,13 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
   name: appInsightsName
 }
 
-resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' existing = {
-  name: storageAccountName
+resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' existing = {
+  name: keyVaultName
+}
+
+resource storageAccountConnectionStringSecret 'Microsoft.KeyVault/vaults/secrets@2023-07-01' existing = {
+  name: 'storage-account-connection-string'
+  parent: keyVault
 }
 
 //=============================================================================

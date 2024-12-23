@@ -123,6 +123,7 @@ module storageAccount 'modules/services/storage-account.bicep' = {
     location: location
     tags: tags
     storageAccountName: storageAccountName
+    keyVaultName: keyVaultName
   }
 }
 
@@ -181,6 +182,7 @@ module functionApp 'modules/services/function-app.bicep' = if (functionAppSettin
     storageAccountName: storageAccountName
   }
   dependsOn: [
+    apiManagement
     appInsights
     storageAccount
   ]
@@ -200,6 +202,7 @@ module logicApp 'modules/services/logic-app.bicep' = if (logicAppSettings != nul
     storageAccountName: storageAccountName
   }
   dependsOn: [
+    apiManagement
     appInsights
     storageAccount
   ]
