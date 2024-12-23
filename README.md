@@ -1,5 +1,8 @@
 # Azure Integration Services Quickstart
 
+> [!IMPORTANT]  
+> I broke the logic app connections to other services in commit `f22abcb34a342303a1a295daf880fd9d06ef3b55`. Will fix this soon!
+
 An `azd` template (Bicep) for quickly deploying Azure Integration Services such as **Azure API Management**, **Function App** and **Logic App**, along with supporting resources like **Application Insights**, **Key Vault** and **Storage Account**. This template is ideal for demos, testing or getting started with Azure Integration Services.
 
 ## Overview
