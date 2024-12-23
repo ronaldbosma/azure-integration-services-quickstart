@@ -33,8 +33,8 @@ param storageAccountName string
 
 // If API Management is deployed, add app settings to connect to it
 var apimAppSettings = apiManagementSettings == null ? {} : {
-  API_MANAGEMENT_BASE_URL: apiManagementService.properties.gatewayUrl
-  API_MANAGEMENT_MASTER_SUBSCRIPTION_KEY: '@Microsoft.KeyVault(SecretUri=${apimMasterSubscriptionSecret.properties.secretUri})'
+  ApiManagement__baseUrl: apiManagementService.properties.gatewayUrl
+  ApiManagement__subscriptionKey: '@Microsoft.KeyVault(SecretUri=${apimMasterSubscriptionSecret.properties.secretUri})'
 }
 
 // If the Service Bus is deployed, add app settings to connect to it
