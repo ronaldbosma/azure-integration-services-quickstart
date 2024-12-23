@@ -98,14 +98,14 @@ module assignRolesToApimSystemAssignedIdentity '../shared/assign-roles-to-princi
 }
 
 
-// Store the app insights instrumentation key in a named value
+// Store the app insights connection string in a named value
 
-resource appInsightsInstrumentationKeyNamedValue 'Microsoft.ApiManagement/service/namedValues@2023-09-01-preview' = {
-  name: 'appin-instrumentation-key'
+resource appInsightsConnectionStringNamedValue 'Microsoft.ApiManagement/service/namedValues@2023-09-01-preview' = {
+  name: 'appinsights-connection-string'
   parent: apiManagementService
   properties: {
-    displayName: 'appin-instrumentation-key'
-    value: appInsights.properties.InstrumentationKey
+    displayName: 'appinsights-connection-string'
+    value: appInsights.properties.ConnectionString
   }
 }
 
@@ -120,9 +120,9 @@ resource apimAppInsightsLogger 'Microsoft.ApiManagement/service/loggers@2023-09-
   properties: {
     loggerType: 'applicationInsights'
     credentials: {
-      // If we would reference the instrumentation key directly using appInsights.properties.InstrumentationKey,
+      // If we would reference the connection string directly using appInsights.properties.ConnectionString,
       // a new named value is created every time we execute a deployment
-      instrumentationKey: '{{${appInsightsInstrumentationKeyNamedValue.properties.displayName}}}'
+      connectionString: '{{${appInsightsConnectionStringNamedValue.properties.displayName}}}'
     }
     resourceId: appInsights.id
   }
