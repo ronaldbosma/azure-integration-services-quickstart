@@ -114,7 +114,7 @@ When disabling an already deployed service, it will not be removed when running 
   - Azure Key Vault for secure storage of secrets
   - Azure Storage Account for persistent storage
 - **Managed Identities**:
-  - Each integration service has both a **user-assigned** and **system-assigned managed identity**.
+  - Each integration service has a **system-assigned managed identity**.
   - These identities are assigned the following roles:
     - Azure Service Bus Data Receiver
     - Azure Service Bus Data Sender

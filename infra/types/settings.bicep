@@ -6,9 +6,6 @@ type apiManagementSettingsType = {
   @description('The name of the API Management service')
   serviceName: string
 
-  @description('The name of the user-assigned managed identity for the API Management service')
-  identityName: string
-
   @description('The name of the owner of the API Management service')
   publisherName: string
 
@@ -41,9 +38,6 @@ type functionAppSettingsType = {
   @description('The name of the Function App')
   functionAppName: string
 
-  @description('The name of the user-assigned managed identity for the Function App')
-  identityName: string
-
   @description('The name of the App Service for the Function App')
   appServicePlanName: string
 
@@ -62,9 +56,6 @@ type functionAppSettingsType = {
 type logicAppSettingsType = {
   @description('The name of the Logic App')
   logicAppName: string
-
-  @description('The name of the user-assigned managed identity for the Logic App')
-  identityName: string
 
   @description('The name of the App Service for the Logic App')
   appServicePlanName: string

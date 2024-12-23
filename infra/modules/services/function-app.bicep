@@ -91,25 +91,6 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' existing 
 // Resources
 //=============================================================================
 
-// Create Function App user-assigned identity and assign roles to it
-
-resource functionAppIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
-  name: functionAppSettings.identityName
-  location: location
-  tags: tags
-}
-
-module assignRolesToFunctionAppUserAssignedIdentity '../shared/assign-roles-to-principal.bicep' = {
-  name: 'assignRolesToFunctionAppUserAssignedIdentity'
-  params: {
-    principalId: functionAppIdentity.properties.principalId
-    keyVaultName: keyVaultName
-    serviceBusSettings: serviceBusSettings
-    storageAccountName: storageAccountName
-  }
-}
-
-
 // Create the Application Service Plan for the Function App
 
 resource hostingPlan 'Microsoft.Web/serverfarms@2024-04-01' = {
@@ -133,10 +114,7 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
   tags: serviceTags
   kind: 'functionapp'
   identity: {
-    type: 'SystemAssigned, UserAssigned'
-    userAssignedIdentities: {
-      '${functionAppIdentity.id}': {}
-    }
+    type: 'SystemAssigned'
   }
   properties: {
     serverFarmId: hostingPlan.id
@@ -147,6 +125,19 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
       netFrameworkVersion: functionAppSettings.netFrameworkVersion
     }
     httpsOnly: true
+  }
+}
+
+
+// Assign roles to system-assigned identity of Function App
+
+module assignRolesToFunctionAppSystemAssignedIdentity '../shared/assign-roles-to-principal.bicep' = {
+  name: 'assignRolesToFunctionAppSystemAssignedIdentity'
+  params: {
+    principalId: functionApp.identity.principalId
+    keyVaultName: keyVaultName
+    serviceBusSettings: serviceBusSettings
+    storageAccountName: storageAccountName
   }
 }
 
@@ -162,17 +153,7 @@ module setFunctionAppSettings '../shared/merge-app-settings.bicep' = {
     currentAppSettings: list('${functionApp.id}/config/appsettings', functionApp.apiVersion).properties
     newAppSettings: appSettings
   }
-}
-
-
-// Assign roles to system-assigned identity of Function App
-
-module assignRolesToFunctionAppSystemAssignedIdentity '../shared/assign-roles-to-principal.bicep' = {
-  name: 'assignRolesToFunctionAppSystemAssignedIdentity'
-  params: {
-    principalId: functionApp.identity.principalId
-    keyVaultName: keyVaultName
-    serviceBusSettings: serviceBusSettings
-    storageAccountName: storageAccountName
-  }
+  dependsOn: [
+    assignRolesToFunctionAppSystemAssignedIdentity // App settings might be dependent on the function app having access to e.g. Key Vault
+  ]
 }

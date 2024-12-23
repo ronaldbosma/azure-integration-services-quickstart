@@ -66,25 +66,6 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' existing 
 // Resources
 //=============================================================================
 
-// Create API Management user-assigned identity and assign roles to it
-
-resource apimIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
-  name: apiManagementSettings.identityName
-  location: location
-  tags: tags
-}
-
-module assignRolesToApimUserAssignedIdentity '../shared/assign-roles-to-principal.bicep' = {
-  name: 'assignRolesToApimUserAssignedIdentity'
-  params: {
-    principalId: apimIdentity.properties.principalId
-    keyVaultName: keyVaultName
-    serviceBusSettings: serviceBusSettings
-    storageAccountName: storageAccountName
-  }
-}
-
-
 // API Management - Consumption tier (see also: https://learn.microsoft.com/en-us/azure/api-management/quickstart-bicep?tabs=CLI)
 
 resource apiManagementService 'Microsoft.ApiManagement/service@2022-08-01' = {
@@ -100,10 +81,7 @@ resource apiManagementService 'Microsoft.ApiManagement/service@2022-08-01' = {
     publisherEmail: apiManagementSettings.publisherEmail
   }
   identity: {
-    type: 'SystemAssigned, UserAssigned'
-    userAssignedIdentities: {
-      '${apimIdentity.id}': {}
-    }
+    type: 'SystemAssigned'
   }
 }
 

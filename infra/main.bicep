@@ -59,7 +59,6 @@ var resourceGroupName = getResourceName('resourceGroup', environmentName, locati
 
 var apiManagementSettings = !includeApiManagement ? null : {
   serviceName: getResourceName('apiManagement', environmentName, location, instanceId)
-  identityName: getResourceName('managedIdentity', environmentName, location, 'apim-${instanceId}')
   publisherName: 'admin@example.org'
   publisherEmail: 'admin@example.org'
 }
@@ -72,7 +71,6 @@ var appInsightsSettings = {
 
 var functionAppSettings = {
   functionAppName: getResourceName('functionApp', environmentName, location, instanceId)
-  identityName: getResourceName('managedIdentity', environmentName, location, 'functionapp-${instanceId}')
   appServicePlanName: getResourceName('appServicePlan', environmentName, location, 'functionapp-${instanceId}')
   netFrameworkVersion: 'v8.0'
   isIncluded: includeFunctionApp
@@ -80,7 +78,6 @@ var functionAppSettings = {
 
 var logicAppSettings = {
   logicAppName: getResourceName('logicApp', environmentName, location, instanceId)
-  identityName: getResourceName('managedIdentity', environmentName, location, 'logicapp-${instanceId}')
   appServicePlanName: getResourceName('appServicePlan', environmentName, location, 'logicapp-${instanceId}')
   netFrameworkVersion: 'v8.0'
   isIncluded: includeLogicApp

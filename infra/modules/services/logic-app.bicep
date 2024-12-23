@@ -86,25 +86,6 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' existing 
 // Resources
 //=============================================================================
 
-// Create Logic App user-assigned identity and assign roles to it
-
-resource logicAppIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
-  name: logicAppSettings.identityName
-  location: location
-  tags: tags
-}
-
-module assignRolesToLogicAppUserAssignedIdentity '../shared/assign-roles-to-principal.bicep' = {
-  name: 'assignRolesToLogicAppUserAssignedIdentity'
-  params: {
-    principalId: logicAppIdentity.properties.principalId
-    keyVaultName: keyVaultName
-    serviceBusSettings: serviceBusSettings
-    storageAccountName: storageAccountName
-  }
-}
-
-
 // Create the Application Service Plan for the Logic App
 
 resource hostingPlan 'Microsoft.Web/serverfarms@2024-04-01' = {
@@ -130,14 +111,10 @@ resource logicApp 'Microsoft.Web/sites@2024-04-01' = {
   tags: serviceTags
   kind: 'functionapp,workflowapp'
   identity: {
-    type: 'SystemAssigned, UserAssigned'
-    userAssignedIdentities: {
-      '${logicAppIdentity.id}': {}
-    }
+    type: 'SystemAssigned'
   }
   properties: {
     serverFarmId: hostingPlan.id
-    keyVaultReferenceIdentity: logicAppIdentity.id
     siteConfig: {
       // NOTE: the app settings will be set separately
       ftpsState: 'FtpsOnly'
@@ -145,6 +122,19 @@ resource logicApp 'Microsoft.Web/sites@2024-04-01' = {
       netFrameworkVersion: logicAppSettings.netFrameworkVersion
     }
     httpsOnly: true
+  }
+}
+
+
+// Assign roles to system-assigned identity of Logic App
+
+module assignRolesToLogicAppSystemAssignedIdentity '../shared/assign-roles-to-principal.bicep' = {
+  name: 'assignRolesToLogicAppSystemAssignedIdentity'
+  params: {
+    principalId: logicApp.identity.principalId
+    keyVaultName: keyVaultName
+    serviceBusSettings: serviceBusSettings
+    storageAccountName: storageAccountName
   }
 }
 
@@ -160,17 +150,7 @@ module setLogicAppSettings '../shared/merge-app-settings.bicep' = {
     currentAppSettings: list('${logicApp.id}/config/appsettings', logicApp.apiVersion).properties
     newAppSettings: appSettings
   }
-}
-
-
-// Assign roles to system-assigned identity of Logic App
-
-module assignRolesToLogicAppSystemAssignedIdentity '../shared/assign-roles-to-principal.bicep' = {
-  name: 'assignRolesToLogicAppSystemAssignedIdentity'
-  params: {
-    principalId: logicApp.identity.principalId
-    keyVaultName: keyVaultName
-    serviceBusSettings: serviceBusSettings
-    storageAccountName: storageAccountName
-  }
+  dependsOn: [
+    assignRolesToLogicAppSystemAssignedIdentity // App settings might be dependent on the logic app having access to e.g. Key Vault
+  ]
 }
