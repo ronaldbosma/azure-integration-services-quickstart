@@ -1,5 +1,5 @@
 # =============================================================================
-# Tests for the Sample application. See test.md for more information.
+# Tests for the Sample application. See tests.md for more information.
 # =============================================================================
 
 # Publish a message to the aisquick-sample topic via the Sample API in API Management
