@@ -13,7 +13,7 @@ param apiManagementServiceName string
 // Existing resources
 //=============================================================================
 
-resource apiManagementService 'Microsoft.ApiManagement/service@2022-08-01' existing = {
+resource apiManagementService 'Microsoft.ApiManagement/service@2023-09-01-preview' existing = {
   name: apiManagementServiceName
 }
 
@@ -21,7 +21,7 @@ resource apiManagementService 'Microsoft.ApiManagement/service@2022-08-01' exist
 // Resources
 //=============================================================================
 
-resource sampleApi 'Microsoft.ApiManagement/service/apis@2022-08-01' = {
+resource sampleApi 'Microsoft.ApiManagement/service/apis@2023-09-01-preview' = {
   name: 'aisquick-sample'
   parent: apiManagementService
   properties: {
@@ -36,7 +36,7 @@ resource sampleApi 'Microsoft.ApiManagement/service/apis@2022-08-01' = {
   }
 }
 
-resource getBlobOperation 'Microsoft.ApiManagement/service/apis/operations@2022-08-01' existing = {
+resource getBlobOperation 'Microsoft.ApiManagement/service/apis/operations@2023-09-01-preview' existing = {
   name: 'get-blob'
   parent: sampleApi
 
@@ -49,7 +49,7 @@ resource getBlobOperation 'Microsoft.ApiManagement/service/apis/operations@2022-
   }
 }
 
-resource getTableEntityOperation 'Microsoft.ApiManagement/service/apis/operations@2022-08-01' existing = {
+resource getTableEntityOperation 'Microsoft.ApiManagement/service/apis/operations@2023-09-01-preview' existing = {
   name: 'get-table-entity'
   parent: sampleApi
 
@@ -62,7 +62,7 @@ resource getTableEntityOperation 'Microsoft.ApiManagement/service/apis/operation
   }
 }
 
-resource publishMessageOperation 'Microsoft.ApiManagement/service/apis/operations@2022-08-01' existing = {
+resource publishMessageOperation 'Microsoft.ApiManagement/service/apis/operations@2023-09-01-preview' existing = {
   name: 'publish-message'
   parent: sampleApi
 

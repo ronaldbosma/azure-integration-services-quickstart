@@ -53,7 +53,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' existing = {
   name: keyVaultName
 }
 
-resource masterSubscription 'Microsoft.ApiManagement/service/subscriptions@2022-08-01' existing = {
+resource masterSubscription 'Microsoft.ApiManagement/service/subscriptions@2023-09-01-preview' existing = {
   name: 'master'
   parent: apiManagementService
 }
@@ -68,7 +68,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' existing 
 
 // API Management - Consumption tier (see also: https://learn.microsoft.com/en-us/azure/api-management/quickstart-bicep?tabs=CLI)
 
-resource apiManagementService 'Microsoft.ApiManagement/service@2022-08-01' = {
+resource apiManagementService 'Microsoft.ApiManagement/service@2023-09-01-preview' = {
   name: apiManagementSettings.serviceName
   location: location
   tags: serviceTags
@@ -85,7 +85,6 @@ resource apiManagementService 'Microsoft.ApiManagement/service@2022-08-01' = {
   }
 }
 
-
 // Assign roles to system-assigned identity of API Management
 
 module assignRolesToApimSystemAssignedIdentity '../shared/assign-roles-to-principal.bicep' = {
@@ -101,7 +100,7 @@ module assignRolesToApimSystemAssignedIdentity '../shared/assign-roles-to-princi
 
 // Store the app insights instrumentation key in a named value
 
-resource appInsightsInstrumentationKeyNamedValue 'Microsoft.ApiManagement/service/namedValues@2022-08-01' = {
+resource appInsightsInstrumentationKeyNamedValue 'Microsoft.ApiManagement/service/namedValues@2023-09-01-preview' = {
   name: 'appin-instrumentation-key'
   parent: apiManagementService
   properties: {
@@ -115,7 +114,7 @@ resource appInsightsInstrumentationKeyNamedValue 'Microsoft.ApiManagement/servic
 // - we need a logger that is connected to the App Insights instance
 // - we need diagnostics settings that specify what to log to the logger
 
-resource apimAppInsightsLogger 'Microsoft.ApiManagement/service/loggers@2022-08-01' = {
+resource apimAppInsightsLogger 'Microsoft.ApiManagement/service/loggers@2023-09-01-preview' = {
   name: appInsightsName
   parent: apiManagementService
   properties: {
@@ -129,7 +128,7 @@ resource apimAppInsightsLogger 'Microsoft.ApiManagement/service/loggers@2022-08-
   }
 }
 
-resource apimInsightsDiagnostics 'Microsoft.ApiManagement/service/diagnostics@2022-08-01' = {
+resource apimInsightsDiagnostics 'Microsoft.ApiManagement/service/diagnostics@2023-09-01-preview' = {
   name: 'applicationinsights' // The name of the diagnostics resource has to be applicationinsights, because that's the logger type we chose
   parent: apiManagementService
   properties: {
@@ -153,7 +152,7 @@ resource apimMasterSubscriptionKeySecret 'Microsoft.KeyVault/vaults/secrets@2023
 
 // Add backends for the various services
 
-resource serviceBusBackend 'Microsoft.ApiManagement/service/backends@2022-08-01' = if (serviceBusSettings != null) {
+resource serviceBusBackend 'Microsoft.ApiManagement/service/backends@2023-09-01-preview' = if (serviceBusSettings != null) {
   parent: apiManagementService
   name: 'service-bus'
   properties: {
@@ -167,7 +166,7 @@ resource serviceBusBackend 'Microsoft.ApiManagement/service/backends@2022-08-01'
   }
 }
 
-resource blobStorageBackend 'Microsoft.ApiManagement/service/backends@2022-08-01' = {
+resource blobStorageBackend 'Microsoft.ApiManagement/service/backends@2023-09-01-preview' = {
   parent: apiManagementService
   name: 'blob-storage'
   properties: {
@@ -181,7 +180,7 @@ resource blobStorageBackend 'Microsoft.ApiManagement/service/backends@2022-08-01
   }
 }
 
-resource tableStorageBackend 'Microsoft.ApiManagement/service/backends@2022-08-01' = {
+resource tableStorageBackend 'Microsoft.ApiManagement/service/backends@2023-09-01-preview' = {
   parent: apiManagementService
   name: 'table-storage'
   properties: {
@@ -195,7 +194,7 @@ resource tableStorageBackend 'Microsoft.ApiManagement/service/backends@2022-08-0
   }
 }
 
-resource queueStorageBackend 'Microsoft.ApiManagement/service/backends@2022-08-01' = {
+resource queueStorageBackend 'Microsoft.ApiManagement/service/backends@2023-09-01-preview' = {
   parent: apiManagementService
   name: 'queue-storage'
   properties: {
