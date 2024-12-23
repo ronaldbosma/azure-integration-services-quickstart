@@ -6,7 +6,7 @@
 // Imports
 //=============================================================================
 
-import { logicAppSettingsType, serviceBusSettingsType } from '../../types/settings.bicep'
+import { apiManagementSettingsType, logicAppSettingsType, serviceBusSettingsType } from '../../types/settings.bicep'
 
 //=============================================================================
 // Parameters
@@ -20,6 +20,9 @@ param tags object
 
 @description('The settings for the Logic App that will be created')
 param logicAppSettings logicAppSettingsType
+
+@description('The settings for the API Management Service')
+param apiManagementSettings apiManagementSettingsType?
 
 @description('The name of the App Insights instance that will be used by the Logic App')
 param appInsightsName string
@@ -42,7 +45,7 @@ var serviceTags = union(tags, {
 })
 
 var storageAccountConnectionString = 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount.listKeys().keys[0].value}'
-var baseAppSettings = {
+var appSettings = {
   APP_KIND: 'workflowApp'
   APPLICATIONINSIGHTS_CONNECTION_STRING: appInsights.properties.ConnectionString
   AzureFunctionsJobHost__extensionBundle__id: 'Microsoft.Azure.Functions.ExtensionBundle.Workflows'
@@ -54,20 +57,6 @@ var baseAppSettings = {
   WEBSITE_CONTENTSHARE: toLower(logicAppSettings.logicAppName)
   WEBSITE_NODE_DEFAULT_VERSION: '~20'
 }
-
-// If the Service Bus is deployed, add app settings to connect to it
-var serviceBusAppSettings = serviceBusSettings == null ? {} : {
-  SERVICE_BUS_FULLY_QUALIFIED_NAMESPACE: '${serviceBusSettings!.namespaceName}.servicebus.windows.net'
-}
-
-var storageAccountAppSettings = {
-  BLOB_STORAGE_ENDPOINT: storageAccount.properties.primaryEndpoints.blob
-  FILE_STORAGE_ENDPOINT: storageAccount.properties.primaryEndpoints.file
-  TABLE_STORAGE_ENDPOINT: storageAccount.properties.primaryEndpoints.table
-  QUEUE_STORAGE_ENDPOINT: storageAccount.properties.primaryEndpoints.queue
-}
-
-var appSettings = union(baseAppSettings, serviceBusAppSettings, storageAccountAppSettings)
 
 //=============================================================================
 // Existing resources
@@ -138,7 +127,7 @@ module assignRolesToLogicAppSystemAssignedIdentity '../shared/assign-roles-to-pr
 }
 
 
-// Set App Settings
+// Set standard App Settings
 //  NOTE: this is done in a separate module that merges the app settings with the existing ones 
 //        to prevent other (manually) created app settings from being removed.
 
@@ -151,5 +140,22 @@ module setLogicAppSettings '../shared/merge-app-settings.bicep' = {
   }
   dependsOn: [
     assignRolesToLogicAppSystemAssignedIdentity // App settings might be dependent on the logic app having access to e.g. Key Vault
+  ]
+}
+
+
+// Add app settings that can be used to connect to other services
+
+module addConnectionAppSettingsToLogicApp '../shared/add-app-settings-to-other-services.bicep' = {
+  name: 'addConnectionAppSettingsToLogicApp'
+  params: {
+    siteName: logicAppSettings.logicAppName
+    apiManagementSettings: apiManagementSettings
+    keyVaultName: keyVaultName
+    serviceBusSettings: serviceBusSettings
+    storageAccountName: storageAccountName
+  }
+  dependsOn: [
+    setLogicAppSettings
   ]
 }

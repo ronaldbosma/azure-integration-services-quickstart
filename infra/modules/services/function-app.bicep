@@ -45,7 +45,7 @@ var serviceTags = union(tags, {
 })
 
 var storageAccountConnectionString = 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount.listKeys().keys[0].value}'
-var baseAppSettings = {
+var appSettings = {
   APPLICATIONINSIGHTS_CONNECTION_STRING: appInsights.properties.ConnectionString
   AzureWebJobsStorage: storageAccountConnectionString
   FUNCTIONS_EXTENSION_VERSION: '~4'
@@ -54,25 +54,6 @@ var baseAppSettings = {
   WEBSITE_CONTENTSHARE: toLower(functionAppSettings.functionAppName)
   WEBSITE_USE_PLACEHOLDER_DOTNETISOLATED: '1'
 }
-
-// If API Management is deployed, add app settings to connect to it
-var apimAppSettings = apiManagementSettings == null ? {} : {
-  API_MANAGEMENT_BASE_URL: 'https://${apiManagementSettings!.serviceName}.azure-api.net'
-  API_MANAGEMENT_MASTER_SUBSCRIPTION_KEY: '@Microsoft.KeyVault(SecretUri=https://${keyVaultName}.vault.azure.net/secrets/apim-master-subscription-key)'
-}
-
-// If the Service Bus is deployed, add app settings to connect to it
-var serviceBusAppSettings = serviceBusSettings == null ? {} : {
-  ServiceBusConnection__fullyQualifiedNamespace: '${serviceBusSettings!.namespaceName}.servicebus.windows.net'
-}
-
-var storageAccountAppSettings = {
-  StorageAccountConnection__blobServiceUri: storageAccount.properties.primaryEndpoints.blob
-  StorageAccountConnection__tableServiceUri: storageAccount.properties.primaryEndpoints.table
-  StorageAccountConnection__queueServiceUri: storageAccount.properties.primaryEndpoints.queue
-}
-
-var appSettings = union(baseAppSettings, apimAppSettings, serviceBusAppSettings, storageAccountAppSettings)
 
 //=============================================================================
 // Existing resources
@@ -141,7 +122,7 @@ module assignRolesToFunctionAppSystemAssignedIdentity '../shared/assign-roles-to
 }
 
 
-// Set App Settings
+// Set standard App Settings
 //  NOTE: this is done in a separate module that merges the app settings with the existing ones 
 //        to prevent other (manually) created app settings from being removed.
 
@@ -154,5 +135,22 @@ module setFunctionAppSettings '../shared/merge-app-settings.bicep' = {
   }
   dependsOn: [
     assignRolesToFunctionAppSystemAssignedIdentity // App settings might be dependent on the function app having access to e.g. Key Vault
+  ]
+}
+
+
+// Add app settings that can be used to connect to other services
+
+module addConnectionAppSettingsToFunctionApp '../shared/add-app-settings-to-other-services.bicep' = {
+  name: 'addConnectionAppSettingsToFunctionApp'
+  params: {
+    siteName: functionAppSettings.functionAppName
+    apiManagementSettings: apiManagementSettings
+    keyVaultName: keyVaultName
+    serviceBusSettings: serviceBusSettings
+    storageAccountName: storageAccountName
+  }
+  dependsOn: [
+    setFunctionAppSettings
   ]
 }

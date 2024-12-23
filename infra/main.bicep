@@ -193,6 +193,7 @@ module logicApp 'modules/services/logic-app.bicep' = if (logicAppSettings != nul
     location: location
     tags: tags
     logicAppSettings: logicAppSettings!
+    apiManagementSettings: apiManagementSettings
     appInsightsName: appInsightsSettings.appInsightsName
     keyVaultName: keyVaultName
     serviceBusSettings: serviceBusSettings

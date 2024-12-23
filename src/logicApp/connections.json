@@ -8,7 +8,7 @@
                 "authProvider": {
                     "Type": "ManagedServiceIdentity"
                 },
-                "blobStorageEndpoint": "@appsetting('BLOB_STORAGE_ENDPOINT')"
+                "blobStorageEndpoint": "@appsetting('StorageAccountConnection__blobServiceUri')"
             },
             "serviceProvider": {
                 "id": "/serviceProviders/AzureBlob"
@@ -21,7 +21,7 @@
                 "authProvider": {
                     "Type": "ManagedServiceIdentity"
                 },
-                "storageAccountUri": "@appsetting('FILE_STORAGE_ENDPOINT')"
+                "storageAccountUri": "@appsetting('StorageAccountConnection__fileServiceUri')"
             },
             "serviceProvider": {
                 "id": "/serviceProviders/AzureFile"
@@ -34,7 +34,7 @@
                 "authProvider": {
                     "Type": "ManagedServiceIdentity"
                 },
-                "tableStorageEndpoint": "@appsetting('TABLE_STORAGE_ENDPOINT')"
+                "tableStorageEndpoint": "@appsetting('StorageAccountConnection__tableServiceUri')"
             },
             "serviceProvider": {
                 "id": "/serviceProviders/azureTables"
@@ -47,7 +47,7 @@
                 "authProvider": {
                     "Type": "ManagedServiceIdentity"
                 },
-                "queueServiceUri": "@appsetting('QUEUE_STORAGE_ENDPOINT')"
+                "queueServiceUri": "@appsetting('StorageAccountConnection__queueServiceUri')"
             },
             "serviceProvider": {
                 "id": "/serviceProviders/azurequeues"
@@ -60,7 +60,7 @@
                 "authProvider": {
                     "Type": "ManagedServiceIdentity"
                 },
-                "fullyQualifiedNamespace": "@appsetting('SERVICE_BUS_FULLY_QUALIFIED_NAMESPACE')"
+                "fullyQualifiedNamespace": "@appsetting('ServiceBusConnection__fullyQualifiedNamespace')"
             },
             "serviceProvider": {
                 "id": "/serviceProviders/serviceBus"
