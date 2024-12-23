@@ -69,14 +69,14 @@ var appInsightsSettings = {
   retentionInDays: 30
 }
 
-var functionAppSettings = {
+var functionAppSettings = !includeFunctionApp ? null : {
   functionAppName: getResourceName('functionApp', environmentName, location, instanceId)
   appServicePlanName: getResourceName('appServicePlan', environmentName, location, 'functionapp-${instanceId}')
   netFrameworkVersion: 'v8.0'
   isIncluded: includeFunctionApp
 }
 
-var logicAppSettings = {
+var logicAppSettings = !includeLogicApp ? null : {
   logicAppName: getResourceName('logicApp', environmentName, location, instanceId)
   appServicePlanName: getResourceName('appServicePlan', environmentName, location, 'logicapp-${instanceId}')
   netFrameworkVersion: 'v8.0'
@@ -167,13 +167,13 @@ module apiManagement 'modules/services/api-management.bicep' = if (apiManagement
   ]
 }
 
-module functionApp 'modules/services/function-app.bicep' = if (includeFunctionApp) {
+module functionApp 'modules/services/function-app.bicep' = if (functionAppSettings != null) {
   name: 'functionApp'
   scope: resourceGroup
   params: {
     location: location
     tags: tags
-    functionAppSettings: functionAppSettings
+    functionAppSettings: functionAppSettings!
     apiManagementSettings: apiManagementSettings
     appInsightsName: appInsightsSettings.appInsightsName
     keyVaultName: keyVaultName
@@ -186,13 +186,13 @@ module functionApp 'modules/services/function-app.bicep' = if (includeFunctionAp
   ]
 }
 
-module logicApp 'modules/services/logic-app.bicep' = if (includeLogicApp){
+module logicApp 'modules/services/logic-app.bicep' = if (logicAppSettings != null){
   name: 'logicApp'
   scope: resourceGroup
   params: {
     location: location
     tags: tags
-    logicAppSettings: logicAppSettings
+    logicAppSettings: logicAppSettings!
     appInsightsName: appInsightsSettings.appInsightsName
     keyVaultName: keyVaultName
     serviceBusSettings: serviceBusSettings
@@ -250,9 +250,9 @@ module applicationResources 'modules/application/application.bicep' = {
 // Return the names of the resources
 output AZURE_API_MANAGEMENT_NAME string = (apiManagementSettings != null ? apiManagementSettings!.serviceName : '')
 output AZURE_APPLICATION_INSIGHTS_NAME string = appInsightsSettings.appInsightsName
-output AZURE_FUNCTION_APP_NAME string = (includeFunctionApp ? functionAppSettings.functionAppName : '')
+output AZURE_FUNCTION_APP_NAME string = (functionAppSettings != null ? functionAppSettings!.functionAppName : '')
 output AZURE_KEY_VAULT_NAME string = keyVaultName
-output AZURE_LOGIC_APP_NAME string = (includeLogicApp ? logicAppSettings.logicAppName : '')
+output AZURE_LOGIC_APP_NAME string = (logicAppSettings != null ? logicAppSettings!.logicAppName : '')
 output AZURE_RESOURCE_GROUP string = resourceGroupName
 output AZURE_SERVICE_BUS_NAMESPACE_NAME string = (serviceBusSettings != null ? serviceBusSettings!.namespaceName : '')
 output AZURE_STORAGE_ACCOUNT_NAME string = storageAccountName

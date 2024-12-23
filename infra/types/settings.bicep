@@ -43,9 +43,6 @@ type functionAppSettingsType = {
 
   @description('The .NET Framework version for the Function App')
   netFrameworkVersion: string
-
-  @description('Indication if the Function App is included in the deployment')
-  isIncluded: bool
 }
 
 
@@ -62,9 +59,6 @@ type logicAppSettingsType = {
 
   @description('The .NET Framework version for the Logic App')
   netFrameworkVersion: string
-
-  @description('Indication if the Logic App is included in the deployment')
-  isIncluded: bool
 }
 
 
