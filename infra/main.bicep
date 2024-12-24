@@ -246,6 +246,7 @@ module applicationResources 'modules/application/application.bicep' = if (includ
   dependsOn: [
     apiManagement
     serviceBus
+    storageAccount
   ]
 }
 
