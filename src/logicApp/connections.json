@@ -8,7 +8,7 @@
                 "authProvider": {
                     "Type": "ManagedServiceIdentity"
                 },
-                "blobStorageEndpoint": "@appsetting('StorageAccountConnection__blobServiceUri')"
+                "blobStorageEndpoint": "@appsetting('AzureBlob_blobStorageEndpoint')"
             },
             "serviceProvider": {
                 "id": "/serviceProviders/AzureBlob"
@@ -21,7 +21,7 @@
                 "authProvider": {
                     "Type": "ManagedServiceIdentity"
                 },
-                "storageAccountUri": "@appsetting('StorageAccountConnection__fileServiceUri')"
+                "storageAccountUri": "@appsetting('AzureFile_storageAccountUri')"
             },
             "serviceProvider": {
                 "id": "/serviceProviders/AzureFile"
@@ -34,7 +34,7 @@
                 "authProvider": {
                     "Type": "ManagedServiceIdentity"
                 },
-                "tableStorageEndpoint": "@appsetting('StorageAccountConnection__tableServiceUri')"
+                "tableStorageEndpoint": "@appsetting('AzureTables_tableStorageEndpoint')"
             },
             "serviceProvider": {
                 "id": "/serviceProviders/azureTables"
@@ -47,7 +47,7 @@
                 "authProvider": {
                     "Type": "ManagedServiceIdentity"
                 },
-                "queueServiceUri": "@appsetting('StorageAccountConnection__queueServiceUri')"
+                "queueServiceUri": "@appsetting('AzureQueues_queueServiceUri')"
             },
             "serviceProvider": {
                 "id": "/serviceProviders/azurequeues"
@@ -60,7 +60,7 @@
                 "authProvider": {
                     "Type": "ManagedServiceIdentity"
                 },
-                "fullyQualifiedNamespace": "@appsetting('ServiceBusConnection__fullyQualifiedNamespace')"
+                "fullyQualifiedNamespace": "@appsetting('ServiceBus_fullyQualifiedNamespace')"
             },
             "serviceProvider": {
                 "id": "/serviceProviders/serviceBus"

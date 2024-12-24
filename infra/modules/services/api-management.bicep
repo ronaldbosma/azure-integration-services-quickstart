@@ -6,6 +6,7 @@
 // Imports
 //=============================================================================
 
+import * as helpers from '../../functions/helpers.bicep'
 import { apiManagementSettingsType, serviceBusSettingsType } from '../../types/settings.bicep'
 
 //=============================================================================
@@ -56,14 +57,6 @@ resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' existing = {
 resource masterSubscription 'Microsoft.ApiManagement/service/subscriptions@2023-09-01-preview' existing = {
   name: 'master'
   parent: apiManagementService
-}
-
-resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' existing = {
-  name: storageAccountName
-}
-
-resource serviceBusNamespace 'Microsoft.ServiceBus/namespaces@2024-01-01' existing = if (serviceBusSettings != null) {
-  name: serviceBusSettings!.namespaceName
 }
 
 //=============================================================================
@@ -161,7 +154,7 @@ resource serviceBusBackend 'Microsoft.ApiManagement/service/backends@2023-09-01-
   name: 'service-bus'
   properties: {
     description: 'The backend for the service bus'
-    url: serviceBusNamespace!.properties.serviceBusEndpoint
+    url: helpers.getServiceBusEndpoint(serviceBusSettings!.namespaceName)
     protocol: 'http'
     tls: {
       validateCertificateChain: true
@@ -175,7 +168,7 @@ resource blobStorageBackend 'Microsoft.ApiManagement/service/backends@2023-09-01
   name: 'blob-storage'
   properties: {
     description: 'The backend for blob storage'
-    url: storageAccount.properties.primaryEndpoints.blob
+    url: helpers.getBlobStorageEndpoint(storageAccountName)
     protocol: 'http'
     tls: {
       validateCertificateChain: true
@@ -189,7 +182,7 @@ resource tableStorageBackend 'Microsoft.ApiManagement/service/backends@2023-09-0
   name: 'table-storage'
   properties: {
     description: 'The backend for table storage'
-    url: storageAccount.properties.primaryEndpoints.table
+    url: helpers.getTableStorageEndpoint(storageAccountName)
     protocol: 'http'
     tls: {
       validateCertificateChain: true
@@ -203,7 +196,7 @@ resource queueStorageBackend 'Microsoft.ApiManagement/service/backends@2023-09-0
   name: 'queue-storage'
   properties: {
     description: 'The backend for queue storage'
-    url: storageAccount.properties.primaryEndpoints.queue
+    url: helpers.getQueueStorageEndpoint(storageAccountName)
     protocol: 'http'
     tls: {
       validateCertificateChain: true

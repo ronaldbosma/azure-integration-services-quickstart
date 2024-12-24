@@ -6,6 +6,7 @@
 // Imports
 //=============================================================================
 
+import * as helpers from '../../functions/helpers.bicep'
 import { apiManagementSettingsType, logicAppSettingsType, serviceBusSettingsType } from '../../types/settings.bicep'
 
 //=============================================================================
@@ -44,17 +45,38 @@ var serviceTags = union(tags, {
   'azd-service-name': 'logicApp'
 })
 
+// If API Management is deployed, add app settings to connect to it
+var apimAppSettings = apiManagementSettings == null ? {} : {
+  ApiManagement_gatewayUrl: helpers.getApiManagementGatewayUrl(apiManagementSettings!.serviceName)
+  ApiManagement_subscriptionKey: helpers.getKeyVaultSecretReference(keyVaultName, 'apim-master-subscription-key')
+}
+
+// If the Service Bus is deployed, add app settings to connect to it
+var serviceBusAppSettings = serviceBusSettings == null ? {} : {
+  ServiceBus_fullyQualifiedNamespace: helpers.getServiceBusFullyQualifiedNamespace(serviceBusSettings!.namespaceName)
+}
+
 var appSettings = {
   APP_KIND: 'workflowApp'
   APPLICATIONINSIGHTS_CONNECTION_STRING: appInsights.properties.ConnectionString
   AzureFunctionsJobHost__extensionBundle__id: 'Microsoft.Azure.Functions.ExtensionBundle.Workflows'
   AzureFunctionsJobHost__extensionBundle__version: '[1.*, 2.0.0)'
-  AzureWebJobsStorage: '@Microsoft.KeyVault(SecretUri=${storageAccountConnectionStringSecret.properties.secretUri})'
+  AzureWebJobsStorage: helpers.getKeyVaultSecretReference(keyVaultName, 'storage-account-connection-string')
   FUNCTIONS_EXTENSION_VERSION: '~4'
   FUNCTIONS_WORKER_RUNTIME: 'dotnet'
-  WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: '@Microsoft.KeyVault(SecretUri=${storageAccountConnectionStringSecret.properties.secretUri})'
+  WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: helpers.getKeyVaultSecretReference(keyVaultName, 'storage-account-connection-string')
   WEBSITE_CONTENTSHARE: toLower(logicAppSettings.logicAppName)
   WEBSITE_NODE_DEFAULT_VERSION: '~20'
+
+  // Storage Account App Settings
+  AzureBlob_blobStorageEndpoint: helpers.getBlobStorageEndpoint(storageAccountName)
+  AzureFile_storageAccountUri: helpers.getFileStorageEndpoint(storageAccountName)
+  AzureQueues_queueServiceUri: helpers.getQueueStorageEndpoint(storageAccountName)
+  AzureTables_tableStorageEndpoint: helpers.getTableStorageEndpoint(storageAccountName)
+
+  // Include optional app settings
+  ...apimAppSettings
+  ...serviceBusAppSettings
 }
 
 //=============================================================================
@@ -63,15 +85,6 @@ var appSettings = {
 
 resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
   name: appInsightsName
-}
-
-resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' existing = {
-  name: keyVaultName
-}
-
-resource storageAccountConnectionStringSecret 'Microsoft.KeyVault/vaults/secrets@2023-07-01' existing = {
-  name: 'storage-account-connection-string'
-  parent: keyVault
 }
 
 //=============================================================================
@@ -144,22 +157,5 @@ module setLogicAppSettings '../shared/merge-app-settings.bicep' = {
   }
   dependsOn: [
     assignRolesToLogicAppSystemAssignedIdentity // App settings might be dependent on the logic app having access to e.g. Key Vault
-  ]
-}
-
-
-// Add app settings that can be used to connect to other services
-
-module addConnectionAppSettingsToLogicApp '../shared/add-app-settings-to-other-services.bicep' = {
-  name: 'addConnectionAppSettingsToLogicApp'
-  params: {
-    siteName: logicAppSettings.logicAppName
-    apiManagementSettings: apiManagementSettings
-    keyVaultName: keyVaultName
-    serviceBusSettings: serviceBusSettings
-    storageAccountName: storageAccountName
-  }
-  dependsOn: [
-    setLogicAppSettings
   ]
 }
