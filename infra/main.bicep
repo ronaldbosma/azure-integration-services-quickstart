@@ -167,6 +167,7 @@ module apiManagement 'modules/services/api-management.bicep' = if (apiManagement
   }
   dependsOn: [
     appInsights
+    keyVault
     storageAccount
   ]
 }
@@ -187,6 +188,7 @@ module functionApp 'modules/services/function-app.bicep' = if (functionAppSettin
   dependsOn: [
     apiManagement
     appInsights
+    keyVault
     storageAccount
   ]
 }
@@ -207,6 +209,7 @@ module logicApp 'modules/services/logic-app.bicep' = if (logicAppSettings != nul
   dependsOn: [
     apiManagement
     appInsights
+    keyVault
     storageAccount
   ]
 }
