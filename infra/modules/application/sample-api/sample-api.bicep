@@ -34,6 +34,14 @@ resource sampleApi 'Microsoft.ApiManagement/service/apis@2023-09-01-preview' = {
     ]
     subscriptionRequired: true
   }
+  
+  resource policies 'policies' = {
+    name: 'policy'
+    properties: {
+      format: 'rawxml'
+      value: loadTextContent('sample-api.xml')
+    }
+  }
 }
 
 resource getBlobOperation 'Microsoft.ApiManagement/service/apis/operations@2023-09-01-preview' existing = {

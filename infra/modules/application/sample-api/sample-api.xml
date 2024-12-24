@@ -1,0 +1,20 @@
+<policies>
+    <inbound>
+        <base />
+
+        <!-- Remove the API Management subscription key header -->
+        <set-header name="Ocp-Apim-Subscription-Key" exists-action="delete" />
+    </inbound>
+
+    <backend>
+        <base />
+    </backend>
+
+    <outbound>
+        <base />
+    </outbound>
+
+    <on-error>
+        <base />
+    </on-error>
+</policies>
