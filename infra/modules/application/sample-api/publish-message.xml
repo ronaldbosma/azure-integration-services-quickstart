@@ -19,14 +19,6 @@
             body["id"] = context.Variables.GetValueOrDefault<string>("message-id");
             return body.ToString();
         }</set-body>
-
-        <!-- 
-            Add Diagnostic-Id header to correlate the APIM and Service Bus logging.
-            See https://learn.microsoft.com/en-us/azure/service-bus-messaging/service-bus-end-to-end-tracing for more information.
-        -->
-        <set-header name="Diagnostic-Id" exists-action="override">
-            <value>@(context.Request.Headers.GetValueOrDefault("Request-Id", context.RequestId.ToString("N")))</value>
-        </set-header>
     </inbound>
 
     <backend>
