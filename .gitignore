@@ -397,12 +397,11 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 
-# Local files
-deploy.local.ps1
-test.local.http
-
 # Ignore Draw.io backup files
 *.drawio.bkp
 
 # Ignore .azure folder (used by azd)
 .azure
+
+# Local settings file (could contain secrets)
+local.settings.json
