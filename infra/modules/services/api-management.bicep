@@ -177,12 +177,12 @@ resource blobStorageBackend 'Microsoft.ApiManagement/service/backends@2023-09-01
   }
 }
 
-resource tableStorageBackend 'Microsoft.ApiManagement/service/backends@2023-09-01-preview' = {
+resource queueStorageBackend 'Microsoft.ApiManagement/service/backends@2023-09-01-preview' = {
   parent: apiManagementService
-  name: 'table-storage'
+  name: 'queue-storage'
   properties: {
-    description: 'The backend for table storage'
-    url: helpers.getTableStorageEndpoint(storageAccountName)
+    description: 'The backend for queue storage'
+    url: helpers.getQueueStorageEndpoint(storageAccountName)
     protocol: 'http'
     tls: {
       validateCertificateChain: true
@@ -191,12 +191,12 @@ resource tableStorageBackend 'Microsoft.ApiManagement/service/backends@2023-09-0
   }
 }
 
-resource queueStorageBackend 'Microsoft.ApiManagement/service/backends@2023-09-01-preview' = {
+resource tableStorageBackend 'Microsoft.ApiManagement/service/backends@2023-09-01-preview' = {
   parent: apiManagementService
-  name: 'queue-storage'
+  name: 'table-storage'
   properties: {
-    description: 'The backend for queue storage'
-    url: helpers.getQueueStorageEndpoint(storageAccountName)
+    description: 'The backend for table storage'
+    url: helpers.getTableStorageEndpoint(storageAccountName)
     protocol: 'http'
     tls: {
       validateCertificateChain: true
