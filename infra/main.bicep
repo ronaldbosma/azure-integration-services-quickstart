@@ -138,9 +138,6 @@ module appInsights 'modules/services/app-insights.bicep' = {
     tags: tags
     appInsightsSettings: appInsightsSettings
   }
-  dependsOn: [
-    keyVault
-  ]
 }
 
 module serviceBus 'modules/services/service-bus.bicep' = if (serviceBusSettings != null) {
