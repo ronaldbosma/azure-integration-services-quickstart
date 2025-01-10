@@ -33,9 +33,6 @@ param instance string = ''
 @description('The current principal ID that will be assigned roles to the Key Vault and Storage Account.')
 param currentPrincipalId string = ''
 
-@description('The type of current principal.')
-param currentPrincipalType string = 'User'
-
 @description('Include the API Management service in the deployment.')
 param includeApiManagement bool
 
@@ -215,7 +212,6 @@ module assignRolesToCurrentPrincipal 'modules/shared/assign-roles-to-principal.b
   scope: resourceGroup
   params: {
     principalId: currentPrincipalId
-    principalType: currentPrincipalType
     isAdmin: true
     keyVaultName: keyVaultName
     serviceBusSettings: serviceBusSettings
