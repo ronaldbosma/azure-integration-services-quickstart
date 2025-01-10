@@ -165,7 +165,6 @@ module apiManagement 'modules/services/api-management.bicep' = if (apiManagement
   dependsOn: [
     appInsights
     keyVault
-    storageAccount
   ]
 }
 
@@ -183,9 +182,9 @@ module functionApp 'modules/services/function-app.bicep' = if (functionAppSettin
     storageAccountName: storageAccountName
   }
   dependsOn: [
-    apiManagement
     appInsights
     keyVault
+    serviceBus
     storageAccount
   ]
 }
@@ -204,9 +203,9 @@ module logicApp 'modules/services/logic-app.bicep' = if (logicAppSettings != nul
     storageAccountName: storageAccountName
   }
   dependsOn: [
-    apiManagement
     appInsights
     keyVault
+    serviceBus
     storageAccount
   ]
 }
@@ -224,6 +223,7 @@ module assignRolesToCurrentPrincipal 'modules/shared/assign-roles-to-principal.b
   }
   dependsOn: [
     keyVault
+    serviceBus // what if it's not included?
     storageAccount
   ]
 }
