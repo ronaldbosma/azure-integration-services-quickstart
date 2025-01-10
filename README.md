@@ -28,7 +28,8 @@ If you haven't installed the Azure Developer CLI (`azd`) yet, follow the instruc
 
 Ones `azd` is installed on your machine, you can deploy this template using the following steps:
 
-1. Run the `azd init` command in an empty directory with the `--template` parameter to clone this template into the current directory.
+1. Run the `azd init` command in an empty directory with the `--template` parameter to clone this template into the current directory. 
+   When asked, specify the name of the environment. For example `aisquick`. The maximum length is 32 characters.
 
     ```
     azd init --template ronaldbosma/azure-integration-services-quickstart
