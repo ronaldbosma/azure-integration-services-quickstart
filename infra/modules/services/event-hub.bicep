@@ -18,7 +18,7 @@ param location string
 @description('The tags to associate with the resource')
 param tags object
 
-@description('The settings for the Event Hub that will be created')
+@description('The settings for the Event Hub namespace that will be created')
 param eventHubSettings eventHubSettingsType
 
 //=============================================================================
@@ -40,14 +40,5 @@ resource eventHubNamespace 'Microsoft.EventHub/namespaces@2024-01-01' = {
   properties: {
     isAutoInflateEnabled: false
     maximumThroughputUnits: 0
-  }
-}
-
-resource eventHub 'Microsoft.EventHub/namespaces/eventhubs@2024-01-01' = {
-  parent: eventHubNamespace
-  name: eventHubSettings.eventHubName
-  properties: {
-    messageRetentionInDays: 1 // Max 1 day for Basic tier
-    partitionCount: 1
   }
 }

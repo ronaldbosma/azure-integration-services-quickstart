@@ -37,9 +37,6 @@ type appInsightsSettingsType = {
 type eventHubSettingsType = {
   @description('The name of the Event Hub Namespace')
   namespaceName: string
-
-  @description('The name of the Event Hub')
-  eventHubName: string
 }
 
 
