@@ -5,12 +5,12 @@ namespace AISQuick.FunctionApp.Models
 {
     public class SampleTableEntity : ITableEntity
     {
-        public SampleTableEntity(Guid id, string message, string via)
+        public SampleTableEntity(SampleMessage sampleMessage)
         {
             PartitionKey = "aisquick-sample";
-            RowKey = id.ToString();
-            Message = message;
-            Via = via;
+            RowKey = sampleMessage.Id.ToString();
+            Message = sampleMessage.Message;
+            Via = sampleMessage.Via;
         }
 
         public string PartitionKey { get; set; }
