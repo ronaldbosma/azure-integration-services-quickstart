@@ -6,5 +6,9 @@
     "api-management-subscription-key": {
         "type": "String",
         "value": "@appsetting('ApiManagement_subscriptionKey')"
+    },
+    "event-hub-name": {
+        "type": "String",
+        "value": "@appsetting('EventHub_eventHubName')"
     }
 }

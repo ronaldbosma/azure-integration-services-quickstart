@@ -53,6 +53,19 @@
                 "id": "/serviceProviders/azureTables"
             }
         },
+        "eventHub": {
+            "displayName": "event-hub-namespace",
+            "parameterSetName": "ManagedServiceIdentity",
+            "parameterValues": {
+                "authProvider": {
+                    "Type": "ManagedServiceIdentity"
+                },
+                "fullyQualifiedNamespace": "@appsetting('EventHub_fullyQualifiedNamespace')"
+            },
+            "serviceProvider": {
+                "id": "/serviceProviders/eventHub"
+            }
+        },
         "serviceBus": {
             "displayName": "service-bus",
             "parameterSetName": "ManagedServiceIdentity",
