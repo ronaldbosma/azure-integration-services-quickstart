@@ -80,7 +80,7 @@ resource getTableEntityOperation 'Microsoft.ApiManagement/service/apis/operation
 }
 
 // Only set policy on publish message operation if the Service Bus has been deployed, otherwise it will fail
-resource publishMessageOperation 'Microsoft.ApiManagement/service/apis/operations@2023-09-01-preview' existing = if (serviceBusSettings != null) {
+resource publishMessageToServiceBusOperation 'Microsoft.ApiManagement/service/apis/operations@2023-09-01-preview' existing = if (serviceBusSettings != null) {
   name: 'publish-message-to-service-bus'
   parent: sampleApi
 
