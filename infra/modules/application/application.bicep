@@ -36,6 +36,7 @@ module sampleApi 'sample-api/sample-api.bicep' = if (apiManagementSettings != nu
   name: 'sampleApi'
   params: {
     apiManagementServiceName: apiManagementSettings!.serviceName
+    serviceBusSettings: serviceBusSettings
   }
 }
 

@@ -3,11 +3,20 @@
 //=============================================================================
 
 //=============================================================================
+// Imports
+//=============================================================================
+
+import { apiManagementSettingsType, serviceBusSettingsType } from '../../../types/settings.bicep'
+
+//=============================================================================
 // Parameters
 //=============================================================================
 
 @description('The name of the API Management service')
 param apiManagementServiceName string
+
+@description('The settings for the Service Bus namespace')
+param serviceBusSettings serviceBusSettingsType?
 
 //=============================================================================
 // Existing resources
@@ -70,7 +79,8 @@ resource getTableEntityOperation 'Microsoft.ApiManagement/service/apis/operation
   }
 }
 
-resource publishMessageOperation 'Microsoft.ApiManagement/service/apis/operations@2023-09-01-preview' existing = {
+// Only set policy on publish message operation if the Service Bus has been deployed, otherwise it will fail
+resource publishMessageOperation 'Microsoft.ApiManagement/service/apis/operations@2023-09-01-preview' existing = if (serviceBusSettings != null) {
   name: 'publish-message'
   parent: sampleApi
 
