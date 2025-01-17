@@ -36,7 +36,7 @@ param storageAccountName string
 //=============================================================================
 
 module eventHub 'event-hub/event-hub.bicep' = if (eventHubSettings != null) {
-  name: 'eventHubAndConsumerGroups'
+  name: 'eventHub'
   params: {
     eventHubSettings: eventHubSettings!
     apiManagementSettings: apiManagementSettings
