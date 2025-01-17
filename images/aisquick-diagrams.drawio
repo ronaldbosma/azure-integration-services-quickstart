@@ -1,4 +1,4 @@
-<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/25.0.2 Chrome/128.0.6613.186 Electron/32.2.5 Safari/537.36" version="25.0.2" pages="2">
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/26.0.4 Chrome/128.0.6613.186 Electron/32.2.5 Safari/537.36" version="26.0.4" pages="2">
   <diagram name="infra" id="OG9XKBtIFsMrls6_ppqH">
     <mxGraphModel dx="1434" dy="836" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -7,7 +7,7 @@
         <mxCell id="4zAsJzn06Giq1cRdL7rz-1" value="Azure Integration Services" style="rounded=0;whiteSpace=wrap;html=1;labelPosition=center;verticalLabelPosition=middle;align=center;verticalAlign=top;fontStyle=1;strokeColor=#67AB9F;" parent="1" vertex="1">
           <mxGeometry x="140" y="210" width="450" height="310" as="geometry" />
         </mxCell>
-        <mxCell id="4zAsJzn06Giq1cRdL7rz-2" value="read &amp;amp; write" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="4zAsJzn06Giq1cRdL7rz-3" target="4zAsJzn06Giq1cRdL7rz-7" edge="1">
+        <mxCell id="4zAsJzn06Giq1cRdL7rz-2" value="read &amp;amp; write" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="4zAsJzn06Giq1cRdL7rz-3" target="4zAsJzn06Giq1cRdL7rz-7" edge="1">
           <mxGeometry x="0.0031" relative="1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
@@ -25,7 +25,7 @@
           <mxGeometry x="312.5" y="360" width="60" height="60" as="geometry" />
         </mxCell>
         <mxCell id="4zAsJzn06Giq1cRdL7rz-7" value="Service Bus" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/integration/Service_Bus.svg;" parent="1" vertex="1">
-          <mxGeometry x="511" y="320" width="68" height="60" as="geometry" />
+          <mxGeometry x="499" y="250" width="68" height="60" as="geometry" />
         </mxCell>
         <mxCell id="4zAsJzn06Giq1cRdL7rz-8" value="Shared" style="rounded=0;whiteSpace=wrap;html=1;labelPosition=center;verticalLabelPosition=middle;align=center;verticalAlign=bottom;fontStyle=1;strokeColor=#67AB9F;" parent="1" vertex="1">
           <mxGeometry x="140" y="520" width="450" height="140" as="geometry" />
@@ -55,6 +55,16 @@
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="394" y="465" as="sourcePoint" />
             <mxPoint x="490" y="559" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="n3HjTpbfRZSVET7YTT7L-1" value="Event Hub" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/analytics/Event_Hubs.svg;" vertex="1" parent="1">
+          <mxGeometry x="500" y="390" width="67" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="n3HjTpbfRZSVET7YTT7L-2" value="read &amp;amp; write" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="4zAsJzn06Giq1cRdL7rz-3" target="n3HjTpbfRZSVET7YTT7L-1">
+          <mxGeometry x="0.0031" relative="1" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="411" y="332" as="sourcePoint" />
+            <mxPoint x="521" y="308" as="targetPoint" />
           </mxGeometry>
         </mxCell>
       </root>
