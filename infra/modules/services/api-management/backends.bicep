@@ -7,7 +7,7 @@
 //=============================================================================
 
 import * as helpers from '../../../functions/helpers.bicep'
-import { apiManagementSettingsType, serviceBusSettingsType } from '../../../types/settings.bicep'
+import { apiManagementSettingsType, eventHubSettingsType, serviceBusSettingsType } from '../../../types/settings.bicep'
 
 //=============================================================================
 // Parameters
@@ -15,6 +15,9 @@ import { apiManagementSettingsType, serviceBusSettingsType } from '../../../type
 
 @description('The settings for the API Management Service that will be created')
 param apiManagementSettings apiManagementSettingsType
+
+@description('The settings for the Event Hub')
+param eventHubSettings eventHubSettingsType?
 
 @description('The settings for the Service Bus namespace')
 param serviceBusSettings serviceBusSettingsType?
@@ -33,6 +36,22 @@ resource apiManagementService 'Microsoft.ApiManagement/service@2023-09-01-previe
 //=============================================================================
 // Resources
 //=============================================================================
+
+// Event Hub backends
+
+resource eventHubBackend 'Microsoft.ApiManagement/service/backends@2023-09-01-preview' = if (eventHubSettings != null) {
+  parent: apiManagementService
+  name: 'event-hub'
+  properties: {
+    description: 'The backend for the event hub'
+    url: helpers.getEventHubEndpoint(eventHubSettings!.namespaceName, eventHubSettings!.eventHubName)
+    protocol: 'http'
+    tls: {
+      validateCertificateChain: true
+      validateCertificateName: true
+    }
+  }
+}
 
 // Service Bus backends
 

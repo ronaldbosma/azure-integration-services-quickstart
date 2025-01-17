@@ -68,6 +68,7 @@ module backends './api-management/backends.bicep' = {
   name: 'backends'
   params: {
     apiManagementSettings: apiManagementSettings
+    eventHubSettings: eventHubSettings
     serviceBusSettings: serviceBusSettings
     storageAccountName: storageAccountName
   }
