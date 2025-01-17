@@ -17,7 +17,7 @@ import { apiManagementSettingsType, eventHubSettingsType } from '../../../types/
 @description('The settings for the API Management Service that will be created')
 param apiManagementSettings apiManagementSettingsType
 
-@description('The settings for the Event Hub')
+@description('The settings for the Event Hub namespace')
 param eventHubSettings eventHubSettingsType
 
 //=============================================================================

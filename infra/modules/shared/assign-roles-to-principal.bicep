@@ -18,7 +18,7 @@ param principalId string
 @description('The flag to determine if the principal is an admin or not')
 param isAdmin bool = false
 
-@description('The settings for the Event Hub on which to assign roles')
+@description('The settings for the Event Hub namespace on which to assign roles')
 param eventHubSettings eventHubSettingsType?
 
 @description('The name of the Key Vault on which to assign roles')

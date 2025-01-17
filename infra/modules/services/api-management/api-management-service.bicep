@@ -23,7 +23,7 @@ param tags object
 @description('The settings for the API Management Service that will be created')
 param apiManagementSettings apiManagementSettingsType
 
-@description('The settings for the Event Hub')
+@description('The settings for the Event Hub namespace')
 param eventHubSettings eventHubSettingsType?
 
 @description('The name of the Key Vault that will contain the secrets')
