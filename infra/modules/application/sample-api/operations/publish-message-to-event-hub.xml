@@ -9,7 +9,7 @@
 
         <!-- Forward the request to the Event Hub -->
         <set-backend-service backend-id="event-hub" />
-        <rewrite-uri template="messages" copy-unmatched-params="false" />
+        <rewrite-uri template="aisquick-sample/messages" copy-unmatched-params="false" />
         <authentication-managed-identity resource="https://eventhubs.azure.net" />
         
         <!-- Add message ID to body -->

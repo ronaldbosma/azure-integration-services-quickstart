@@ -158,7 +158,7 @@ resource eventHubBackend 'Microsoft.ApiManagement/service/backends@2023-09-01-pr
   name: 'event-hub'
   properties: {
     description: 'The backend for the event hub'
-    url: helpers.getEventHubEndpoint(eventHubSettings!.namespaceName, eventHubSettings!.eventHubName)
+    url: helpers.getServiceBusEndpoint(eventHubSettings!.namespaceName)
     protocol: 'http'
     tls: {
       validateCertificateChain: true

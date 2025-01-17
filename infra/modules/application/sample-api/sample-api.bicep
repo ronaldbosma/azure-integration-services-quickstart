@@ -6,7 +6,7 @@
 // Imports
 //=============================================================================
 
-import { apiManagementSettingsType, serviceBusSettingsType } from '../../../types/settings.bicep'
+import { apiManagementSettingsType, eventHubSettingsType, serviceBusSettingsType } from '../../../types/settings.bicep'
 
 //=============================================================================
 // Parameters
@@ -14,6 +14,9 @@ import { apiManagementSettingsType, serviceBusSettingsType } from '../../../type
 
 @description('The name of the API Management service')
 param apiManagementServiceName string
+
+@description('The settings for the Event Hub namespace')
+param eventHubSettings eventHubSettingsType?
 
 @description('The settings for the Service Bus namespace')
 param serviceBusSettings serviceBusSettingsType?
@@ -53,32 +56,6 @@ resource sampleApi 'Microsoft.ApiManagement/service/apis@2023-09-01-preview' = {
   }
 }
 
-resource getBlobOperation 'Microsoft.ApiManagement/service/apis/operations@2023-09-01-preview' existing = {
-  name: 'get-blob'
-  parent: sampleApi
-
-  resource policies 'policies' = {
-    name: 'policy'
-    properties:{
-      format: 'rawxml'
-      value: loadTextContent('operations/get-blob.xml') 
-    }
-  }
-}
-
-resource getTableEntityOperation 'Microsoft.ApiManagement/service/apis/operations@2023-09-01-preview' existing = {
-  name: 'get-table-entity'
-  parent: sampleApi
-
-  resource policies 'policies' = {
-    name: 'policy'
-    properties:{
-      format: 'rawxml'
-      value: loadTextContent('operations/get-table-entity.xml') 
-    }
-  }
-}
-
 // Only set policy on publish message operation if the Service Bus has been deployed, otherwise it will fail
 resource publishMessageToServiceBusOperation 'Microsoft.ApiManagement/service/apis/operations@2023-09-01-preview' existing = if (serviceBusSettings != null) {
   name: 'publish-message-to-service-bus'
@@ -103,6 +80,32 @@ resource publishMessageToEventHubOperation 'Microsoft.ApiManagement/service/apis
     properties:{
       format: 'rawxml'
       value: loadTextContent('operations/publish-message-to-event-hub.xml') 
+    }
+  }
+}
+
+resource getBlobOperation 'Microsoft.ApiManagement/service/apis/operations@2023-09-01-preview' existing = {
+  name: 'get-blob'
+  parent: sampleApi
+
+  resource policies 'policies' = {
+    name: 'policy'
+    properties:{
+      format: 'rawxml'
+      value: loadTextContent('operations/get-blob.xml') 
+    }
+  }
+}
+
+resource getTableEntityOperation 'Microsoft.ApiManagement/service/apis/operations@2023-09-01-preview' existing = {
+  name: 'get-table-entity'
+  parent: sampleApi
+
+  resource policies 'policies' = {
+    name: 'policy'
+    properties:{
+      format: 'rawxml'
+      value: loadTextContent('operations/get-table-entity.xml') 
     }
   }
 }

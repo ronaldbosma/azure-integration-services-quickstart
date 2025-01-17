@@ -11,9 +11,6 @@ func getApiManagementGatewayUrl(apimServiceName string) string => 'https://${api
 // Event Hub functions
 
 @export()
-func getEventHubEndpoint(eventHubNamespaceName string, eventHubName string) string => 'https://${getEventHubEndpointAddress(eventHubNamespaceName, eventHubName)}'
-
-@export()
 func getEventHubEndpointAddress(eventHubNamespaceName string, eventHubName string) string => '${getServiceBusFullyQualifiedNamespace(eventHubNamespaceName)}/${eventHubName}'
 
 
