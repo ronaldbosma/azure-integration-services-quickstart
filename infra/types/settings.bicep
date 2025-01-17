@@ -30,6 +30,19 @@ type appInsightsSettingsType = {
 }
 
 
+// Event Hub
+
+@description('The settings for the Event Hub')
+@export()
+type eventHubSettingsType = {
+  @description('The name of the Event Hub Namespace')
+  eventHubNamespaceName: string
+
+  @description('The name of the Event Hub')
+  eventHubName: string
+}
+
+
 // Function App
 
 @description('The settings for the Function App')
