@@ -17,6 +17,21 @@ Ocp-Apim-Trace: true
 ###
 
 
+# Publish a message to the aisquick-sample event hub on the Event Hub namespace via the Sample API in API Management
+# @name publishMessage
+POST https://{{apimHostname}}/aisquick-sample/event-hub/messages
+Content-Type: application/json
+Ocp-Apim-Subscription-Key: {{apimSubscriptionKey}}
+Ocp-Apim-Trace: true
+
+{
+    "message": "Hello, world!"
+}
+
+
+###
+
+
 # Get the blob with the stored message from the aisquick-sample container
 GET https://{{apimHostname}}/aisquick-sample/blobs/{{publishMessage.response.body.id}}
 Ocp-Apim-Subscription-Key: {{apimSubscriptionKey}}

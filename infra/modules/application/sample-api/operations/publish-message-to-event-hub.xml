@@ -1,0 +1,49 @@
+<policies>
+    <inbound>
+        <base />
+		
+        <!-- Validate that the body complies to the schema -->
+        <validate-content unspecified-content-type-action="prevent" max-size="102400" size-exceeded-action="prevent">
+            <content type="application/json" validate-as="json" action="prevent" />
+        </validate-content>
+
+        <!-- Forward the request to the Event Hub -->
+        <set-backend-service backend-id="event-hub" />
+        <rewrite-uri template="messages" copy-unmatched-params="false" />
+        <authentication-managed-identity resource="https://eventhubs.azure.net" />
+        
+        <!-- Add message ID to body -->
+        <set-variable name="message-id" value="@(Guid.NewGuid().ToString())" />
+        <set-body>@{
+            var body = context.Request.Body.As<JObject>();
+            body["id"] = context.Variables.GetValueOrDefault<string>("message-id");
+            return body.ToString();
+        }</set-body>
+    </inbound>
+	
+    <backend>
+        <base />
+    </backend>
+	
+    <outbound>
+        <base />
+		
+        <!-- Return the generated message ID if the message was successfully published -->
+        <choose>
+            <when condition="@(context.Response.StatusCode == 201)">
+                <set-header name="Content-Type" exists-action="override">
+                    <value>application/json</value>
+                </set-header>
+                <set-body template="liquid">
+                {
+                    "id": "{{context.Variables["message-id"]}}"
+                }
+                </set-body>
+            </when>
+        </choose>
+    </outbound>
+	
+    <on-error>
+        <base />
+    </on-error>
+</policies>

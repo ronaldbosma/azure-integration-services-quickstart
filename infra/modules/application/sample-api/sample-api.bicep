@@ -92,3 +92,17 @@ resource publishMessageToServiceBusOperation 'Microsoft.ApiManagement/service/ap
     }
   }
 }
+
+// Only set policy on publish message operation if the Event Hub has been deployed, otherwise it will fail
+resource publishMessageToEventHubOperation 'Microsoft.ApiManagement/service/apis/operations@2023-09-01-preview' existing = if (eventHubSettings != null) {
+  name: 'publish-message-to-event-hub'
+  parent: sampleApi
+
+  resource policies 'policies' = {
+    name: 'policy'
+    properties:{
+      format: 'rawxml'
+      value: loadTextContent('operations/publish-message-to-event-hub.xml') 
+    }
+  }
+}

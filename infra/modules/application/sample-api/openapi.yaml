@@ -25,6 +25,27 @@ paths:
                 $ref: '#/components/schemas/publishMessageResponse'
               example:
                 id: 8599d9e6-24cf-4d65-a79a-9ccb085987df
+  /event-hub/messages:
+    post:
+      summary: Publish Message to Event Hub
+      description: Publish Message to Event Hub
+      operationId: publish-message-to-event-hub
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/publishMessageRequest'
+            example:
+              message: Hello world!
+      responses:
+        '201':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/publishMessageResponse'
+              example:
+                id: 8599d9e6-24cf-4d65-a79a-9ccb085987df
   '/blobs/{id}':
     get:
       summary: Get Blob
