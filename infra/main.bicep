@@ -73,7 +73,7 @@ var appInsightsSettings = {
 }
 
 var eventHubSettings = !includeEventHub ? null : {
-  eventHubNamespaceName: getResourceName('eventHubNamespace', environmentName, location, instanceId)
+  namespaceName: getResourceName('eventHubNamespace', environmentName, location, instanceId)
   eventHubName: getResourceName('eventHub', environmentName, location, instanceId)
 }
 
@@ -272,7 +272,7 @@ module applicationResources 'modules/application/application.bicep' = if (includ
 // Return the names of the resources
 output AZURE_API_MANAGEMENT_NAME string = (apiManagementSettings != null ? apiManagementSettings!.serviceName : '')
 output AZURE_APPLICATION_INSIGHTS_NAME string = appInsightsSettings.appInsightsName
-output AZURE_EVENT_HUB_NAMESPACE_NAME string = (eventHubSettings != null ? eventHubSettings!.eventHubNamespaceName : '')
+output AZURE_EVENT_HUB_NAMESPACE_NAME string = (eventHubSettings != null ? eventHubSettings!.namespaceName : '')
 output AZURE_EVENT_HUB_NAME string = (eventHubSettings != null ? eventHubSettings!.eventHubName : '')
 output AZURE_FUNCTION_APP_NAME string = (functionAppSettings != null ? functionAppSettings!.functionAppName : '')
 output AZURE_KEY_VAULT_NAME string = keyVaultName
