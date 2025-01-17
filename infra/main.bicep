@@ -74,7 +74,6 @@ var appInsightsSettings = {
 
 var eventHubSettings = !includeEventHub ? null : {
   namespaceName: getResourceName('eventHubNamespace', environmentName, location, instanceId)
-  eventHubName: getResourceName('eventHub', environmentName, location, instanceId)
 }
 
 var functionAppSettings = !includeFunctionApp ? null : {
@@ -268,6 +267,7 @@ module applicationResources 'modules/application/application.bicep' = if (includ
   }
   dependsOn: [
     apiManagement
+    eventHub
     serviceBus
     storageAccount
   ]
@@ -282,7 +282,6 @@ module applicationResources 'modules/application/application.bicep' = if (includ
 output AZURE_API_MANAGEMENT_NAME string = (apiManagementSettings != null ? apiManagementSettings!.serviceName : '')
 output AZURE_APPLICATION_INSIGHTS_NAME string = appInsightsSettings.appInsightsName
 output AZURE_EVENT_HUB_NAMESPACE_NAME string = (eventHubSettings != null ? eventHubSettings!.namespaceName : '')
-output AZURE_EVENT_HUB_NAME string = (eventHubSettings != null ? eventHubSettings!.eventHubName : '')
 output AZURE_FUNCTION_APP_NAME string = (functionAppSettings != null ? functionAppSettings!.functionAppName : '')
 output AZURE_KEY_VAULT_NAME string = keyVaultName
 output AZURE_LOGIC_APP_NAME string = (logicAppSettings != null ? logicAppSettings!.logicAppName : '')
