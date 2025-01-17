@@ -4,16 +4,16 @@ using Microsoft.Extensions.Logging;
 
 namespace AISQuick.FunctionApp;
 
-public class SampleFunction
+public class ServiceBusSampleFunction
 {
-    private readonly ILogger<SampleFunction> _logger;
+    private readonly ILogger<ServiceBusSampleFunction> _logger;
 
-    public SampleFunction(ILogger<SampleFunction> logger)
+    public ServiceBusSampleFunction(ILogger<ServiceBusSampleFunction> logger)
     {
         _logger = logger;
     }
 
-    [Function(nameof(SampleFunction))]
+    [Function(nameof(ServiceBusSampleFunction))]
     [TableOutput("aisquickSample", Connection = "StorageAccountConnection")]
     public SampleTableEntity Run(
         [ServiceBusTrigger("aisquick-sample", "function-app", Connection = "ServiceBusConnection", AutoCompleteMessages = true)]
