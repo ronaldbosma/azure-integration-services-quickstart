@@ -30,7 +30,7 @@ resource serviceBusNamespace 'Microsoft.ServiceBus/namespaces@2024-01-01' = {
   location: location
   tags: tags
   sku: {
-    name: 'Standard'
+    name: 'Standard' // Standard is the minimum version that supports topics
   }
   properties: {
     minimumTlsVersion: '1.2'
