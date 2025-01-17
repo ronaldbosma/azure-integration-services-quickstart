@@ -173,12 +173,14 @@ module apiManagement 'modules/services/api-management.bicep' = if (apiManagement
     tags: tags
     apiManagementSettings: apiManagementSettings!
     appInsightsName: appInsightsSettings.appInsightsName
+    eventHubSettings: eventHubSettings
     keyVaultName: keyVaultName
     serviceBusSettings: serviceBusSettings
     storageAccountName: storageAccountName
   }
   dependsOn: [
     appInsights
+    eventHub
     keyVault
   ]
 }
@@ -192,12 +194,14 @@ module functionApp 'modules/services/function-app.bicep' = if (functionAppSettin
     functionAppSettings: functionAppSettings!
     apiManagementSettings: apiManagementSettings
     appInsightsName: appInsightsSettings.appInsightsName
+    eventHubSettings: eventHubSettings
     keyVaultName: keyVaultName
     serviceBusSettings: serviceBusSettings
     storageAccountName: storageAccountName
   }
   dependsOn: [
     appInsights
+    eventHub
     keyVault
     serviceBus
     storageAccount
@@ -213,12 +217,14 @@ module logicApp 'modules/services/logic-app.bicep' = if (logicAppSettings != nul
     logicAppSettings: logicAppSettings!
     apiManagementSettings: apiManagementSettings
     appInsightsName: appInsightsSettings.appInsightsName
+    eventHubSettings: eventHubSettings
     keyVaultName: keyVaultName
     serviceBusSettings: serviceBusSettings
     storageAccountName: storageAccountName
   }
   dependsOn: [
     appInsights
+    eventHub
     keyVault
     serviceBus
     storageAccount
@@ -231,13 +237,15 @@ module assignRolesToCurrentPrincipal 'modules/shared/assign-roles-to-principal.b
   params: {
     principalId: currentPrincipalId
     isAdmin: true
+    eventHubSettings: eventHubSettings
     keyVaultName: keyVaultName
     serviceBusSettings: serviceBusSettings
     storageAccountName: storageAccountName
   }
   dependsOn: [
+    eventHub
     keyVault
-    serviceBus // what if it's not included?
+    serviceBus
     storageAccount
   ]
 }

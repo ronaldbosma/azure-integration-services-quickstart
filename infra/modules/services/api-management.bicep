@@ -7,7 +7,7 @@
 //=============================================================================
 
 import * as helpers from '../../functions/helpers.bicep'
-import { apiManagementSettingsType, serviceBusSettingsType } from '../../types/settings.bicep'
+import { apiManagementSettingsType, eventHubSettingsType, serviceBusSettingsType } from '../../types/settings.bicep'
 
 //=============================================================================
 // Parameters
@@ -24,6 +24,9 @@ param apiManagementSettings apiManagementSettingsType
 
 @description('The name of the App Insights instance that will be used by API Management')
 param appInsightsName string
+
+@description('The settings for the Event Hub')
+param eventHubSettings eventHubSettingsType?
 
 @description('The name of the Key Vault that will contain the secrets')
 param keyVaultName string
@@ -88,6 +91,7 @@ module assignRolesToApimSystemAssignedIdentity '../shared/assign-roles-to-princi
   name: 'assignRolesToApimSystemAssignedIdentity'
   params: {
     principalId: apiManagementService.identity.principalId
+    eventHubSettings: eventHubSettings
     keyVaultName: keyVaultName
     serviceBusSettings: serviceBusSettings
     storageAccountName: storageAccountName
