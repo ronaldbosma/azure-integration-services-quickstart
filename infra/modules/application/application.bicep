@@ -7,7 +7,7 @@
 // Imports
 //=============================================================================
 
-import { apiManagementSettingsType, functionAppSettingsType, logicAppSettingsType, serviceBusSettingsType } from '../../types/settings.bicep'
+import { apiManagementSettingsType, eventHubSettingsType, functionAppSettingsType, logicAppSettingsType, serviceBusSettingsType } from '../../types/settings.bicep'
 
 //=============================================================================
 // Parameters
@@ -15,6 +15,9 @@ import { apiManagementSettingsType, functionAppSettingsType, logicAppSettingsTyp
 
 @description('The settings for the API Management Service')
 param apiManagementSettings apiManagementSettingsType?
+
+@description('The settings for the Event Hub namespace')
+param eventHubSettings eventHubSettingsType?
 
 @description('The settings for the Function App')
 param functionAppSettings functionAppSettingsType?
@@ -31,6 +34,15 @@ param storageAccountName string
 //=============================================================================
 // Resources
 //=============================================================================
+
+module eventHubAndConsumerGroups 'event-hub/event-hub-and-consumer-groups.bicep' = if (eventHubSettings != null) {
+  name: 'eventHubAndConsumerGroups'
+  params: {
+    eventHubSettings: eventHubSettings!
+    functionAppSettings: functionAppSettings
+    logicAppSettings: logicAppSettings
+  }
+}
 
 module sampleApi 'sample-api/sample-api.bicep' = if (apiManagementSettings != null) {
   name: 'sampleApi'

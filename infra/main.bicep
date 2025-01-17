@@ -260,6 +260,7 @@ module applicationResources 'modules/application/application.bicep' = if (includ
   scope: resourceGroup
   params: {
     apiManagementSettings: apiManagementSettings
+    eventHubSettings: eventHubSettings
     functionAppSettings: functionAppSettings
     logicAppSettings: logicAppSettings
     serviceBusSettings: serviceBusSettings
