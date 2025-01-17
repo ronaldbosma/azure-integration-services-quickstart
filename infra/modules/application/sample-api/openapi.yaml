@@ -4,11 +4,11 @@ info:
   description: AISQuick Sample API
   version: '1.0'
 paths:
-  /messages:
+  /service-bus/messages:
     post:
-      summary: Publish Message
-      description: Publish Message
-      operationId: publish-message
+      summary: Publish Message to Service Bus
+      description: Publish Message to Service Bus
+      operationId: publish-message-to-service-bus
       requestBody:
         content:
           application/json:
