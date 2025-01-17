@@ -64,6 +64,17 @@ module appInsightsLogging './api-management/app-insights-logging.bicep' = {
   ]
 }
 
+module eventHubLogging './api-management/event-hub-logging.bicep' = if (eventHubSettings != null) {
+  name: 'eventHubLogging'
+  params: {
+    apiManagementSettings: apiManagementSettings
+    eventHubSettings: eventHubSettings!
+  }
+  dependsOn: [
+    apiManagementService
+  ]
+}
+
 module backends './api-management/backends.bicep' = {
   name: 'backends'
   params: {
