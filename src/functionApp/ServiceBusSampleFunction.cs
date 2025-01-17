@@ -22,6 +22,6 @@ public class ServiceBusSampleFunction
     {
         _logger.LogInformation("Received message '{message}' with ID {id}", sampleMessage.Message, sampleMessage.Id);
 
-        return new SampleTableEntity(sampleMessage.Id, sampleMessage.Message);
+        return new SampleTableEntity(sampleMessage.Id, sampleMessage.Message, sampleMessage.Via);
     }
 }

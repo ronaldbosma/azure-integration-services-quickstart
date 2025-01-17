@@ -17,6 +17,7 @@
         <set-body>@{
             var body = context.Request.Body.As<JObject>();
             body["id"] = context.Variables.GetValueOrDefault<string>("message-id");
+            body["via"] = "Event Hub";
             return body.ToString();
         }</set-body>
     </inbound>
