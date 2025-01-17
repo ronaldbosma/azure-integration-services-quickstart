@@ -1,12 +1,14 @@
 //=============================================================================
 // Event Hub & Consumer Groups in Event Hub Namespace
+// and adds Event Hub logger to API Management
 //=============================================================================
 
 //=============================================================================
 // Imports
 //=============================================================================
 
-import { functionAppSettingsType, logicAppSettingsType, eventHubSettingsType } from '../../../types/settings.bicep'
+import { getEventHubEndpointAddress } from '../../../functions/helpers.bicep'
+import { apiManagementSettingsType, functionAppSettingsType, logicAppSettingsType, eventHubSettingsType } from '../../../types/settings.bicep'
 
 //=============================================================================
 // Parameters
@@ -14,6 +16,9 @@ import { functionAppSettingsType, logicAppSettingsType, eventHubSettingsType } f
 
 @description('The settings for the Event Hub namespace')
 param eventHubSettings eventHubSettingsType
+
+@description('The settings for the API Management Service')
+param apiManagementSettings apiManagementSettingsType?
 
 @description('The settings for the Function App')
 param functionAppSettings functionAppSettingsType?
@@ -27,6 +32,10 @@ param logicAppSettings logicAppSettingsType?
 
 resource eventHubNamespace 'Microsoft.EventHub/namespaces@2024-01-01' existing = {
   name: eventHubSettings.namespaceName
+}
+
+resource apiManagementService 'Microsoft.ApiManagement/service@2023-09-01-preview' existing = if (apiManagementSettings != null) {
+  name: apiManagementSettings!.serviceName
 }
 
 //=============================================================================
@@ -50,4 +59,18 @@ resource functionAppConsumerGroup 'Microsoft.EventHub/namespaces/eventhubs/consu
 resource logicAppConsumerGroup 'Microsoft.EventHub/namespaces/eventhubs/consumergroups@2024-01-01' = if (logicAppSettings != null) {
   name: 'logic-app'
   parent: eventHub
+}
+
+resource apimEventHubLogger 'Microsoft.ApiManagement/service/loggers@2023-09-01-preview' = if (apiManagementSettings != null) {
+  name: 'apim-event-hub-logger'
+  parent: apiManagementService
+  properties: {
+    loggerType: 'azureEventHub'
+    description: 'Event Hub logger'
+    credentials: {
+      endpointAddress: getEventHubEndpointAddress(eventHubSettings.namespaceName, eventHub.name)
+      identityClientId: 'systemAssigned'
+      name: eventHub.name
+    }
+  }
 }

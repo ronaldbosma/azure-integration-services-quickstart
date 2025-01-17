@@ -35,10 +35,11 @@ param storageAccountName string
 // Resources
 //=============================================================================
 
-module eventHubAndConsumerGroups 'event-hub/event-hub-and-consumer-groups.bicep' = if (eventHubSettings != null) {
+module eventHub 'event-hub/event-hub.bicep' = if (eventHubSettings != null) {
   name: 'eventHubAndConsumerGroups'
   params: {
     eventHubSettings: eventHubSettings!
+    apiManagementSettings: apiManagementSettings
     functionAppSettings: functionAppSettings
     logicAppSettings: logicAppSettings
   }
