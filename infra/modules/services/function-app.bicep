@@ -54,6 +54,11 @@ var apimAppSettings = apiManagementSettings == null ? {} : {
   ApiManagement_subscriptionKey: helpers.getKeyVaultSecretReference(keyVaultName, 'apim-master-subscription-key')
 }
 
+// If the Event Hub is deployed, add app settings to connect to it
+var eventHubAppSettings = eventHubSettings == null ? {} : {
+  EventHubConnection__fullyQualifiedNamespace: helpers.getServiceBusFullyQualifiedNamespace(eventHubSettings!.namespaceName)
+}
+
 // If the Service Bus is deployed, add app settings to connect to it
 var serviceBusAppSettings = serviceBusSettings == null ? {} : {
   ServiceBusConnection__fullyQualifiedNamespace: helpers.getServiceBusFullyQualifiedNamespace(serviceBusSettings!.namespaceName)
@@ -76,6 +81,7 @@ var appSettings = {
 
   // Include optional app settings
   ...apimAppSettings
+  ...eventHubAppSettings
   ...serviceBusAppSettings
 }
 
