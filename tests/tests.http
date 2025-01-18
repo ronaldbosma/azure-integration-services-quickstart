@@ -4,7 +4,7 @@
 
 # 1. Publish a message to the aisquick-sample topic on the Service Bus via the Sample API in API Management
 # @name publishMessage
-POST https://{{apimHostname}}/aisquick-sample/service-bus/messages
+POST https://{{apimHostname}}/aisquick-sample/messages
 Content-Type: application/json
 Ocp-Apim-Subscription-Key: {{apimSubscriptionKey}}
 Ocp-Apim-Trace: true
