@@ -79,12 +79,12 @@ There are a couple of ways to change which Azure Integration Services are deploy
 
    ```
    ...TRUNCATED...
-    INCLUDE_API_MANAGEMENT="true"
-    INCLUDE_APPLICATION_INFRA_RESOURCES="false"
-    INCLUDE_EVENT_HUB="false"
-    INCLUDE_FUNCTION_APP="true"
-    INCLUDE_LOGIC_APP="false"
-    INCLUDE_SERVICE_BUS="false"
+   INCLUDE_API_MANAGEMENT="true"
+   INCLUDE_APPLICATION_INFRA_RESOURCES="false"
+   INCLUDE_EVENT_HUB="false"
+   INCLUDE_FUNCTION_APP="true"
+   INCLUDE_LOGIC_APP="false"
+   INCLUDE_SERVICE_BUS="false"
    ```
 
 1. If the environment has been taken down, most variables in the `.env` file are removed. Instead, locate the `.azure/<environment-name>/config.json` file and change the values of the parameters to `true` or `false`.
