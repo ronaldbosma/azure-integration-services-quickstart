@@ -17,7 +17,7 @@ This template is designed to simplify and accelerate the deployment of Azure Int
 
 To minimize cost and reduce deployment time, the cheapest possible SKUs are used for each service. Virtual networks, application gateways and other security measures typically implemented in production scenarios are not included. Keep in mind that some resources may still incur costs, so it's a good idea to clean up when you're finished to avoid unexpected charges.
 
-A sample application is included in the template to demonstrate how the services can be used together. It consists of an API that allows a message to be published to either a Service Bus topic or Event Hub. A function and a workflow are triggered by the message. The function stores the message in table storage, while the workflow stores the message in blob storage. Using the API, stored messages can be retrieved. See the following diagram for an overview:
+A sample application is included in the template to demonstrate how the services can be used together. It consists of an API that allows a message to be published to a Service Bus topic. A function and a workflow are triggered by the message. The function stores the message in table storage, while the workflow stores the message in blob storage. Using the API, stored messages can be retrieved. See the following diagram for an overview:
 
 ![Infra](images/aisquick-diagrams-app.png)
 
@@ -51,7 +51,7 @@ Once `azd` is installed on your machine, you can deploy this template using the 
 
     You'll be prompted to select the Azure Integration Services to include in the deployment. For each service, use the arrow keys to select `True` to include it or `False` to skip it, then press `Enter` to continue.  
 
-    The `includeApplicationInfraResources` parameter specifies whether the application infrastructure resources defined in Bicep should be deployed. These resources are used by the sample application and include the Sample API in API Management, topics and subscriptions in Azure Service Bus, an Event Hub in the Event Hubs namespace, as well as tables and containers in Azure Storage.  
+    The `includeApplicationInfraResources` parameter specifies whether the application infrastructure resources defined in Bicep should be deployed. These resources are used by the sample application and include the Sample API in API Management, topics and subscriptions in Azure Service Bus, as well as tables and containers in Azure Storage.  
 
     ![Select resources to include during azd up](images/azd-up-select-resources-to-include.png)
 
