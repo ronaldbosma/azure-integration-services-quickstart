@@ -2,24 +2,9 @@
 # Tests for the Sample application. See tests.md for more information.
 # =============================================================================
 
-# 1a. Publish a message to the aisquick-sample topic on the Service Bus via the Sample API in API Management
+# 1. Publish a message to the aisquick-sample topic on the Service Bus via the Sample API in API Management
 # @name publishMessage
 POST https://{{apimHostname}}/aisquick-sample/service-bus/messages
-Content-Type: application/json
-Ocp-Apim-Subscription-Key: {{apimSubscriptionKey}}
-Ocp-Apim-Trace: true
-
-{
-    "message": "Hello, world!"
-}
-
-
-###
-
-
-# 1b. Publish a message to the aisquick-sample event hub on the Event Hub namespace via the Sample API in API Management
-# @name publishMessage
-POST https://{{apimHostname}}/aisquick-sample/event-hub/messages
 Content-Type: application/json
 Ocp-Apim-Subscription-Key: {{apimSubscriptionKey}}
 Ocp-Apim-Trace: true
