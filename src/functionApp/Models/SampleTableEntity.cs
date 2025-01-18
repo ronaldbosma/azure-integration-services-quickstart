@@ -3,6 +3,9 @@ using Azure.Data.Tables;
 
 namespace AISQuick.FunctionApp.Models
 {
+    /// <summary>
+    /// Table entity to insert a sample message in Azure Table Storage.
+    /// </summary>
     public class SampleTableEntity : ITableEntity
     {
         public SampleTableEntity(SampleMessage sampleMessage)

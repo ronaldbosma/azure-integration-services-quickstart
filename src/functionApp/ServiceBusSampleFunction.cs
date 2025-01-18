@@ -4,6 +4,9 @@ using Microsoft.Extensions.Logging;
 
 namespace AISQuick.FunctionApp;
 
+/// <summary>
+/// Sample function that triggers on a Service Bus message and writes the message to a table.
+/// </summary>
 public class ServiceBusSampleFunction
 {
     private readonly ILogger<ServiceBusSampleFunction> _logger;

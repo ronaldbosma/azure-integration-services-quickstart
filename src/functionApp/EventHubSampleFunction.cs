@@ -4,6 +4,9 @@ using Microsoft.Extensions.Logging;
 
 namespace AISQuick.FunctionApp;
 
+/// <summary>
+/// Sample function that triggers on an Event Hub message and writes the message to a table.
+/// </summary>
 public class EventHubSampleFunction
 {
     private readonly ILogger<EventHubSampleFunction> _logger;
