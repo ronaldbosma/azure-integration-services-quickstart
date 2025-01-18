@@ -6,7 +6,7 @@
 // Imports
 //=============================================================================
 
-import { apiManagementSettingsType, eventHubSettingsType, serviceBusSettingsType } from '../../../types/settings.bicep'
+import { apiManagementSettingsType, serviceBusSettingsType } from '../../../types/settings.bicep'
 
 //=============================================================================
 // Parameters
@@ -14,9 +14,6 @@ import { apiManagementSettingsType, eventHubSettingsType, serviceBusSettingsType
 
 @description('The name of the API Management service')
 param apiManagementServiceName string
-
-@description('The settings for the Event Hub namespace')
-param eventHubSettings eventHubSettingsType?
 
 @description('The settings for the Service Bus namespace')
 param serviceBusSettings serviceBusSettingsType?
@@ -66,20 +63,6 @@ resource publishMessageToServiceBusOperation 'Microsoft.ApiManagement/service/ap
     properties:{
       format: 'rawxml'
       value: loadTextContent('operations/publish-message-to-service-bus.xml') 
-    }
-  }
-}
-
-// Only set the policy on the publish message operation if the Event Hub namespace has been deployed; otherwise, it will fail.
-resource publishMessageToEventHubOperation 'Microsoft.ApiManagement/service/apis/operations@2023-09-01-preview' existing = if (eventHubSettings != null) {
-  name: 'publish-message-to-event-hub'
-  parent: sampleApi
-
-  resource policies 'policies' = {
-    name: 'policy'
-    properties:{
-      format: 'rawxml'
-      value: loadTextContent('operations/publish-message-to-event-hub.xml') 
     }
   }
 }
