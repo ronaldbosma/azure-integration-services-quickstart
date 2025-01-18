@@ -153,11 +153,11 @@ resource apimMasterSubscriptionKeySecret 'Microsoft.KeyVault/vaults/secrets@2023
 
 // Add backends for the various services
 
-resource eventHubBackend 'Microsoft.ApiManagement/service/backends@2023-09-01-preview' = if (eventHubSettings != null) {
+resource eventHubNamespaceBackend 'Microsoft.ApiManagement/service/backends@2023-09-01-preview' = if (eventHubSettings != null) {
   parent: apiManagementService
-  name: 'event-hub'
+  name: 'event-hub-namespace'
   properties: {
-    description: 'The backend for the event hub'
+    description: 'The backend for the event hub namespace'
     url: helpers.getServiceBusEndpoint(eventHubSettings!.namespaceName)
     protocol: 'http'
     tls: {
