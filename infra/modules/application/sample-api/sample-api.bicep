@@ -56,7 +56,7 @@ resource sampleApi 'Microsoft.ApiManagement/service/apis@2023-09-01-preview' = {
   }
 }
 
-// Only set policy on publish message operation if the Service Bus has been deployed, otherwise it will fail
+// Only set the policy on the publish message operation if the Service Bus has been deployed; otherwise, it will fail.
 resource publishMessageToServiceBusOperation 'Microsoft.ApiManagement/service/apis/operations@2023-09-01-preview' existing = if (serviceBusSettings != null) {
   name: 'publish-message-to-service-bus'
   parent: sampleApi
@@ -70,7 +70,7 @@ resource publishMessageToServiceBusOperation 'Microsoft.ApiManagement/service/ap
   }
 }
 
-// Only set policy on publish message operation if the Event Hub has been deployed, otherwise it will fail
+// Only set the policy on the publish message operation if the Event Hub namespace has been deployed; otherwise, it will fail.
 resource publishMessageToEventHubOperation 'Microsoft.ApiManagement/service/apis/operations@2023-09-01-preview' existing = if (eventHubSettings != null) {
   name: 'publish-message-to-event-hub'
   parent: sampleApi
