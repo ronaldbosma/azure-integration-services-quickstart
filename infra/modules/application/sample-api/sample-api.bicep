@@ -53,20 +53,6 @@ resource sampleApi 'Microsoft.ApiManagement/service/apis@2023-09-01-preview' = {
   }
 }
 
-// Only set the policy on the publish message operation if the Service Bus has been deployed; otherwise, it will fail.
-resource publishMessageToServiceBusOperation 'Microsoft.ApiManagement/service/apis/operations@2023-09-01-preview' existing = if (serviceBusSettings != null) {
-  name: 'publish-message-to-service-bus'
-  parent: sampleApi
-
-  resource policies 'policies' = {
-    name: 'policy'
-    properties:{
-      format: 'rawxml'
-      value: loadTextContent('operations/publish-message-to-service-bus.xml') 
-    }
-  }
-}
-
 resource getBlobOperation 'Microsoft.ApiManagement/service/apis/operations@2023-09-01-preview' existing = {
   name: 'get-blob'
   parent: sampleApi
@@ -89,6 +75,20 @@ resource getTableEntityOperation 'Microsoft.ApiManagement/service/apis/operation
     properties:{
       format: 'rawxml'
       value: loadTextContent('operations/get-table-entity.xml') 
+    }
+  }
+}
+
+// Only set policy on publish message operation if the Service Bus has been deployed, otherwise it will fail
+resource publishMessageOperation 'Microsoft.ApiManagement/service/apis/operations@2023-09-01-preview' existing = if (serviceBusSettings != null) {
+  name: 'publish-message'
+  parent: sampleApi
+
+  resource policies 'policies' = {
+    name: 'policy'
+    properties:{
+      format: 'rawxml'
+      value: loadTextContent('operations/publish-message.xml') 
     }
   }
 }

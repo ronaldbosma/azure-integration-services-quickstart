@@ -7,16 +7,16 @@ namespace AISQuick.FunctionApp;
 /// <summary>
 /// Sample function that triggers on a Service Bus message and writes the message to a table.
 /// </summary>
-public class ServiceBusSampleFunction
+public class SampleFunction
 {
-    private readonly ILogger<ServiceBusSampleFunction> _logger;
+    private readonly ILogger<SampleFunction> _logger;
 
-    public ServiceBusSampleFunction(ILogger<ServiceBusSampleFunction> logger)
+    public SampleFunction(ILogger<SampleFunction> logger)
     {
         _logger = logger;
     }
 
-    [Function(nameof(ServiceBusSampleFunction))]
+    [Function(nameof(SampleFunction))]
     [TableOutput("aisquickSample", Connection = "StorageAccountConnection")]
     public SampleTableEntity Run(
         [ServiceBusTrigger("aisquick-sample", "function-app", Connection = "ServiceBusConnection", AutoCompleteMessages = true)]
