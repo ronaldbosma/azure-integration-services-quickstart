@@ -57,7 +57,7 @@
             <mxPoint x="490" y="559" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="eFfSvvpewZFo5A5SUoZi-16" value="Event Hub&lt;div&gt;Namespace&lt;br&gt;&lt;/div&gt;" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/analytics/Event_Hubs.svg;" parent="eFfSvvpewZFo5A5SUoZi-1" vertex="1">
+        <mxCell id="eFfSvvpewZFo5A5SUoZi-16" value="Event Hubs&lt;div&gt;Namespace&lt;br&gt;&lt;/div&gt;" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/analytics/Event_Hubs.svg;" parent="eFfSvvpewZFo5A5SUoZi-1" vertex="1">
           <mxGeometry x="500" y="390" width="67" height="60" as="geometry" />
         </mxCell>
         <mxCell id="eFfSvvpewZFo5A5SUoZi-17" value="read &amp;amp; write" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="eFfSvvpewZFo5A5SUoZi-1" source="eFfSvvpewZFo5A5SUoZi-4" target="eFfSvvpewZFo5A5SUoZi-16" edge="1">
