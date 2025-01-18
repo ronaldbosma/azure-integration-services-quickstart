@@ -144,8 +144,8 @@ module appInsights 'modules/services/app-insights.bicep' = {
   }
 }
 
-module eventHub 'modules/services/event-hub.bicep' = if (eventHubSettings != null) {
-  name: 'eventHub'
+module eventHubNamespace 'modules/services/event-hub-namespace.bicep' = if (eventHubSettings != null) {
+  name: 'eventHubNamespace'
   scope: resourceGroup
   params: {
     location: location
@@ -179,7 +179,7 @@ module apiManagement 'modules/services/api-management.bicep' = if (apiManagement
   }
   dependsOn: [
     appInsights
-    eventHub
+    eventHubNamespace
     keyVault
   ]
 }
@@ -200,7 +200,7 @@ module functionApp 'modules/services/function-app.bicep' = if (functionAppSettin
   }
   dependsOn: [
     appInsights
-    eventHub
+    eventHubNamespace
     keyVault
     serviceBus
     storageAccount
@@ -223,7 +223,7 @@ module logicApp 'modules/services/logic-app.bicep' = if (logicAppSettings != nul
   }
   dependsOn: [
     appInsights
-    eventHub
+    eventHubNamespace
     keyVault
     serviceBus
     storageAccount
@@ -242,7 +242,7 @@ module assignRolesToCurrentPrincipal 'modules/shared/assign-roles-to-principal.b
     storageAccountName: storageAccountName
   }
   dependsOn: [
-    eventHub
+    eventHubNamespace
     keyVault
     serviceBus
     storageAccount
@@ -267,7 +267,7 @@ module applicationResources 'modules/application/application.bicep' = if (includ
   }
   dependsOn: [
     apiManagement
-    eventHub
+    eventHubNamespace
     serviceBus
     storageAccount
   ]
