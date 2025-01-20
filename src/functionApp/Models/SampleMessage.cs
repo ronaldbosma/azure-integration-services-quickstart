@@ -1,6 +1,9 @@
 ﻿namespace AISQuick.FunctionApp.Models
 {
-    public record SampleMessage(Guid Id, string Message)
+    /// <summary>
+    /// Sample message that is received by the functions.
+    /// </summary>
+    public record SampleMessage(Guid Id, string Message, string Via)
     {
     }
 }

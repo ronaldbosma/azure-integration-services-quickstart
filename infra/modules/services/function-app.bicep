@@ -7,7 +7,7 @@
 //=============================================================================
 
 import * as helpers from '../../functions/helpers.bicep'
-import { apiManagementSettingsType, functionAppSettingsType, serviceBusSettingsType } from '../../types/settings.bicep'
+import { apiManagementSettingsType, eventHubSettingsType, functionAppSettingsType, serviceBusSettingsType } from '../../types/settings.bicep'
 
 //=============================================================================
 // Parameters
@@ -27,6 +27,9 @@ param apiManagementSettings apiManagementSettingsType?
 
 @description('The name of the App Insights instance that will be used by the Function App')
 param appInsightsName string
+
+@description('The settings for the Event Hub namespace')
+param eventHubSettings eventHubSettingsType?
 
 @description('The name of the Key Vault that will contain the secrets')
 param keyVaultName string
@@ -51,6 +54,11 @@ var apimAppSettings = apiManagementSettings == null ? {} : {
   ApiManagement_subscriptionKey: helpers.getKeyVaultSecretReference(keyVaultName, 'apim-master-subscription-key')
 }
 
+// If the Event Hub is deployed, add app settings to connect to it
+var eventHubAppSettings = eventHubSettings == null ? {} : {
+  EventHubConnection__fullyQualifiedNamespace: helpers.getServiceBusFullyQualifiedNamespace(eventHubSettings!.namespaceName)
+}
+
 // If the Service Bus is deployed, add app settings to connect to it
 var serviceBusAppSettings = serviceBusSettings == null ? {} : {
   ServiceBusConnection__fullyQualifiedNamespace: helpers.getServiceBusFullyQualifiedNamespace(serviceBusSettings!.namespaceName)
@@ -73,6 +81,7 @@ var appSettings = {
 
   // Include optional app settings
   ...apimAppSettings
+  ...eventHubAppSettings
   ...serviceBusAppSettings
 }
 
@@ -132,6 +141,7 @@ module assignRolesToFunctionAppSystemAssignedIdentity '../shared/assign-roles-to
   name: 'assignRolesToFunctionAppSystemAssignedIdentity'
   params: {
     principalId: functionApp.identity.principalId
+    eventHubSettings: eventHubSettings
     keyVaultName: keyVaultName
     serviceBusSettings: serviceBusSettings
     storageAccountName: storageAccountName

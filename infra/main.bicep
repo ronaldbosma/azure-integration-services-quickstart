@@ -36,6 +36,9 @@ param currentPrincipalId string = ''
 @description('Include the API Management service in the deployment.')
 param includeApiManagement bool
 
+@description('Include the Event Hub in the deployment.')
+param includeEventHub bool
+
 @description('Include the Function App in the deployment.')
 param includeFunctionApp bool
 
@@ -67,6 +70,10 @@ var appInsightsSettings = {
   appInsightsName: getResourceName('applicationInsights', environmentName, location, instanceId)
   logAnalyticsWorkspaceName: getResourceName('logAnalyticsWorkspace', environmentName, location, instanceId)
   retentionInDays: 30
+}
+
+var eventHubSettings = !includeEventHub ? null : {
+  namespaceName: getResourceName('eventHubNamespace', environmentName, location, instanceId)
 }
 
 var functionAppSettings = !includeFunctionApp ? null : {
@@ -137,6 +144,16 @@ module appInsights 'modules/services/app-insights.bicep' = {
   }
 }
 
+module eventHubNamespace 'modules/services/event-hub-namespace.bicep' = if (eventHubSettings != null) {
+  name: 'eventHubNamespace'
+  scope: resourceGroup
+  params: {
+    location: location
+    tags: tags
+    eventHubSettings: eventHubSettings!
+  }
+}
+
 module serviceBus 'modules/services/service-bus.bicep' = if (serviceBusSettings != null) {
   name: 'serviceBus'
   scope: resourceGroup
@@ -155,12 +172,14 @@ module apiManagement 'modules/services/api-management.bicep' = if (apiManagement
     tags: tags
     apiManagementSettings: apiManagementSettings!
     appInsightsName: appInsightsSettings.appInsightsName
+    eventHubSettings: eventHubSettings
     keyVaultName: keyVaultName
     serviceBusSettings: serviceBusSettings
     storageAccountName: storageAccountName
   }
   dependsOn: [
     appInsights
+    eventHubNamespace
     keyVault
   ]
 }
@@ -174,12 +193,14 @@ module functionApp 'modules/services/function-app.bicep' = if (functionAppSettin
     functionAppSettings: functionAppSettings!
     apiManagementSettings: apiManagementSettings
     appInsightsName: appInsightsSettings.appInsightsName
+    eventHubSettings: eventHubSettings
     keyVaultName: keyVaultName
     serviceBusSettings: serviceBusSettings
     storageAccountName: storageAccountName
   }
   dependsOn: [
     appInsights
+    eventHubNamespace
     keyVault
     serviceBus
     storageAccount
@@ -195,12 +216,14 @@ module logicApp 'modules/services/logic-app.bicep' = if (logicAppSettings != nul
     logicAppSettings: logicAppSettings!
     apiManagementSettings: apiManagementSettings
     appInsightsName: appInsightsSettings.appInsightsName
+    eventHubSettings: eventHubSettings
     keyVaultName: keyVaultName
     serviceBusSettings: serviceBusSettings
     storageAccountName: storageAccountName
   }
   dependsOn: [
     appInsights
+    eventHubNamespace
     keyVault
     serviceBus
     storageAccount
@@ -213,13 +236,15 @@ module assignRolesToCurrentPrincipal 'modules/shared/assign-roles-to-principal.b
   params: {
     principalId: currentPrincipalId
     isAdmin: true
+    eventHubSettings: eventHubSettings
     keyVaultName: keyVaultName
     serviceBusSettings: serviceBusSettings
     storageAccountName: storageAccountName
   }
   dependsOn: [
+    eventHubNamespace
     keyVault
-    serviceBus // what if it's not included?
+    serviceBus
     storageAccount
   ]
 }
@@ -254,6 +279,7 @@ module applicationResources 'modules/application/application.bicep' = if (includ
 // Return the names of the resources
 output AZURE_API_MANAGEMENT_NAME string = (apiManagementSettings != null ? apiManagementSettings!.serviceName : '')
 output AZURE_APPLICATION_INSIGHTS_NAME string = appInsightsSettings.appInsightsName
+output AZURE_EVENT_HUB_NAMESPACE_NAME string = (eventHubSettings != null ? eventHubSettings!.namespaceName : '')
 output AZURE_FUNCTION_APP_NAME string = (functionAppSettings != null ? functionAppSettings!.functionAppName : '')
 output AZURE_KEY_VAULT_NAME string = keyVaultName
 output AZURE_LOGIC_APP_NAME string = (logicAppSettings != null ? logicAppSettings!.logicAppName : '')
@@ -263,6 +289,7 @@ output AZURE_STORAGE_ACCOUNT_NAME string = storageAccountName
 
 // Return which services are included in the deployment
 output INCLUDE_API_MANAGEMENT bool = includeApiManagement
+output INCLUDE_EVENT_HUB bool = includeEventHub
 output INCLUDE_FUNCTION_APP bool = includeFunctionApp
 output INCLUDE_LOGIC_APP bool = includeLogicApp
 output INCLUDE_SERVICE_BUS bool = includeServiceBus

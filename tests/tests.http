@@ -2,7 +2,7 @@
 # Tests for the Sample application. See tests.md for more information.
 # =============================================================================
 
-# Publish a message to the aisquick-sample topic via the Sample API in API Management
+# 1. Publish a message to the aisquick-sample topic on the Service Bus via the Sample API in API Management
 # @name publishMessage
 POST https://{{apimHostname}}/aisquick-sample/messages
 Content-Type: application/json
@@ -17,16 +17,19 @@ Ocp-Apim-Trace: true
 ###
 
 
-# Get the blob with the stored message from the aisquick-sample container
+# 4a. Get the table entity with the stored message from the aisquick-sample table
+GET https://{{apimHostname}}/aisquick-sample/table-entities/{{publishMessage.response.body.id}}
+Ocp-Apim-Subscription-Key: {{apimSubscriptionKey}}
+Ocp-Apim-Trace: true 
+
+
+###
+
+
+# 4b. Get the blob with the stored message from the aisquick-sample container
 GET https://{{apimHostname}}/aisquick-sample/blobs/{{publishMessage.response.body.id}}
 Ocp-Apim-Subscription-Key: {{apimSubscriptionKey}}
 Ocp-Apim-Trace: true
 
 
 ###
-
-
-# Get the table entity with the stored message from the aisquick-sample table
-GET https://{{apimHostname}}/aisquick-sample/table-entities/{{publishMessage.response.body.id}}
-Ocp-Apim-Subscription-Key: {{apimSubscriptionKey}}
-Ocp-Apim-Trace: true 

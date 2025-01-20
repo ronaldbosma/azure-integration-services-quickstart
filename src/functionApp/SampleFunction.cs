@@ -4,6 +4,9 @@ using Microsoft.Extensions.Logging;
 
 namespace AISQuick.FunctionApp;
 
+/// <summary>
+/// Sample function that triggers on a Service Bus message and writes the message to a table.
+/// </summary>
 public class SampleFunction
 {
     private readonly ILogger<SampleFunction> _logger;
@@ -22,6 +25,6 @@ public class SampleFunction
     {
         _logger.LogInformation("Received message '{message}' with ID {id}", sampleMessage.Message, sampleMessage.Id);
 
-        return new SampleTableEntity(sampleMessage.Id, sampleMessage.Message);
+        return new SampleTableEntity(sampleMessage);
     }
 }

@@ -7,7 +7,7 @@
 //=============================================================================
 
 import * as helpers from '../../functions/helpers.bicep'
-import { apiManagementSettingsType, serviceBusSettingsType } from '../../types/settings.bicep'
+import { apiManagementSettingsType, eventHubSettingsType, serviceBusSettingsType } from '../../types/settings.bicep'
 
 //=============================================================================
 // Parameters
@@ -24,6 +24,9 @@ param apiManagementSettings apiManagementSettingsType
 
 @description('The name of the App Insights instance that will be used by API Management')
 param appInsightsName string
+
+@description('The settings for the Event Hub namespace')
+param eventHubSettings eventHubSettingsType?
 
 @description('The name of the Key Vault that will contain the secrets')
 param keyVaultName string
@@ -88,6 +91,7 @@ module assignRolesToApimSystemAssignedIdentity '../shared/assign-roles-to-princi
   name: 'assignRolesToApimSystemAssignedIdentity'
   params: {
     principalId: apiManagementService.identity.principalId
+    eventHubSettings: eventHubSettings
     keyVaultName: keyVaultName
     serviceBusSettings: serviceBusSettings
     storageAccountName: storageAccountName
@@ -148,6 +152,20 @@ resource apimMasterSubscriptionKeySecret 'Microsoft.KeyVault/vaults/secrets@2023
 
 
 // Add backends for the various services
+
+resource eventHubNamespaceBackend 'Microsoft.ApiManagement/service/backends@2023-09-01-preview' = if (eventHubSettings != null) {
+  parent: apiManagementService
+  name: 'event-hub-namespace'
+  properties: {
+    description: 'The backend for the event hub namespace'
+    url: helpers.getServiceBusEndpoint(eventHubSettings!.namespaceName)
+    protocol: 'http'
+    tls: {
+      validateCertificateChain: true
+      validateCertificateName: true
+    }
+  }
+}
 
 resource serviceBusBackend 'Microsoft.ApiManagement/service/backends@2023-09-01-preview' = if (serviceBusSettings != null) {
   parent: apiManagementService

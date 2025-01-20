@@ -6,7 +6,7 @@
 // Imports
 //=============================================================================
 
-import { serviceBusSettingsType } from '../../types/settings.bicep'
+import { eventHubSettingsType, serviceBusSettingsType } from '../../types/settings.bicep'
 
 //=============================================================================
 // Parameters
@@ -18,10 +18,13 @@ param principalId string
 @description('The flag to determine if the principal is an admin or not')
 param isAdmin bool = false
 
+@description('The settings for the Event Hub namespace on which to assign roles')
+param eventHubSettings eventHubSettingsType?
+
 @description('The name of the Key Vault on which to assign roles')
 param keyVaultName string
 
-@description('The settings for the Service Bus namespace')
+@description('The settings for the Service Bus namespace on which to assign roles')
 param serviceBusSettings serviceBusSettingsType?
 
 @description('The name of the Storage Account on which to assign roles')
@@ -31,13 +34,18 @@ param storageAccountName string
 // Variables
 //=============================================================================
 
+var eventHubRoles = [
+  'a638d3c7-ab3a-418d-83e6-5f17a39d4fde'      // Azure Event Hubs Data Receiver
+  '2b629674-e913-4c01-ae53-ef4638d8f975'      // Azure Event Hubs Data Sender
+]
+
 var keyVaultRole = isAdmin 
-  ? '00482a5a-887f-4fb3-b363-3b7fe8e74483' // Key Vault Administrator
-  : '4633458b-17de-408a-b874-0445c86b69e6' // Key Vault Secrets User
+  ? '00482a5a-887f-4fb3-b363-3b7fe8e74483'    // Key Vault Administrator
+  : '4633458b-17de-408a-b874-0445c86b69e6'    // Key Vault Secrets User
 
 var serviceBusRoles = [
-  '4f6d3b9b-027b-4f4c-9142-0e5a2a2247e0'  // Azure Service Bus Data Receiver
-  '69a216fc-b8fb-44d8-bc22-1f3c2cd27a39'  // Azure Service Bus Data Sender
+  '4f6d3b9b-027b-4f4c-9142-0e5a2a2247e0'      // Azure Service Bus Data Receiver
+  '69a216fc-b8fb-44d8-bc22-1f3c2cd27a39'      // Azure Service Bus Data Sender
 ]
 
 var storageAccountRoles = [
@@ -54,6 +62,10 @@ var storageAccountRoles = [
 // Existing Resources
 //=============================================================================
 
+resource eventHubNamespace 'Microsoft.EventHub/namespaces@2024-01-01' existing = if (eventHubSettings != null) {
+  name: eventHubSettings!.namespaceName
+}
+
 resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' existing = {
   name: keyVaultName
 }
@@ -69,6 +81,17 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' existing 
 //=============================================================================
 // Resources
 //=============================================================================
+
+// Assign role on Event Hub Namespace to the principal (if Event Hub is included)
+
+resource assignRolesOnEventHubNamespaceToManagedIdentity 'Microsoft.Authorization/roleAssignments@2022-04-01' = [for role in eventHubRoles: if (eventHubSettings != null) {
+  name: guid(principalId, eventHubNamespace.id, subscriptionResourceId('Microsoft.Authorization/roleDefinitions', role))
+  scope: eventHubNamespace
+  properties: {
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', role)
+    principalId: principalId
+  }
+}]
 
 // Assign role on Key Vault to the principal
 

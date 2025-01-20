@@ -8,6 +8,12 @@
 func getApiManagementGatewayUrl(apimServiceName string) string => 'https://${apimServiceName}.azure-api.net'
 
 
+// Event Hub functions
+
+@export()
+func getEventHubEndpointAddress(eventHubNamespaceName string, eventHubName string) string => '${getServiceBusFullyQualifiedNamespace(eventHubNamespaceName)}/${eventHubName}'
+
+
 // Key Vault functions
 
 @export()

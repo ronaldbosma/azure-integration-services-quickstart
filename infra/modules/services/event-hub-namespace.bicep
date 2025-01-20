@@ -1,12 +1,12 @@
 //=============================================================================
-// Service Bus
+// Event Hub Namespace
 //=============================================================================
 
 //=============================================================================
 // Imports
 //=============================================================================
 
-import { serviceBusSettingsType } from '../../types/settings.bicep'
+import { eventHubSettingsType } from '../../types/settings.bicep'
 
 //=============================================================================
 // Parameters
@@ -18,21 +18,27 @@ param location string
 @description('The tags to associate with the resource')
 param tags object
 
-@description('The settings for the Service Bus namespace')
-param serviceBusSettings serviceBusSettingsType
+@description('The settings for the Event Hub namespace that will be created')
+param eventHubSettings eventHubSettingsType
 
 //=============================================================================
 // Resources
 //=============================================================================
 
-resource serviceBusNamespace 'Microsoft.ServiceBus/namespaces@2024-01-01' = {
-  name: serviceBusSettings.namespaceName
+resource eventHubNamespace 'Microsoft.EventHub/namespaces@2024-01-01' = {
+  name: eventHubSettings.namespaceName
   location: location
   tags: tags
   sku: {
-    name: 'Standard' // Standard is the minimum version that supports topics
+    name: 'Standard'  // Standard is the minimum version that supports multiple consumer groups on an event hub
+    tier: 'Standard'
+    capacity: 1
+  }
+  identity: {
+    type: 'SystemAssigned'
   }
   properties: {
-    minimumTlsVersion: '1.2'
+    isAutoInflateEnabled: false
+    maximumThroughputUnits: 0
   }
 }
