@@ -16,17 +16,6 @@ param tags object
 @maxLength(24)
 param storageAccountName string
 
-@description('The name of the Key Vault that will contain the secrets')
-param keyVaultName string
-
-//=============================================================================
-// Existing resources
-//=============================================================================
-
-resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' existing = {
-  name: keyVaultName
-}
-
 //=============================================================================
 // Resources
 //=============================================================================
@@ -42,15 +31,5 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
   properties: {
     supportsHttpsTrafficOnly: true
     defaultToOAuthAuthentication: true
-  }
-}
-
-// Store connection string in Key Vault
-
-resource storageAccountConnectionStringSecret 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
-  name: 'storage-account-connection-string'
-  parent: keyVault
-  properties: {
-    value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount.listKeys().keys[0].value}'
   }
 }
