@@ -277,14 +277,14 @@ module applicationResources 'modules/application/application.bicep' = if (includ
 //=============================================================================
 
 // Return the names of the resources
-output AZURE_API_MANAGEMENT_NAME string = (apiManagementSettings != null ? apiManagementSettings!.serviceName : '')
+output AZURE_API_MANAGEMENT_NAME string = apiManagementSettings.?serviceName ?? ''
 output AZURE_APPLICATION_INSIGHTS_NAME string = appInsightsSettings.appInsightsName
-output AZURE_EVENT_HUB_NAMESPACE_NAME string = (eventHubSettings != null ? eventHubSettings!.namespaceName : '')
-output AZURE_FUNCTION_APP_NAME string = (functionAppSettings != null ? functionAppSettings!.functionAppName : '')
+output AZURE_EVENT_HUB_NAMESPACE_NAME string = eventHubSettings.?namespaceName ?? ''
+output AZURE_FUNCTION_APP_NAME string = functionAppSettings.?functionAppName ?? ''
 output AZURE_KEY_VAULT_NAME string = keyVaultName
-output AZURE_LOGIC_APP_NAME string = (logicAppSettings != null ? logicAppSettings!.logicAppName : '')
+output AZURE_LOGIC_APP_NAME string = logicAppSettings.?logicAppName ?? ''
 output AZURE_RESOURCE_GROUP string = resourceGroupName
-output AZURE_SERVICE_BUS_NAMESPACE_NAME string = (serviceBusSettings != null ? serviceBusSettings!.namespaceName : '')
+output AZURE_SERVICE_BUS_NAMESPACE_NAME string = serviceBusSettings.?namespaceName ?? ''
 output AZURE_STORAGE_ACCOUNT_NAME string = storageAccountName
 
 // Return which services are included in the deployment
