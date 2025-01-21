@@ -180,6 +180,7 @@ module apiManagement 'modules/services/api-management.bicep' = if (apiManagement
     appInsights
     eventHubNamespace
     keyVault
+    serviceBus
   ]
 }
 
