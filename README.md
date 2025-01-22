@@ -117,6 +117,14 @@ As mentioned in the [Overview](#overview) section, this template deploys a set o
 
 ### Infrastructure
 
+#### API Management
+
+> TODO (sku, subscription, apim logger w3c, ...)
+
+#### Function App
+
+> TODO
+
 #### Logic App
 
 When the `includeLogicApp` parameter or corresponding `INCLUDE_LOGIC_APP` environment variable is set to `true`, a Standard single-tenant Logic App is deployed via the [logic.bicep](./infra/modules/services/logic-app.bicep) module. The `WS1` (Workflow Standard) pricing tier is used. The system-assigned managed identity is enabled and provides access to other services. See the [Role Assignments](#role-assignments) section for more information.
@@ -136,9 +144,19 @@ The following app settings (environment variables) are configured to facilitate 
 
 Note: The `*` indicates that setting is only deployed of the corresponding service is included.
 
+#### Service Bus
+
+> TODO
+
+#### Event Hubs Namespace
+
+> TODO
+
 #### Role Assignments
 
 > TODO
+
+#### Supporting Resources
 
 ### Application
 
