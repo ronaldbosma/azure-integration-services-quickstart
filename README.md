@@ -134,7 +134,7 @@ The following app settings (environment variables) are configured to facilitate 
 | Name | Description |
 | --- | --- |
 | `ApiManagement_gatewayUrl` * | The base url to API Management. For example: `https://apim-aisquick-sdc-5spzh.azure-api.net`. |
-| `ApiManagement_subscriptionKey` * | Key vault reference to the subscription key of the default `master` subscription in API Management. |
+| `ApiManagement_subscriptionKey` * | A Key Vault reference to the subscription key of the default `master` subscription in API Management. |
 | `AzureBlob_blobStorageEndpoint` | The Blob Storage endpoint. For example: `https://staisquicksdc5spzh.blob.core.windows.net`. |
 | `AzureFile_storageAccountUri` | The File Storage endpoint. For example: `https://staisquicksdc5spzh.file.core.windows.net`. |
 | `AzureQueues_queueServiceUri` | The Queue Storage endpoint. For example: `https://staisquicksdc5spzh.queue.core.windows.net`. |
@@ -142,7 +142,7 @@ The following app settings (environment variables) are configured to facilitate 
 | `EventHub_fullyQualifiedNamespace` * | The fully qualified namespace of the Event Hubs namespace. For example: `evhns-aisquick-sdc-5spzh.servicebus.windows.net`. |
 | `ServiceBus_fullyQualifiedNamespace` * | The fully qualified namespace of the Service Bus. For example: `sbns-aisquick-sdc-5spzh.servicebus.windows.net`. |
 
-Note: The `*` indicates that setting is only deployed of the corresponding service is included.
+Note: The `*` indicates that setting is only deployed if the corresponding service is included.
 
 #### Service Bus
 
