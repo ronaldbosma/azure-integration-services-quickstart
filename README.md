@@ -111,30 +111,43 @@ There are a couple of ways to change which Azure Integration Services are deploy
 When disabling an already deployed service, it will not be removed when running `azd up` or `azd provision` again. You will need to manually remove the resources from the Azure portal or use `azd down` to remove the entire environment.
 
 
-## Features
+## Template Breakdown
 
-- **Integration Services**:
-  - Azure API Management (APIM)
-  - Azure Function App
-  - Azure Logic App (Standard)
-- **Shared Resources**:
-  - Application Insights for centralized logging and monitoring
-  - Azure Key Vault for secure storage of secrets
-  - Azure Storage Account for persistent storage
-- **Managed Identities**:
-  - Each integration service has a **system-assigned managed identity**.
-  - These identities are assigned the following roles:
-    - Azure Service Bus Data Receiver
-    - Azure Service Bus Data Sender
-    - Key Vault Secrets User
-    - Storage Blob Data Contributor
-    - Storage File Data SMB Share Contributor
-    - Storage Queue Data Contributor
-    - Storage Table Data Contributor
-- **Naming Convention**:
-  - All resources are deployed using a naming convention based on the [Azure Resource Naming Best Practices](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-naming). 
-  - The naming convention is implemented using user-defined functions in Bicep, which I blogged about in [Apply Azure naming convention using Bicep functions](https://ronaldbosma.github.io/blog/2024/06/05/apply-azure-naming-convention-using-bicep-functions/).
+As mentioned in the [Overview](#overview) section, this template deploys a set of Azure Integration Services along with supporting resources. The following sections provide a detailed description of the resources that are deployed and how they are connected.
 
+### Infrastructure
+
+#### Logic App
+
+When the `includeLogicApp` parameter or corresponding `INCLUDE_LOGIC_APP` environment variable is set to `true`, a Standard single-tenant Logic App is deployed via the [logic.bicep](./infra/modules/services/logic-app.bicep) module. The `WS1` (Workflow Standard) pricing tier is used. The system-assigned managed identity is enabled and provides access to other services. See the [Role Assignments](#role-assignments) section for more information.
+
+The following app settings (environment variables) are configured to facilitate connections to the other services. These are used in the [connections.json](./src/logicApp/connections.json) file of the sample logic app.
+
+| Name | Description |
+| --- | --- |
+| `ApiManagement_gatewayUrl` * | The base url to API Management. For example: `https://apim-aisquick-sdc-5spzh.azure-api.net`. |
+| `ApiManagement_subscriptionKey` * | Key vault reference to the subscription key of the default `master` subscription in API Management. |
+| `AzureBlob_blobStorageEndpoint` | The Blob Storage endpoint. For example: `https://staisquicksdc5spzh.blob.core.windows.net`. |
+| `AzureFile_storageAccountUri` | The File Storage endpoint. For example: `https://staisquicksdc5spzh.file.core.windows.net`. |
+| `AzureQueues_queueServiceUri` | The Queue Storage endpoint. For example: `https://staisquicksdc5spzh.queue.core.windows.net`. |
+| `AzureTables_tableStorageEndpoint` | The Table Storage endpoint. For example: `https://staisquicksdc5spzh.table.core.windows.net`. |
+| `EventHub_fullyQualifiedNamespace` * | The fully qualified namespace of the Event Hubs namespace. For example: `evhns-aisquick-sdc-5spzh.servicebus.windows.net`. |
+| `ServiceBus_fullyQualifiedNamespace` * | The fully qualified namespace of the Service Bus. For example: `sbns-aisquick-sdc-5spzh.servicebus.windows.net`. |
+
+Note: The `*` indicates that setting is only deployed of the corresponding service is included.
+
+#### Role Assignments
+
+> TODO
+
+### Application
+
+> TODO
+
+
+## Naming Convention
+
+All resources are deployed using a naming convention based on the [Azure Resource Naming Best Practices](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-naming). The naming convention is implemented using (a variation of the) user-defined functions in Bicep, which I blogged about in [Apply Azure naming convention using Bicep functions](https://ronaldbosma.github.io/blog/2024/06/05/apply-azure-naming-convention-using-bicep-functions/).
 
 The following image displays an example of the resources that are deployed with this template:
 
