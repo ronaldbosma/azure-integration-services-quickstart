@@ -142,7 +142,7 @@ The following app settings (environment variables) are configured to facilitate 
 | `EventHub_fullyQualifiedNamespace` * | The fully qualified namespace of the Event Hubs namespace. For example: `evhns-aisquick-sdc-5spzh.servicebus.windows.net`. |
 | `ServiceBus_fullyQualifiedNamespace` * | The fully qualified namespace of the Service Bus. For example: `sbns-aisquick-sdc-5spzh.servicebus.windows.net`. |
 
-Note: The `*` indicates that setting is only deployed if the corresponding service is included.
+_Note: The `*` indicates that setting is only deployed if the corresponding service is included._
 
 #### Service Bus
 
