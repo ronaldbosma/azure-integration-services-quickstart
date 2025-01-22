@@ -44,6 +44,8 @@ param storageAccountName string
 // Variables
 //=============================================================================
 
+// azd uses the 'azd-service-name' tag to identify the service when deploying the app source code from the src folder.
+// In this case the logic app workflow(s) and related assets.
 var serviceTags = union(tags, {
   'azd-service-name': 'logicApp'
 })

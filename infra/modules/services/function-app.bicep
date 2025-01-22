@@ -44,6 +44,8 @@ param storageAccountName string
 // Variables
 //=============================================================================
 
+// azd uses the 'azd-service-name' tag to identify the service when deploying the app source code from the src folder.
+// In this case the assemblies of the functions .NET solution.
 var serviceTags = union(tags, {
   'azd-service-name': 'functionApp'
 })
