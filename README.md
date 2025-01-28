@@ -129,22 +129,23 @@ The primary key of the default `master` subscription is stored in a Key Vault se
 
 #### Logic App
 
-When the `includeLogicApp` parameter or corresponding `INCLUDE_LOGIC_APP` environment variable is set to `true`, a Standard single-tenant Logic App is deployed via the [logic.bicep](./infra/modules/services/logic-app.bicep) module. The `WS1` (Workflow Standard) pricing tier is used. The system-assigned managed identity is enabled and provides access to other services. See the [Role Assignments](#role-assignments) section for more information.
+When the `includeLogicApp` parameter or the corresponding `INCLUDE_LOGIC_APP` environment variable is set to `true`, a Standard single-tenant Logic App is deployed via the [logic.bicep](./infra/modules/services/logic-app.bicep) module. The `WS1` (Workflow Standard) pricing tier is used. The system-assigned managed identity is enabled and provides access to other services. See the [Role Assignments](#role-assignments) section for more information.
 
-The following app settings (environment variables) are configured to facilitate connections to the other services. These are used in the [connections.json](./src/logicApp/connections.json) file of the sample application.
+The following app settings (environment variables) are configured to facilitate connections to other services. These are used in the [connections.json](./src/logicApp/connections.json) file of the sample application.
 
-| Name | Description |
-| --- | --- |
-| `ApiManagement_gatewayUrl` * | The base url to API Management. For example: `https://apim-aisquick-sdc-5spzh.azure-api.net`. |
-| `ApiManagement_subscriptionKey` * | A Key Vault reference to the subscription key of the default `master` subscription in API Management. |
-| `AzureBlob_blobStorageEndpoint` | The Blob Storage endpoint. For example: `https://staisquicksdc5spzh.blob.core.windows.net`. |
-| `AzureFile_storageAccountUri` | The File Storage endpoint. For example: `https://staisquicksdc5spzh.file.core.windows.net`. |
-| `AzureQueues_queueServiceUri` | The Queue Storage endpoint. For example: `https://staisquicksdc5spzh.queue.core.windows.net`. |
-| `AzureTables_tableStorageEndpoint` | The Table Storage endpoint. For example: `https://staisquicksdc5spzh.table.core.windows.net`. |
-| `EventHub_fullyQualifiedNamespace` * | The fully qualified namespace of the Event Hubs namespace. For example: `evhns-aisquick-sdc-5spzh.servicebus.windows.net`. |
-| `ServiceBus_fullyQualifiedNamespace` * | The fully qualified namespace of the Service Bus. For example: `sbns-aisquick-sdc-5spzh.servicebus.windows.net`. |
+| Name                                   | Description                                                                                                                |
+|----------------------------------------|----------------------------------------------------------------------------------------------------------------------------|
+| `ApiManagement_gatewayUrl` *           | The base URL for API Management. For example: `https://apim-aisquick-sdc-5spzh.azure-api.net`.                             |
+| `ApiManagement_subscriptionKey` *      | A Key Vault reference to the subscription key of the default `master` subscription in API Management.                      |
+| `AzureBlob_blobStorageEndpoint`        | The Blob Storage endpoint. For example: `https://staisquicksdc5spzh.blob.core.windows.net`.                                |
+| `AzureFile_storageAccountUri`          | The File Storage endpoint. For example: `https://staisquicksdc5spzh.file.core.windows.net`.                                |
+| `AzureQueues_queueServiceUri`          | The Queue Storage endpoint. For example: `https://staisquicksdc5spzh.queue.core.windows.net`.                              |
+| `AzureTables_tableStorageEndpoint`     | The Table Storage endpoint. For example: `https://staisquicksdc5spzh.table.core.windows.net`.                              |
+| `EventHub_fullyQualifiedNamespace` *   | The fully qualified namespace of the Event Hubs namespace. For example: `evhns-aisquick-sdc-5spzh.servicebus.windows.net`. |
+| `ServiceBus_fullyQualifiedNamespace` * | The fully qualified namespace of the Service Bus. For example: `sbns-aisquick-sdc-5spzh.servicebus.windows.net`.           |
 
-_Note: The `*` indicates that setting is only deployed if the corresponding service is included._
+_Note: The `*` indicates that the setting is only deployed if the corresponding service is included._
+
 
 #### Service Bus
 
