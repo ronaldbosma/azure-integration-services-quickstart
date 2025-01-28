@@ -129,13 +129,33 @@ When the `includeApiManagement` parameter or the corresponding `INCLUDE_API_MANA
 
 #### Function App
 
-> TODO
+When the `includeFunctionApp` parameter or the corresponding `INCLUDE_FUNCTION_APP` environment variable is set to `true`, a Function App is deployed via the [function-app.bicep](./infra/modules/services/function-app.bicep) module:
+
+- The `Y1` (Consumption) pricing tier is used. 
+- The worker runtime is configured to .NET 8 isolated. 
+- The system-assigned managed identity is enabled to provide access to other services. See the [Role Assignments](#role-assignments) section for more information.
+
+The following app settings (environment variables) are configured to facilitate connections to other services. The `StorageAccountConnection`, `EventHubConnection` or `ServiceBusConnection` connection name can be used in triggers and bindings of a function. See [SampleFunction.cs](./src/functionApp/SampleFunction.cs) for an example.
+
+| Name                                              | Description                                                                                                                |
+|---------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------|
+| `ApiManagement_gatewayUrl` *                      | The base URL for API Management. For example: `https://apim-aisquick-sdc-5spzh.azure-api.net`.                             |
+| `ApiManagement_subscriptionKey` *                 | A Key Vault reference to the subscription key of the default `master` subscription in API Management.                      |
+| `StorageAccountConnection__blobServiceUri`        | The Blob Storage endpoint. For example: `https://staisquicksdc5spzh.blob.core.windows.net`.                                |
+| `StorageAccountConnection__fileServiceUri`        | The File Storage endpoint. For example: `https://staisquicksdc5spzh.file.core.windows.net`.                                |
+| `StorageAccountConnection__queueServiceUri`       | The Queue Storage endpoint. For example: `https://staisquicksdc5spzh.queue.core.windows.net`.                              |
+| `StorageAccountConnection__tableServiceUri`       | The Table Storage endpoint. For example: `https://staisquicksdc5spzh.table.core.windows.net`.                              |
+| `EventHubConnection__fullyQualifiedNamespace` *   | The fully qualified namespace of the Event Hubs namespace. For example: `evhns-aisquick-sdc-5spzh.servicebus.windows.net`. |
+| `ServiceBusConnection__fullyQualifiedNamespace` * | The fully qualified namespace of the Service Bus. For example: `sbns-aisquick-sdc-5spzh.servicebus.windows.net`.           |
+
+_Note: The `*` indicates that the setting is only deployed if the corresponding service is included._
+
 
 #### Logic App
 
-When the `includeLogicApp` parameter or the corresponding `INCLUDE_LOGIC_APP` environment variable is set to `true`, a Standard single-tenant Logic App is deployed via the [logic.bicep](./infra/modules/services/logic-app.bicep) module.
+When the `includeLogicApp` parameter or the corresponding `INCLUDE_LOGIC_APP` environment variable is set to `true`, a Standard single-tenant Logic App is deployed via the [logic-app.bicep](./infra/modules/services/logic-app.bicep) module:
 
-- The WS1 (Workflow Standard) pricing tier is used. 
+- The `WS1` (Workflow Standard) pricing tier is used. 
 - The worker runtime is configured to .NET 8 to enable the use of [custom .NET code](https://learn.microsoft.com/en-us/azure/logic-apps/create-run-custom-code-functions). 
 - The system-assigned managed identity is enabled and provides access to other services. See the [Role Assignments](#role-assignments) section for more information.
 
@@ -153,7 +173,6 @@ The following app settings (environment variables) are configured to facilitate 
 | `ServiceBus_fullyQualifiedNamespace` * | The fully qualified namespace of the Service Bus. For example: `sbns-aisquick-sdc-5spzh.servicebus.windows.net`.           |
 
 _Note: The `*` indicates that the setting is only deployed if the corresponding service is included._
-
 
 #### Service Bus
 
