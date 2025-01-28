@@ -119,7 +119,9 @@ As mentioned in the [Overview](#overview) section, this template deploys a set o
 
 #### API Management
 
-> TODO (sku, subscription, apim logger w3c, ...)
+When the `includeApiManagement` parameter or the corresponding `INCLUDE_API_MANAGEMENT` environment variable is set to `true`, a `Consumption` tier API Management service is deployed via the [api-management.bicep](./infra/modules/services/api-management.bicep) module. The system-assigned managed identity is enabled and provides access to other services. See the [Role Assignments](#role-assignments) section for more information.
+
+The primary key of the default `master` subscription is stored in a Key Vault secret called `apim-master-subscription-key`. It can be used, for example, by the Function App to access APIs on API Management. The deployment also includes backends for the Service Bus, various Storage Account endpoints and the Event Hubs namespace.
 
 #### Function App
 
