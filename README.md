@@ -119,9 +119,13 @@ As mentioned in the [Overview](#overview) section, this template deploys a set o
 
 #### API Management
 
-When the `includeApiManagement` parameter or the corresponding `INCLUDE_API_MANAGEMENT` environment variable is set to `true`, a `Consumption` tier API Management service is deployed via the [api-management.bicep](./infra/modules/services/api-management.bicep) module. The system-assigned managed identity is enabled and provides access to other services. See the [Role Assignments](#role-assignments) section for more information.
+When the `includeApiManagement` parameter or the corresponding `INCLUDE_API_MANAGEMENT` environment variable is set to `true`, a `Consumption` tier API Management service is deployed via the [api-management.bicep](./infra/modules/services/api-management.bicep) module:
 
-The primary key of the default `master` subscription is stored in a Key Vault secret called `apim-master-subscription-key`. It can be used, for example, by the Function App to access APIs on API Management. The deployment also includes backends for the Service Bus, various Storage Account endpoints and the Event Hubs namespace.
+- The system-assigned managed identity is enabled to provide access to other services. See the [Role Assignments](#role-assignments) section for more information.
+- The primary key of the default `master` subscription is stored in a Key Vault secret called `apim-master-subscription-key`. This key can be used, for example, by the Function App to access APIs hosted on API Management.
+- The deployment also includes backends for the Service Bus (\*), various Storage Account endpoints and the Event Hubs namespace (\*).  
+  _Note: The `*` indicates that the backend is only deployed if the corresponding service is included._
+
 
 #### Function App
 
@@ -129,7 +133,11 @@ The primary key of the default `master` subscription is stored in a Key Vault se
 
 #### Logic App
 
-When the `includeLogicApp` parameter or the corresponding `INCLUDE_LOGIC_APP` environment variable is set to `true`, a Standard single-tenant Logic App is deployed via the [logic.bicep](./infra/modules/services/logic-app.bicep) module. The `WS1` (Workflow Standard) pricing tier is used. The system-assigned managed identity is enabled and provides access to other services. See the [Role Assignments](#role-assignments) section for more information.
+When the `includeLogicApp` parameter or the corresponding `INCLUDE_LOGIC_APP` environment variable is set to `true`, a Standard single-tenant Logic App is deployed via the [logic.bicep](./infra/modules/services/logic-app.bicep) module.
+
+- The WS1 (Workflow Standard) pricing tier is used. 
+- The worker runtime is configured to .NET 8 to enable the use of [custom .NET code](https://learn.microsoft.com/en-us/azure/logic-apps/create-run-custom-code-functions). 
+- The system-assigned managed identity is enabled and provides access to other services. See the [Role Assignments](#role-assignments) section for more information.
 
 The following app settings (environment variables) are configured to facilitate connections to other services. These are used in the [connections.json](./src/logicApp/connections.json) file of the sample application.
 
