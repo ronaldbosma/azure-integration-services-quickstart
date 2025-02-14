@@ -252,9 +252,9 @@ The following image displays an example of the resources that are deployed with 
 
 If you're executing `azd up` or `azd deploy`, you may encounter the following error if the Function App was not included in the deployment:
 
-```
+`
 ERROR: error executing step command 'deploy --all': getting target resource: resource not found: unable to find a resource tagged with 'azd-service-name: functionApp'. Ensure the service resource is correctly tagged in your infrastructure configuration, and rerun provision
-```
+`
 
 Use `azd provision` if you only want to deploy the infrastructure without the application resources. Use `azd deploy logicApp` if you want to deploy the Logic App workflow. See [Changing which resources are deployed](#changing-which-resources-are-deployed) if you want to include the Function App in the deployment.
 
@@ -262,9 +262,9 @@ Use `azd provision` if you only want to deploy the infrastructure without the ap
 
 If you're executing `azd up` or `azd deploy`, you may encounter the following error if the Logic App was not included in the deployment:
 
-```
+`
 ERROR: error executing step command 'deploy --all': getting target resource: resource not found: unable to find a resource tagged with 'azd-service-name: logicApp'. Ensure the service resource is correctly tagged in your infrastructure configuration, and rerun provision
-```
+`
 
 Use `azd provision` if you only want to deploy the infrastructure without the application resources. Use `azd deploy functionApp` if you want to deploy the Azure Function. See [Changing which resources are deployed](#changing-which-resources-are-deployed) if you want to include the Logic App in the deployment.
 
