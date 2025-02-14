@@ -61,6 +61,29 @@ Once `azd` is installed on your machine, you can deploy this template using the 
 
 If you only deploy the Function App or Logic App, use `azd provision` to deploy the infrastructure and then use `azd deploy functionApp` or `azd deploy logicApp` to deploy the sample Azure Function or Logic App workflow, respectively.
 
+### Test
+
+The [tests.http](./tests/tests.http) file contains a set of HTTP requests that you can use to test the deployed resources. Note that you'll need to deploy the application infrastructure, API Management and Service Bus, and include the Function and/or Logic App.
+
+Follow these steps to test the sample application using Visual Studio Code:
+
+1. Install the [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) extension in Visual Studio Code. 
+1. The API is protected and needs to be called with a subscription key. Either:
+   - Locate the `Built-in all-access` subscription in API Management and copy the primary key,
+   - Or locate the `apim-master-subscription-key` secret in Key Vault and copy the secret value.
+1. Add an environment to your Visual Studio Code user settings with the API Management hostname and subscription key. Use the following example and replace the values with your own:
+   ```
+   "rest-client.environmentVariables": {
+       "apim-aisquick-sdc-5spzh": {
+           "apimHostname": "apim-aisquick-sdc-5spzh.azure-api.net",
+           "apimSubscriptionKey": "1234567890abcdefghijklmnopqrstuv"
+       }
+   }
+   ```
+1. Open `test.http` and click on `Send Request` above the first request. This will send a message to the Service Bus topic.
+1. Click on `Send Request` above the second request to retrieve the message from the storage table. A `404 Not Found` response might be returned if the message hasn't been processed yet or if you haven't deployed the Azure Function.
+1. Click on `Send Request` above the third request to retrieve the message from the blob container. A `404 Not Found` response might be returned if the message hasn't been processed yet or if you haven't deployed the Logic App workflow.
+
 ### Clean up
 
 Once you're done and want to clean up, run the `azd down` command. By including the `--purge` parameter, you ensure that the API Management service doesn't remain in a soft-deleted state, which could block future deployments of the same environment.
@@ -232,7 +255,7 @@ Although these resources are part of the application, they are deployed as part 
 
 The [functionApp](./src/functionApp) directory contains the code for the Azure Function deployed to the Function App. The function is triggered by messages sent to the Service Bus topic and stores the message in a table within the Storage Account.  
 
-#### Logic App Workflow  
+#### Logic App workflow  
 
 The [logicApp](./src/logicApp) directory contains the Logic App workflow. The workflow is triggered by messages sent to the Service Bus topic and stores the message in a blob container within the Storage Account.  
 
