@@ -110,7 +110,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' existing 
 // Resources
 //=============================================================================
 
-// Create the Application Service Plan for the Logic App
+// Create the App Service Plan for the Logic App
 
 resource hostingPlan 'Microsoft.Web/serverfarms@2024-04-01' = {
   name: logicAppSettings.appServicePlanName

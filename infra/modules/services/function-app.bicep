@@ -107,7 +107,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' existing 
 // Resources
 //=============================================================================
 
-// Create the Application Service Plan for the Function App
+// Create the App Service Plan for the Function App
 
 resource hostingPlan 'Microsoft.Web/serverfarms@2024-04-01' = {
   name: functionAppSettings.appServicePlanName
