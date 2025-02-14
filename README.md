@@ -135,7 +135,7 @@ When the `includeFunctionApp` parameter or the corresponding `INCLUDE_FUNCTION_A
 - The worker runtime is configured to .NET 8 isolated. 
 - The system-assigned managed identity is enabled to provide access to other services. See the [Role Assignments](#role-assignments) section for more information.
 
-The following app settings (environment variables) are configured to facilitate connections to other services. The `StorageAccountConnection`, `EventHubConnection` or `ServiceBusConnection` connection name can be used in triggers and bindings of a function. See [SampleFunction.cs](./src/functionApp/SampleFunction.cs) for an example.
+The following app settings (environment variables) are configured to facilitate connections to other services.
 
 | Name                                              | Description                                                                                                                |
 |---------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------|
@@ -150,6 +150,7 @@ The following app settings (environment variables) are configured to facilitate 
 
 _Note: The `*` indicates that the setting is only deployed if the corresponding service is included._
 
+The `StorageAccountConnection`, `EventHubConnection` or `ServiceBusConnection` connection name can be used in triggers and bindings of a function. See [SampleFunction.cs](./src/functionApp/SampleFunction.cs) for an example.
 
 #### Logic App
 
