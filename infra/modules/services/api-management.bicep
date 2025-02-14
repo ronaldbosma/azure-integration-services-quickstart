@@ -25,7 +25,7 @@ param apiManagementSettings apiManagementSettingsType
 @description('The name of the App Insights instance that will be used by API Management')
 param appInsightsName string
 
-@description('The settings for the Event Hub namespace')
+@description('The settings for the Event Hubs namespace')
 param eventHubSettings eventHubSettingsType?
 
 @description('The name of the Key Vault that will contain the secrets')
@@ -153,11 +153,11 @@ resource apimMasterSubscriptionKeySecret 'Microsoft.KeyVault/vaults/secrets@2023
 
 // Add backends for the various services
 
-resource eventHubNamespaceBackend 'Microsoft.ApiManagement/service/backends@2023-09-01-preview' = if (eventHubSettings != null) {
+resource eventHubsNamespaceBackend 'Microsoft.ApiManagement/service/backends@2023-09-01-preview' = if (eventHubSettings != null) {
   parent: apiManagementService
-  name: 'event-hub-namespace'
+  name: 'event-hubs-namespace'
   properties: {
-    description: 'The backend for the event hub namespace'
+    description: 'The backend for the Events Hubs namespace'
     url: helpers.getServiceBusEndpoint(eventHubSettings!.namespaceName)
     protocol: 'http'
     tls: {
@@ -171,7 +171,7 @@ resource serviceBusBackend 'Microsoft.ApiManagement/service/backends@2023-09-01-
   parent: apiManagementService
   name: 'service-bus'
   properties: {
-    description: 'The backend for the service bus'
+    description: 'The backend for the Service Bus'
     url: helpers.getServiceBusEndpoint(serviceBusSettings!.namespaceName)
     protocol: 'http'
     tls: {
@@ -185,7 +185,7 @@ resource blobStorageBackend 'Microsoft.ApiManagement/service/backends@2023-09-01
   parent: apiManagementService
   name: 'blob-storage'
   properties: {
-    description: 'The backend for blob storage'
+    description: 'The backend for Blob Storage'
     url: helpers.getBlobStorageEndpoint(storageAccountName)
     protocol: 'http'
     tls: {
@@ -199,7 +199,7 @@ resource queueStorageBackend 'Microsoft.ApiManagement/service/backends@2023-09-0
   parent: apiManagementService
   name: 'queue-storage'
   properties: {
-    description: 'The backend for queue storage'
+    description: 'The backend for Queue Storage'
     url: helpers.getQueueStorageEndpoint(storageAccountName)
     protocol: 'http'
     tls: {
@@ -213,7 +213,7 @@ resource tableStorageBackend 'Microsoft.ApiManagement/service/backends@2023-09-0
   parent: apiManagementService
   name: 'table-storage'
   properties: {
-    description: 'The backend for table storage'
+    description: 'The backend for Table Storage'
     url: helpers.getTableStorageEndpoint(storageAccountName)
     protocol: 'http'
     tls: {

@@ -28,7 +28,7 @@ param apiManagementSettings apiManagementSettingsType?
 @description('The name of the App Insights instance that will be used by the Logic App')
 param appInsightsName string
 
-@description('The settings for the Event Hub namespace')
+@description('The settings for the Event Hubs namespace')
 param eventHubSettings eventHubSettingsType?
 
 @description('The name of the Key Vault that will contain the secrets')
@@ -56,7 +56,7 @@ var apimAppSettings = apiManagementSettings == null ? {} : {
   ApiManagement_subscriptionKey: helpers.getKeyVaultSecretReference(keyVaultName, 'apim-master-subscription-key')
 }
 
-// If the Event Hub is deployed, add app settings to connect to it
+// If the Event Hubs namespace is deployed, add app settings to connect to it
 var eventHubAppSettings = eventHubSettings == null ? {} : {
   EventHub_fullyQualifiedNamespace: helpers.getServiceBusFullyQualifiedNamespace(eventHubSettings!.namespaceName)
 }

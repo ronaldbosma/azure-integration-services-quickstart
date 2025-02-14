@@ -18,7 +18,7 @@ param principalId string
 @description('The flag to determine if the principal is an admin or not')
 param isAdmin bool = false
 
-@description('The settings for the Event Hub namespace on which to assign roles')
+@description('The settings for the Event Hubs namespace on which to assign roles')
 param eventHubSettings eventHubSettingsType?
 
 @description('The name of the Key Vault on which to assign roles')
@@ -82,7 +82,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' existing 
 // Resources
 //=============================================================================
 
-// Assign role on Event Hub Namespace to the principal (if Event Hub is included)
+// Assign role on Event Hubs namespace to the principal (if Event Hubs namespace is included)
 
 resource assignRolesOnEventHubNamespaceToManagedIdentity 'Microsoft.Authorization/roleAssignments@2022-04-01' = [for role in eventHubRoles: if (eventHubSettings != null) {
   name: guid(principalId, eventHubNamespace.id, subscriptionResourceId('Microsoft.Authorization/roleDefinitions', role))

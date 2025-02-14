@@ -1,5 +1,5 @@
 //=============================================================================
-// Event Hub Namespace
+// Event Hubs namespace
 //=============================================================================
 
 //=============================================================================
@@ -18,7 +18,7 @@ param location string
 @description('The tags to associate with the resource')
 param tags object
 
-@description('The settings for the Event Hub namespace that will be created')
+@description('The settings for the Event Hubs namespace that will be created')
 param eventHubSettings eventHubSettingsType
 
 //=============================================================================

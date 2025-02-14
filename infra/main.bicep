@@ -36,7 +36,7 @@ param currentPrincipalId string = ''
 @description('Include the API Management service in the deployment.')
 param includeApiManagement bool
 
-@description('Include the Event Hub in the deployment.')
+@description('Include the Event Hubs namespace in the deployment.')
 param includeEventHub bool
 
 @description('Include the Function App in the deployment.')
@@ -143,8 +143,8 @@ module appInsights 'modules/services/app-insights.bicep' = {
   }
 }
 
-module eventHubNamespace 'modules/services/event-hub-namespace.bicep' = if (eventHubSettings != null) {
-  name: 'eventHubNamespace'
+module eventHubsNamespace 'modules/services/event-hubs-namespace.bicep' = if (eventHubSettings != null) {
+  name: 'eventHubsNamespace'
   scope: resourceGroup
   params: {
     location: location
@@ -178,7 +178,7 @@ module apiManagement 'modules/services/api-management.bicep' = if (apiManagement
   }
   dependsOn: [
     appInsights
-    eventHubNamespace
+    eventHubsNamespace
     keyVault
     serviceBus
   ]
@@ -200,7 +200,7 @@ module functionApp 'modules/services/function-app.bicep' = if (functionAppSettin
   }
   dependsOn: [
     appInsights
-    eventHubNamespace
+    eventHubsNamespace
     keyVault
     serviceBus
     storageAccount
@@ -223,7 +223,7 @@ module logicApp 'modules/services/logic-app.bicep' = if (logicAppSettings != nul
   }
   dependsOn: [
     appInsights
-    eventHubNamespace
+    eventHubsNamespace
     keyVault
     serviceBus
     storageAccount
@@ -242,7 +242,7 @@ module assignRolesToCurrentPrincipal 'modules/shared/assign-roles-to-principal.b
     storageAccountName: storageAccountName
   }
   dependsOn: [
-    eventHubNamespace
+    eventHubsNamespace
     keyVault
     serviceBus
     storageAccount

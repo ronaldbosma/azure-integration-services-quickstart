@@ -35,7 +35,7 @@ type appInsightsSettingsType = {
 @description('The settings for the Event Hub')
 @export()
 type eventHubSettingsType = {
-  @description('The name of the Event Hub Namespace')
+  @description('The name of the Event Hubs namespace')
   namespaceName: string
 }
 
