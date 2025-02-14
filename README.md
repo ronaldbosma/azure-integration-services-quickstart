@@ -182,10 +182,27 @@ When the `includeServiceBus` parameter or the corresponding `INCLUDE_SERVICE_BUS
 
 When the `includeEventHubsNamespace` parameter or the corresponding `INCLUDE_EVENT_HUBS_NAMESPACE` environment variable is set to `true`, a Standard tier Event Hubs namespace is deployed via the [event-hubs-namespace.bicep](./infra/modules/services/event-hubs-namespace.bicep) module. The Standard tier supports multiple consumer groups per hub, enabling publish-subscribe scenarios.
 
-
 #### Role Assignments
 
-> TODO
+The [assign-roles-to-principal.bicep](./infra/modules/shared/assign-roles-to-principal.bicep) module is used to assign roles to the principal of the deployer and to the system-assigned managed identity of API Management, the Function App and Logic App. These role assignments are:
+
+- Event Hubs namespace roles:
+  - Azure Event Hubs Data Receiver
+  - Azure Event Hubs Data Sender
+- Key Vault roles:
+  - Key Vault Administrator _(this role is only assigned to the principal of the deployer)_
+  - Key Vault Secrets User _(this role is assigned to the managed identities)_
+- Service Bus roles:
+  - Azure Service Bus Data Receiver
+  - Azure Service Bus Data Sender
+- Storage Account roles:
+  - Storage Blob Data Contributor
+  - Storage File Data Privileged Contributor _(this role is only assigned to the principal of the deployer)_
+  - Storage File Data SMB Share Contributor _(this role is assigned to the managed identities)_
+  - Storage Queue Data Contributor
+  - Storage Table Data Contributor
+
+These roles are assigned to the principal based on the provided parameters and the existing resources in the Azure environment.
 
 #### Supporting Resources
 
