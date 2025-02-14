@@ -54,7 +54,7 @@
             }
         },
         "eventHub": {
-            "displayName": "event-hub-namespace",
+            "displayName": "event-hubs-namespace",
             "parameterSetName": "ManagedServiceIdentity",
             "parameterValues": {
                 "authProvider": {
