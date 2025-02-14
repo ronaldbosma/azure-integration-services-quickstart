@@ -176,7 +176,7 @@ _Note: The `*` indicates that the setting is only deployed if the corresponding 
 
 #### Service Bus
 
-> TODO
+When the `includeServiceBus` parameter or the corresponding `INCLUDE_SERVICE_BUS` environment variable is set to `true`, a Standard tier Service Bus is deployed via the [service-bus.bicep](./infra/modules/services/service-bus.bicep) module. The Standard tier enables features such as topics and subscriptions, which are used by the sample application.
 
 #### Event Hubs Namespace
 
