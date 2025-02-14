@@ -135,6 +135,30 @@ There are a couple of ways to change which Azure Integration Services are deploy
 
 When disabling an already deployed service, it will not be removed when running `azd up` or `azd provision` again. You will need to manually remove the resources from the Azure portal or use `azd down` to remove the entire environment.
 
+## Contents
+
+The repository consists of the following files and directories:
+
+```
+├── images                     [ Images used in the README ]
+├── infra                      [ Infrastructure As Code files ]
+│   |── functions              [ Bicep user-defined functions ]
+│   ├── modules                
+│   │   ├── application        [ Modules for application infrastructure resources ]
+│   │   ├── services           [ Modules for all Azure services ]
+│   │   └── shared             [ Reusable modules ]
+│   ├── types                  [ Bicep user-defined types ]
+│   ├── main.bicep             [ Main infrastructure file ]
+│   └── main.parameters.json   [ Parameters file ]
+├── src                        [ Application code ]
+│   ├── functionApp            [ Azure Functions ]
+│   └── logicApp               [ Logic App workflow]
+├── tests                      
+│   └── tests.http             [ HTTP requests to test the deployed resources ]
+├── azure.yaml                 [ Describes the apps and types of Azure resources ]
+└── bicepconfig.json           [ Bicep configuration file ]
+```
+
 
 ## Template Breakdown
 
@@ -157,7 +181,7 @@ When the `includeApiManagement` parameter or the corresponding `INCLUDE_API_MANA
 When the `includeFunctionApp` parameter or the corresponding `INCLUDE_FUNCTION_APP` environment variable is set to `true`, a Function App is deployed via the [function-app.bicep](./infra/modules/services/function-app.bicep) module:
 
 - The `Y1` (Consumption) pricing tier is used. 
-- The worker runtime is configured to .NET 8 isolated. 
+- The worker runtime is configured to .NET 9 isolated. 
 - The system-assigned managed identity is enabled to provide access to other services. See the [Role Assignments](#role-assignments) section for more information.
 
 The following app settings (environment variables) are configured to facilitate connections to other services.
@@ -182,7 +206,7 @@ The `StorageAccountConnection`, `EventHubConnection` or `ServiceBusConnection` c
 When the `includeLogicApp` parameter or the corresponding `INCLUDE_LOGIC_APP` environment variable is set to `true`, a Standard single-tenant Logic App is deployed via the [logic-app.bicep](./infra/modules/services/logic-app.bicep) module:
 
 - The `WS1` (Workflow Standard) pricing tier is used. 
-- The worker runtime is configured to .NET 8 to enable the use of [custom .NET code](https://learn.microsoft.com/en-us/azure/logic-apps/create-run-custom-code-functions). 
+- The worker runtime is configured to .NET 9 to enable the use of [custom .NET code](https://learn.microsoft.com/en-us/azure/logic-apps/create-run-custom-code-functions). 
 - The system-assigned managed identity is enabled and provides access to other services. See the [Role Assignments](#role-assignments) section for more information.
 
 The following app settings (environment variables) are configured to facilitate connections to other services. These are used in the [connections.json](./src/logicApp/connections.json) file of the sample application.
