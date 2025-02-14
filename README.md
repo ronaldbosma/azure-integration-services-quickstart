@@ -215,6 +215,22 @@ In addition to the Azure Integration Services, the template deploys several supp
 
 ### Application
 
+#### Infrastructure
+
+When the `includeApplicationInfraResources` parameter or the corresponding `INCLUDE_APPLICATION_INFRA_RESOURCES` environment variable is set to `true`, the sample application's infrastructure resources are deployed. These resources are defined in the [application.bicep](./infra/modules/application/application.bicep) module:
+
+- A sample API is deployed in API Management. The API allows messages to be published to a Service Bus topic and retrieves data stored in the Storage Account.  
+- A topic and its subscriptions are created in the Service Bus namespace. Messages published to the topic trigger the Function App and Logic App.
+- A blob container and storage table are created in the Storage Account. These are used by the Function App and Logic App to store messages.  
+
+Although these resources are part of the application, they are deployed as part of the infrastructure using `azd up` or `azd provision`. This is necessary because the Azure Developer CLI does not support deploying Bicep resources as part of the application with `azd deploy`.
+
+### Azure Function
+
+> TODO
+
+### Logic App Workflow
+
 > TODO
 
 
