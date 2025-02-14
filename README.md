@@ -204,7 +204,14 @@ The [assign-roles-to-principal.bicep](./infra/modules/shared/assign-roles-to-pri
 
 These roles are assigned to the principal based on the provided parameters and the existing resources in the Azure environment.
 
-#### Supporting Resources
+#### Supporting Resources  
+
+In addition to the Azure Integration Services, the template deploys several supporting resources to enhance functionality and monitoring:  
+
+- Application Insights: Provides monitoring, logging and diagnostics.  
+- Key Vault: Securely stores secrets and keys, such as API Management subscription keys.  
+- Storage Account: Used to deploy Logic App and Function App code and stores data for the sample application.  
+
 
 ### Application
 
