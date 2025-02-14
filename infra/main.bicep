@@ -80,14 +80,12 @@ var functionAppSettings = !includeFunctionApp ? null : {
   functionAppName: getResourceName('functionApp', environmentName, location, instanceId)
   appServicePlanName: getResourceName('appServicePlan', environmentName, location, 'functionapp-${instanceId}')
   netFrameworkVersion: 'v9.0'
-  isIncluded: includeFunctionApp
 }
 
 var logicAppSettings = !includeLogicApp ? null : {
   logicAppName: getResourceName('logicApp', environmentName, location, instanceId)
   appServicePlanName: getResourceName('appServicePlan', environmentName, location, 'logicapp-${instanceId}')
   netFrameworkVersion: 'v9.0'
-  isIncluded: includeLogicApp
 }
 
 var keyVaultName = getResourceName('keyVault', environmentName, location, instanceId)
