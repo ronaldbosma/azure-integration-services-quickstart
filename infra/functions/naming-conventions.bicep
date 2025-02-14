@@ -92,7 +92,7 @@ func getPrefixMap() object => {
   containerRegistry: 'cr'
   dashboard: 'dash'
   eventHub: 'evh'
-  eventHubNamespace: 'evhns'
+  eventHubsNamespace: 'evhns'
   functionApp: 'func'
   keyVault: 'kv'
   loadBalancerInternal: 'lbi'

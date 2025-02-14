@@ -37,7 +37,7 @@ param currentPrincipalId string = ''
 param includeApiManagement bool
 
 @description('Include the Event Hubs namespace in the deployment.')
-param includeEventHub bool
+param includeEventHubsNamespace bool
 
 @description('Include the Function App in the deployment.')
 param includeFunctionApp bool
@@ -72,8 +72,8 @@ var appInsightsSettings = {
   retentionInDays: 30
 }
 
-var eventHubSettings = !includeEventHub ? null : {
-  namespaceName: getResourceName('eventHubNamespace', environmentName, location, instanceId)
+var eventHubSettings = !includeEventHubsNamespace ? null : {
+  namespaceName: getResourceName('eventHubsNamespace', environmentName, location, instanceId)
 }
 
 var functionAppSettings = !includeFunctionApp ? null : {
@@ -289,7 +289,7 @@ output AZURE_STORAGE_ACCOUNT_NAME string = storageAccountName
 
 // Return which services are included in the deployment
 output INCLUDE_API_MANAGEMENT bool = includeApiManagement
-output INCLUDE_EVENT_HUB bool = includeEventHub
+output INCLUDE_EVENT_HUBS_NAMESPACE bool = includeEventHubsNamespace
 output INCLUDE_FUNCTION_APP bool = includeFunctionApp
 output INCLUDE_LOGIC_APP bool = includeLogicApp
 output INCLUDE_SERVICE_BUS bool = includeServiceBus

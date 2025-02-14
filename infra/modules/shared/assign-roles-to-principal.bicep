@@ -62,7 +62,7 @@ var storageAccountRoles = [
 // Existing Resources
 //=============================================================================
 
-resource eventHubNamespace 'Microsoft.EventHub/namespaces@2024-01-01' existing = if (eventHubSettings != null) {
+resource eventHubsNamespace 'Microsoft.EventHub/namespaces@2024-01-01' existing = if (eventHubSettings != null) {
   name: eventHubSettings!.namespaceName
 }
 
@@ -85,8 +85,8 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' existing 
 // Assign role on Event Hubs namespace to the principal (if Event Hubs namespace is included)
 
 resource assignRolesOnEventHubNamespaceToManagedIdentity 'Microsoft.Authorization/roleAssignments@2022-04-01' = [for role in eventHubRoles: if (eventHubSettings != null) {
-  name: guid(principalId, eventHubNamespace.id, subscriptionResourceId('Microsoft.Authorization/roleDefinitions', role))
-  scope: eventHubNamespace
+  name: guid(principalId, eventHubsNamespace.id, subscriptionResourceId('Microsoft.Authorization/roleDefinitions', role))
+  scope: eventHubsNamespace
   properties: {
     roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', role)
     principalId: principalId

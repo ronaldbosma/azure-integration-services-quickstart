@@ -14,8 +14,8 @@
     "includeApiManagement": {
       "value": "${INCLUDE_API_MANAGEMENT}"
     },
-    "includeEventHub": {
-      "value": "${INCLUDE_EVENT_HUB}"
+    "includeEventHubsNamespace": {
+      "value": "${INCLUDE_EVENT_HUBS_NAMESPACE}"
     },
     "includeFunctionApp": {
       "value": "${INCLUDE_FUNCTION_APP}"

@@ -81,7 +81,7 @@ There are a couple of ways to change which Azure Integration Services are deploy
    ...TRUNCATED...
    INCLUDE_API_MANAGEMENT="true"
    INCLUDE_APPLICATION_INFRA_RESOURCES="false"
-   INCLUDE_EVENT_HUB="false"
+   INCLUDE_EVENT_HUBS_NAMESPACE="false"
    INCLUDE_FUNCTION_APP="true"
    INCLUDE_LOGIC_APP="false"
    INCLUDE_SERVICE_BUS="false"
@@ -97,7 +97,7 @@ There are a couple of ways to change which Azure Integration Services are deploy
        "parameters": {
          "includeApiManagement": true,
          "includeApplicationInfraResources": false,
-         "includeEventHub": false,
+         "includeEventHubsNamespace": false,
          "includeFunctionApp": true,
          "includeLogicApp": false,
          "includeServiceBus": false
@@ -180,7 +180,7 @@ When the `includeServiceBus` parameter or the corresponding `INCLUDE_SERVICE_BUS
 
 #### Event Hubs namespace
 
-When the `includeEventHub` parameter or the corresponding `INCLUDE_EVENT_HUB` environment variable is set to `true`, a Standard tier Event Hubs namespace is deployed via the [event-hubs-namespace.bicep](./infra/modules/services/event-hubs-namespace.bicep) module. The Standard tier supports multiple consumer groups per hub, enabling publish-subscribe scenarios.
+When the `includeEventHubsNamespace` parameter or the corresponding `INCLUDE_EVENT_HUBS_NAMESPACE` environment variable is set to `true`, a Standard tier Event Hubs namespace is deployed via the [event-hubs-namespace.bicep](./infra/modules/services/event-hubs-namespace.bicep) module. The Standard tier supports multiple consumer groups per hub, enabling publish-subscribe scenarios.
 
 
 #### Role Assignments
