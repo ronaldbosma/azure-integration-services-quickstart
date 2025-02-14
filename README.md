@@ -178,9 +178,10 @@ _Note: The `*` indicates that the setting is only deployed if the corresponding 
 
 When the `includeServiceBus` parameter or the corresponding `INCLUDE_SERVICE_BUS` environment variable is set to `true`, a Standard tier Service Bus is deployed via the [service-bus.bicep](./infra/modules/services/service-bus.bicep) module. The Standard tier enables features such as topics and subscriptions, which are used by the sample application.
 
-#### Event Hubs Namespace
+#### Event Hubs namespace
 
-> TODO
+When the `includeEventHub` parameter or the corresponding `INCLUDE_EVENT_HUB` environment variable is set to `true`, a Standard tier Event Hubs namespace is deployed via the [event-hubs-namespace.bicep](./infra/modules/services/event-hubs-namespace.bicep) module. The Standard tier supports multiple consumer groups per hub, enabling publish-subscribe scenarios.
+
 
 #### Role Assignments
 
