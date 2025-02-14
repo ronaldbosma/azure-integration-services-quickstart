@@ -225,11 +225,11 @@ When the `includeApplicationInfraResources` parameter or the corresponding `INCL
 
 Although these resources are part of the application, they are deployed as part of the infrastructure using `azd up` or `azd provision`. This is necessary because the Azure Developer CLI does not support deploying Bicep resources as part of the application with `azd deploy`.
 
-### Azure Function  
+#### Azure Function  
 
 The [functionApp](./src/functionApp) directory contains the code for the Azure Function deployed to the Function App. The function is triggered by messages sent to the Service Bus topic and stores the message in a table within the Storage Account.  
 
-### Logic App Workflow  
+#### Logic App Workflow  
 
 The [logicApp](./src/logicApp) directory contains the Logic App workflow deployed to the Logic App. The workflow is triggered by messages sent to the Service Bus topic and stores the message in a blob container within the Storage Account.  
 
