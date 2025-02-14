@@ -230,23 +230,12 @@ Although these resources are part of the application, they are deployed as part 
 
 The [functionApp](./src/functionApp) directory contains the code for the Azure Function deployed to the Function App. The function is triggered by messages sent to the Service Bus topic and stores the message in a table within the Storage Account.  
 
-Once you've deployed the infrastructure, you can deploy only the function using the following command:
-
-```
-azd deploy functionApp
-```
-
 #### Logic App Workflow  
 
 The [logicApp](./src/logicApp) directory contains the Logic App workflow. The workflow is triggered by messages sent to the Service Bus topic and stores the message in a blob container within the Storage Account.  
 
 The sample [connections.json](./src/logicApp/connections.json) file includes connections to the various Storage Account services, the Service Bus and the Event Hubs namespace.  
 
-Once you've deployed the infrastructure, you can deploy only the workflow using the following command:
-
-```
-azd deploy logicApp
-```
 
 ## Naming Convention
 
