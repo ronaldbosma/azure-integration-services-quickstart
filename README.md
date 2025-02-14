@@ -59,6 +59,8 @@ Once `azd` is installed on your machine, you can deploy this template using the 
 
 1. Once the deployment is complete, you can locally modify the application or infrastructure and run `azd up` again to update the resources in Azure.
 
+If you only deploy the Function App or Logic App, use `azd provision` to deploy the infrastructure and then use `azd deploy functionApp` or `azd deploy logicApp` to deploy the sample Azure Function or Logic App workflow, respectively.
+
 ### Clean up
 
 Once you're done and want to clean up, run the `azd down` command. By including the `--purge` parameter, you ensure that the API Management service doesn't remain in a soft-deleted state, which could block future deployments of the same environment.
