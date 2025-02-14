@@ -203,7 +203,7 @@ The [assign-roles-to-principal.bicep](./infra/modules/shared/assign-roles-to-pri
   - Storage Queue Data Contributor
   - Storage Table Data Contributor
 
-These roles are assigned to the principal based on the provided parameters and the existing resources in the Azure environment.
+These roles are assigned to the principals based on the resources that are included in the deployment.
 
 #### Supporting Resources  
 
