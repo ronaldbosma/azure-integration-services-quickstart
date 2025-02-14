@@ -24,7 +24,7 @@
         <mxCell id="eFfSvvpewZFo5A5SUoZi-7" value="Logic App" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/internet_of_things/Logic_Apps.svg;" parent="eFfSvvpewZFo5A5SUoZi-1" vertex="1">
           <mxGeometry x="312.5" y="360" width="60" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="eFfSvvpewZFo5A5SUoZi-8" value="Service Bus&lt;div&gt;Namespace&lt;/div&gt;" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/integration/Service_Bus.svg;" parent="eFfSvvpewZFo5A5SUoZi-1" vertex="1">
+        <mxCell id="eFfSvvpewZFo5A5SUoZi-8" value="Service Bus&lt;div&gt;namespace&lt;/div&gt;" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/integration/Service_Bus.svg;" parent="eFfSvvpewZFo5A5SUoZi-1" vertex="1">
           <mxGeometry x="499" y="250" width="68" height="60" as="geometry" />
         </mxCell>
         <mxCell id="eFfSvvpewZFo5A5SUoZi-9" value="Shared" style="rounded=0;whiteSpace=wrap;html=1;labelPosition=center;verticalLabelPosition=middle;align=center;verticalAlign=bottom;fontStyle=1;strokeColor=#67AB9F;" parent="eFfSvvpewZFo5A5SUoZi-1" vertex="1">
@@ -57,7 +57,7 @@
             <mxPoint x="490" y="559" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="eFfSvvpewZFo5A5SUoZi-16" value="Event Hubs&lt;div&gt;Namespace&lt;br&gt;&lt;/div&gt;" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/analytics/Event_Hubs.svg;" parent="eFfSvvpewZFo5A5SUoZi-1" vertex="1">
+        <mxCell id="eFfSvvpewZFo5A5SUoZi-16" value="Event Hubs&lt;div&gt;namespace&lt;br&gt;&lt;/div&gt;" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/analytics/Event_Hubs.svg;" parent="eFfSvvpewZFo5A5SUoZi-1" vertex="1">
           <mxGeometry x="500" y="390" width="67" height="60" as="geometry" />
         </mxCell>
         <mxCell id="eFfSvvpewZFo5A5SUoZi-17" value="read &amp;amp; write" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="eFfSvvpewZFo5A5SUoZi-1" source="eFfSvvpewZFo5A5SUoZi-4" target="eFfSvvpewZFo5A5SUoZi-16" edge="1">
