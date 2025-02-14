@@ -220,9 +220,9 @@ In addition to the Azure Integration Services, the template deploys several supp
 
 When the `includeApplicationInfraResources` parameter or the corresponding `INCLUDE_APPLICATION_INFRA_RESOURCES` environment variable is set to `true`, the sample application's infrastructure resources are deployed. These resources are defined in the [application.bicep](./infra/modules/application/application.bicep) module:
 
-- A sample API is deployed in API Management. The API allows messages to be published to a Service Bus topic and retrieves data stored in the Storage Account.  
-- A topic and its subscriptions are created in the Service Bus namespace. Messages published to the topic trigger the Function App and Logic App.
-- A blob container and storage table are created in the Storage Account. These are used by the Function App and Logic App to store messages.  
+- An API is deployed in API Management. It allows messages to be published to a Service Bus topic and retrieves data stored in the Storage Account.  
+- A topic and subscriptions are created in the Service Bus namespace. Messages published to the topic trigger the Function App and Logic App.
+- A storage table and blob container are created in the Storage Account. These are used by the Function App and Logic App to store messages.  
 
 Although these resources are part of the application, they are deployed as part of the infrastructure using `azd up` or `azd provision`. This is necessary because the Azure Developer CLI does not support deploying Bicep resources as part of the application with `azd deploy`.
 
@@ -232,7 +232,7 @@ The [functionApp](./src/functionApp) directory contains the code for the Azure F
 
 #### Logic App Workflow  
 
-The [logicApp](./src/logicApp) directory contains the Logic App workflow deployed to the Logic App. The workflow is triggered by messages sent to the Service Bus topic and stores the message in a blob container within the Storage Account.  
+The [logicApp](./src/logicApp) directory contains the Logic App workflow. The workflow is triggered by messages sent to the Service Bus topic and stores the message in a blob container within the Storage Account.  
 
 The sample [connections.json](./src/logicApp/connections.json) file includes connections to the various Storage Account services, the Service Bus and the Event Hubs namespace.  
 
