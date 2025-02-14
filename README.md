@@ -74,13 +74,14 @@ Follow these steps to test the sample application using Visual Studio Code:
 1. Add an environment to your Visual Studio Code user settings with the API Management hostname and subscription key. Use the following example and replace the values with your own:
    ```
    "rest-client.environmentVariables": {
-       "apim-aisquick-sdc-5spzh": {
+       "aisquick": {
            "apimHostname": "apim-aisquick-sdc-5spzh.azure-api.net",
            "apimSubscriptionKey": "1234567890abcdefghijklmnopqrstuv"
        }
    }
    ```
-1. Open `test.http` and click on `Send Request` above the first request. This will send a message to the Service Bus topic.
+1. Open `test.http` and at the bottom right of the editor, select the `aisquick` environment you just configured.
+1. Click on `Send Request` above the first request. This will send a message to the Service Bus topic.
 1. Click on `Send Request` above the second request to retrieve the message from the storage table. A `404 Not Found` response might be returned if the message hasn't been processed yet or if you haven't deployed the Azure Function.
 1. Click on `Send Request` above the third request to retrieve the message from the blob container. A `404 Not Found` response might be returned if the message hasn't been processed yet or if you haven't deployed the Logic App workflow.
 
