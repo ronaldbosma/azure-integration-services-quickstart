@@ -30,9 +30,6 @@ param environmentName string
 @description('The instance that will be added to the deployed resources names to make them unique. Will be generated if not provided.')
 param instance string = ''
 
-@description('The current principal ID that will be assigned roles to the Key Vault and Storage Account.')
-param currentPrincipalId string = ''
-
 @description('Include the API Management service in the deployment.')
 param includeApiManagement bool
 
@@ -228,11 +225,11 @@ module logicApp 'modules/services/logic-app.bicep' = if (logicAppSettings != nul
   ]
 }
 
-module assignRolesToCurrentPrincipal 'modules/shared/assign-roles-to-principal.bicep' = if (currentPrincipalId != '') {
-  name: 'assignRolesToCurrentPrincipal'
+module assignRolesToDeployer 'modules/shared/assign-roles-to-principal.bicep' = {
+  name: 'assignRolesToDeployer'
   scope: resourceGroup
   params: {
-    principalId: currentPrincipalId
+    principalId: deployer().objectId
     isAdmin: true
     eventHubSettings: eventHubSettings
     keyVaultName: keyVaultName
