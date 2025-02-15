@@ -1,5 +1,6 @@
 # =============================================================================
-# Tests for the Sample application. See tests.md for more information.
+# Tests for the Sample application. 
+# See Test section in README.md for more information.
 # =============================================================================
 
 # 1. Publish a message to the aisquick-sample topic on the Service Bus via the Sample API in API Management
