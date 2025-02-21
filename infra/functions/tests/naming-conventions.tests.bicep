@@ -11,30 +11,30 @@
 test testPrefixResourceGroup 'naming-conventions.getResourceName.bicep' = {
   params: {
     resourceType: 'resourceGroup'
-    environment: 'aisquick'
+    environment: 'myenv'
     region: 'norwayeast'
     instance: '12345'
-    expectedResult: 'rg-aisquick-nwe-12345'
+    expectedResult: 'rg-myenv-nwe-12345'
   }
 }
 
 test testPrefixApiManagement 'naming-conventions.getResourceName.bicep' = {
   params: {
     resourceType: 'apiManagement'
-    environment: 'aisquick'
+    environment: 'myenv'
     region: 'norwayeast'
     instance: '12345'
-    expectedResult: 'apim-aisquick-nwe-12345'
+    expectedResult: 'apim-myenv-nwe-12345'
   }
 }
 
 test testPrefixFunctionApp 'naming-conventions.getResourceName.bicep' = {
   params: {
     resourceType: 'functionApp'
-    environment: 'aisquick'
+    environment: 'myenv'
     region: 'norwayeast'
     instance: '12345'
-    expectedResult: 'func-aisquick-nwe-12345'
+    expectedResult: 'func-myenv-nwe-12345'
   }
 }
 
@@ -61,30 +61,30 @@ test testEnvironmentName 'naming-conventions.getResourceName.bicep' = {
 test testLocationNorwayEast 'naming-conventions.getResourceName.bicep' = {
   params: {
     resourceType: 'resourceGroup'
-    environment: 'aisquick'
+    environment: 'myenv'
     region: 'norwayeast'
     instance: '12345'
-    expectedResult: 'rg-aisquick-nwe-12345'
+    expectedResult: 'rg-myenv-nwe-12345'
   }
 }
 
 test testLocationSwedenCentral 'naming-conventions.getResourceName.bicep' = {
   params: {
     resourceType: 'resourceGroup'
-    environment: 'aisquick'
+    environment: 'myenv'
     region: 'swedencentral'
     instance: '12345'
-    expectedResult: 'rg-aisquick-sdc-12345'
+    expectedResult: 'rg-myenv-sdc-12345'
   }
 }
 
 test testLocationEastUS2 'naming-conventions.getResourceName.bicep' = {
   params: {
     resourceType: 'resourceGroup'
-    environment: 'aisquick'
+    environment: 'myenv'
     region: 'eastus2'
     instance: '12345'
-    expectedResult: 'rg-aisquick-eus2-12345'
+    expectedResult: 'rg-myenv-eus2-12345'
   }
 }
 
@@ -96,20 +96,20 @@ test testLocationEastUS2 'naming-conventions.getResourceName.bicep' = {
 test testInstance12345 'naming-conventions.getResourceName.bicep' = {
   params: {
     resourceType: 'resourceGroup'
-    environment: 'aisquick'
+    environment: 'myenv'
     region: 'norwayeast'
     instance: '12345'
-    expectedResult: 'rg-aisquick-nwe-12345'
+    expectedResult: 'rg-myenv-nwe-12345'
   }
 }
 
 test testInstanceAbcde 'naming-conventions.getResourceName.bicep' = {
   params: {
     resourceType: 'resourceGroup'
-    environment: 'aisquick'
+    environment: 'myenv'
     region: 'norwayeast'
     instance: 'abcde'
-    expectedResult: 'rg-aisquick-nwe-abcde'
+    expectedResult: 'rg-myenv-nwe-abcde'
   }
 }
 
@@ -121,20 +121,20 @@ test testInstanceAbcde 'naming-conventions.getResourceName.bicep' = {
 test testShortenedStorageAccountName 'naming-conventions.getResourceName.bicep' = {
   params: {
     resourceType: 'storageAccount'
-    environment: 'aisquick'
+    environment: 'myenv'
     region: 'norwayeast'
     instance: 'abcde'
-    expectedResult: 'staisquicknweabcde'
+    expectedResult: 'stmyenvnweabcde'
   }
 }
 
 test testShortenedKeyVaultName 'naming-conventions.getResourceName.bicep' = {
   params: {
     resourceType: 'keyVault'
-    environment: 'aisquick'
+    environment: 'myenv'
     region: 'norwayeast'
     instance: 'abcde'
-    expectedResult: 'kvaisquicknweabcde'
+    expectedResult: 'kvmyenvnweabcde'
   }
 }
 
@@ -166,80 +166,80 @@ test testKeyVaultNameWhenEnvironmentNameIsTooLong 'naming-conventions.getResourc
 test testSanitizeColon 'naming-conventions.getResourceName.bicep' = {
   params: {
     resourceType: 'virtualNetwork'
-    environment: 'ais;quick'
+    environment: 'my;env'
     region: 'norwayeast'
     instance: '0;01'
-    expectedResult: 'vnet-aisquick-nwe-001'
+    expectedResult: 'vnet-myenv-nwe-001'
   }
 }
 
 test testSanitizeComma 'naming-conventions.getResourceName.bicep' = {
   params: {
     resourceType: 'virtualNetwork'
-    environment: 'ais,quick'
+    environment: 'my,env'
     region: 'norwayeast'
     instance: '0,01'
-    expectedResult: 'vnet-aisquick-nwe-001'
+    expectedResult: 'vnet-myenv-nwe-001'
   }
 }
 
 test testSanitizeDot 'naming-conventions.getResourceName.bicep' = {
   params: {
     resourceType: 'virtualNetwork'
-    environment: 'ais.quick'
+    environment: 'my.env'
     region: 'norwayeast'
     instance: '0.01'
-    expectedResult: 'vnet-aisquick-nwe-001'
+    expectedResult: 'vnet-myenv-nwe-001'
   }
 }
 
 test testSanitizeSemicolon 'naming-conventions.getResourceName.bicep' = {
   params: {
     resourceType: 'virtualNetwork'
-    environment: 'ais:quick'
+    environment: 'my:env'
     region: 'norwayeast'
     instance: '0:01'
-    expectedResult: 'vnet-aisquick-nwe-001'
+    expectedResult: 'vnet-myenv-nwe-001'
   }
 }
 
 test testSanitizeUnderscore 'naming-conventions.getResourceName.bicep' = {
   params: {
     resourceType: 'virtualNetwork'
-    environment: 'ais_quick'
+    environment: 'my_env'
     region: 'norwayeast'
     instance: '0_01'
-    expectedResult: 'vnet-aisquick-nwe-001'
+    expectedResult: 'vnet-myenv-nwe-001'
   }
 }
 
 test testSanitizeWhiteSpace 'naming-conventions.getResourceName.bicep' = {
   params: {
     resourceType: 'virtualNetwork'
-    environment: 'ais quick'
+    environment: 'my env'
     region: 'norwayeast'
     instance: '0 01'
-    expectedResult: 'vnet-aisquick-nwe-001'
+    expectedResult: 'vnet-myenv-nwe-001'
   }
 }
 
 test testSanitizUpperCaseToLowerCase 'naming-conventions.getResourceName.bicep' = {
   params: {
     resourceType: 'virtualNetwork'
-    environment: 'AIS Quick'
+    environment: 'MY Env'
     region: 'norwayeast'
     instance: 'Main'
-    expectedResult: 'vnet-aisquick-nwe-main'
+    expectedResult: 'vnet-myenv-nwe-main'
   }
 }
 
 test testSanitizeTrailingHyphenWhenInstanceIsEmpty 'naming-conventions.getResourceName.bicep' = {
   params: {
     resourceType: 'virtualNetwork'
-    environment: 'aisquick'
+    environment: 'myenv'
     region: 'norwayeast'
     instance: ''
-    expectedResult: 'vnet-aisquick-nwe'
+    expectedResult: 'vnet-myenv-nwe'
   }
 }
 
@@ -252,10 +252,10 @@ test testSanitizeTrailingHyphenWhenInstanceIsEmpty 'naming-conventions.getResour
 
 test testGetInstanceIdReturnsGeneratedId 'naming-conventions.getInstanceId.bicep' = {
   params: {
-    environment: 'aisquick'
+    environment: 'myenv'
     region: 'norwayeast'
     instance: ''
-    expectedResult: 'wzwr4'
+    expectedResult: 'g6r5i'
   }
 }
 
@@ -270,16 +270,16 @@ test testGetInstanceIdWithDifferentEnvironment 'naming-conventions.getInstanceId
 
 test testGetInstanceIdWithDifferentRegion 'naming-conventions.getInstanceId.bicep' = {
   params: {
-    environment: 'aisquick'
+    environment: 'myenv'
     region: 'swedencentral'
     instance: ''
-    expectedResult: '67euk'
+    expectedResult: 'gxci3'
   }
 }
 
 test testGetInstanceIdReturnsInstanceIfSpecified 'naming-conventions.getInstanceId.bicep' = {
   params: {
-    environment: 'aisquick'
+    environment: 'myenv'
     region: 'norwayeast'
     instance: 'myinstance'
     expectedResult: 'myinstance'
