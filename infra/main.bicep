@@ -202,7 +202,7 @@ module functionApp 'modules/services/function-app.bicep' = if (functionAppSettin
   ]
 }
 
-module logicApp 'modules/services/logic-app.bicep' = if (logicAppSettings != null){
+module logicApp 'modules/services/logic-app.bicep' = if (logicAppSettings != null) {
   name: 'logicApp'
   scope: resourceGroup
   params: {
