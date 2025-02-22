@@ -59,7 +59,7 @@ resource getBlobOperation 'Microsoft.ApiManagement/service/apis/operations@2023-
 
   resource policies 'policies' = {
     name: 'policy'
-    properties:{
+    properties: {
       format: 'rawxml'
       value: loadTextContent('operations/get-blob.xml') 
     }
@@ -72,7 +72,7 @@ resource getTableEntityOperation 'Microsoft.ApiManagement/service/apis/operation
 
   resource policies 'policies' = {
     name: 'policy'
-    properties:{
+    properties: {
       format: 'rawxml'
       value: loadTextContent('operations/get-table-entity.xml') 
     }
@@ -86,7 +86,7 @@ resource publishMessageOperation 'Microsoft.ApiManagement/service/apis/operation
 
   resource policies 'policies' = {
     name: 'policy'
-    properties:{
+    properties: {
       format: 'rawxml'
       value: loadTextContent('operations/publish-message.xml') 
     }
