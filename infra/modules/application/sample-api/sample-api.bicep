@@ -6,7 +6,7 @@
 // Imports
 //=============================================================================
 
-import { apiManagementSettingsType, serviceBusSettingsType } from '../../../types/settings.bicep'
+import { serviceBusSettingsType } from '../../../types/settings.bicep'
 
 //=============================================================================
 // Parameters
