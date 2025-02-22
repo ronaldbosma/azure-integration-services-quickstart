@@ -23,7 +23,14 @@ A sample application is included in the template to demonstrate how the services
 
 ## Getting Started
 
-If you haven't installed the Azure Developer CLI (`azd`) yet, follow the instructions on [Install or update the Azure Developer CLI](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/install-azd).
+### Prerequisites  
+
+- [Azure Developer CLI (azd)](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/install-azd)  
+  - Installing `azd` also installs the following tools:  
+    - [GitHub CLI](https://cli.github.com)  
+    - [Bicep CLI](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/install)  
+- [.NET Core 9 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)  
+- You need Owner or Contributor permissions on an Azure Subscription to deploy this template.  
 
 ### Deployment
 
