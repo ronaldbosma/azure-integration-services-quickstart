@@ -54,6 +54,8 @@ Show the Service Bus topic and its subscriptions.
 
 ### Logic App  
 
+Show the Logic App and deployed workflow.
+
 1. Navigate to the Logic App in the Azure portal.  
 1. Click the `Workflows` tab.  
 1. Select the `aisquick-sample-workflow` workflow.  
@@ -91,3 +93,14 @@ Show the deployed function.
 1. Show that the `ApiManagement_subscriptionKey` variable uses a key vault reference.  
 1. Show the different `Connection` variables that can be used by triggers and bindings within the function.
 
+
+### Storage Account  
+
+Show the messages stored in blob and table storage.  
+
+1. Navigate to the Storage Account in the Azure portal.  
+1. Click the `Storage browser` tab.  
+1. Select `Blob containers` and then `aisquick-sample`.  
+1. Show the messages stored in blob storage.  
+1. Select `Tables` and then `aisquickSample`.  
+1. Show the messages stored in table storage.  
