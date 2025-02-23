@@ -95,6 +95,10 @@ Follow these steps to test the sample application using Visual Studio Code:
 1. Click on `Send Request` above the second request to retrieve the message from the storage table. A `404 Not Found` response might be returned if the message hasn't been processed yet or if you haven't deployed the Azure Function.
 1. Click on `Send Request` above the third request to retrieve the message from the blob container. A `404 Not Found` response might be returned if the message hasn't been processed yet or if you haven't deployed the Logic App workflow.
 
+### Demo
+
+See the [Demo Guide](demos/demo-guide.md) for a step-by-step walkthrough on how to demonstrate the deployed resources and the sample application.
+
 ### Clean up
 
 Once you're done and want to clean up, run the `azd down` command. By including the `--purge` parameter, you ensure that the API Management service doesn't remain in a soft-deleted state, which could block future deployments of the same environment.
