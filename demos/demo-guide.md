@@ -31,6 +31,14 @@ Show the deployed API and its operations.
     1. `GET Blob`: Retrieves a message from blob storage.  
     1. `GET Table Entity`: Retrieves a message from table storage.  
 
+### Key Vault  
+
+Show the secrets stored in Key Vault.  
+
+1. Navigate to the Key Vault in the Azure portal.  
+1. Click the `Secrets` tab.  
+1. Verify that a secret has been created for the API Management master subscription key.  
+
 ### Service Bus  
 
 Show the Service Bus topic and its subscriptions.  
@@ -39,4 +47,6 @@ Show the Service Bus topic and its subscriptions.
 1. Click the `Topics` tab and open the `aisquick-sample` topic.  
 1. View the traffic that has passed through the topic in the overview.  
 1. Click the `Subscriptions` tab to see the subscriptions created for the Function App and Logic App.  
+
+### Azure Function
 
