@@ -4,7 +4,7 @@ In this demo scenario, we will demonstrate how to use Azure Integration Services
 
 ![Infra](../images/aisquick-diagrams-app.png)
 
-## 1. What Resources are getting deployed
+## 1. What resources are getting deployed
 
 For this scenario, you'll need to deploy all optional resources except for the Event Hubs namespace. The following resources will be deployed:
 
