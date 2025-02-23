@@ -97,7 +97,7 @@ Follow these steps to test the sample application using Visual Studio Code:
 
 ### Demo
 
-See the [Demo Guide](demos/demo-guide.md) for a step-by-step walkthrough on how to demonstrate the deployed resources and the sample application.
+See the [Demo Guide](demos/demo-sample-application.md) for a step-by-step walkthrough on how to demonstrate the deployed resources and the sample application.
 
 ### Clean up
 

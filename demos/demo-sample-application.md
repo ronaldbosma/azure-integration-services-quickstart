@@ -1,4 +1,4 @@
-# Azure Integration Services Quickstart - Demo Scenario
+# Azure Integration Services Quickstart - Demo Sample Application
 
 In this demo scenario, we will demonstrate how to use Azure Integration Services to build a simple application that uses API Management, Azure Functions, Logic Apps and Service Bus. The application consists of an API that allows a message to be published to a Service Bus topic. A function and a workflow are triggered by the message. The function stores the message in table storage, while the workflow stores the message in blob storage. Using the API, stored messages can be retrieved. See the following diagram for an overview:
 
