@@ -31,4 +31,12 @@ Show the deployed API and its operations.
     1. `GET Blob`: Retrieves a message from blob storage.  
     1. `GET Table Entity`: Retrieves a message from table storage.  
 
+### Service Bus  
+
+Show the Service Bus topic and its subscriptions.  
+
+1. Navigate to the Service Bus namespace in the Azure portal.  
+1. Click the `Topics` tab and open the `aisquick-sample` topic.  
+1. View the traffic that has passed through the topic in the overview.  
+1. Click the `Subscriptions` tab to see the subscriptions created for the Function App and Logic App.  
 
