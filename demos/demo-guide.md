@@ -10,7 +10,7 @@ For this scenario, you'll need to deploy all optional resources except for the E
 
 ![Deployed Resources](../images/deployed-resources.png)
 
-See the [Naming Convention](../readme.md#naming-convention) section in the readme for more information on the naming convention used in this scenario.
+See the [Naming Convention](../readme.md#naming-convention) section in the readme for more information on the naming convention.
 
 
 ## 2. What can I demo from this scenario after deployment
