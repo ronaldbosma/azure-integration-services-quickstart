@@ -48,5 +48,23 @@ Show the Service Bus topic and its subscriptions.
 1. View the traffic that has passed through the topic in the overview.  
 1. Click the `Subscriptions` tab to see the subscriptions created for the Function App and Logic App.  
 
-### Azure Function
+### Azure Function  
+
+Show the source code.  
+
+1. Open [SampleFunction.cs](../src/functionApp/SampleFunction.cs).  
+1. Show the `ServiceBusTrigger` attribute, which is configured with the Service Bus topic and subscription, and uses the `ServiceBusConnection` connection.  
+1. Show the `TableOutput` output binding, which uses the `StorageAccountConnection` connection to store the return value in table storage.  
+
+Show the deployed function.  
+
+1. Navigate to the Function App in the Azure portal.  
+1. Select `SampleFunction` from the Functions tab on the Overview screen.  
+1. Open the `Invocations` tab.  
+1. Show the function invocations that have occurred. It might take a few minutes for the first invocation to appear.  
+   **NOTE**: If you've deployed and removed the same environment multiple times, you might see older invocation history from previous deployments.  
+1. Go back to the Function App.  
+1. Click the `Environment variables` tab.  
+1. Show that the `ApiManagement_subscriptionKey` variable uses a key vault reference.  
+1. Show the different `Connection` variables that can be used by triggers and bindings within the function.
 
