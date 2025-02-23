@@ -299,11 +299,15 @@ The sample [connections.json](./src/logicApp/connections.json) file includes con
 
 ## Naming Convention
 
-All resources are deployed using a naming convention based on the [Azure Resource Naming Best Practices](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-naming). The naming convention is implemented using (a variation of) the Bicep user-defined functions that I blogged about in [Apply Azure naming convention using Bicep functions](https://ronaldbosma.github.io/blog/2024/06/05/apply-azure-naming-convention-using-bicep-functions/).
+All resources are deployed using the following naming convention, which is based on the [Azure Resource Naming Best Practices](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-naming). The workload and environment are combined into a single identifier to better support the `azd` workflow.
 
-The following image displays an example of the resources that are deployed with this template:
+![Naming Convention](images/aisquick-diagrams-naming-convention.png)
 
-![](images/deployed-resources.png)
+This [naming convention](infra/functions/naming-conventions.bicep) is implemented using a variation of the Bicep user-defined functions, as described in the blog post [Apply Azure naming convention using Bicep functions](https://ronaldbosma.github.io/blog/2024/06/05/apply-azure-naming-convention-using-bicep-functions/).
+
+The following image displays an example of the resources deployed with this template:
+
+![Deployed Resources](images/deployed-resources.png)
 
 
 ## Troubleshooting
