@@ -3,5 +3,4 @@
 [comment]: <> (don't add any other information, as this is rendered as part of a prereqs element on the webpage)
 
 - [.NET Core 9 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)
-- [PowerShell](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell)
 - [npm CLI](https://nodejs.org/)
