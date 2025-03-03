@@ -34,7 +34,7 @@ resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2023-09
   properties: {
     retentionInDays: appInsightsSettings.retentionInDays
     sku: {
-      name: 'Standalone'
+      name: 'PerGB2018'
     }
   }
 }
