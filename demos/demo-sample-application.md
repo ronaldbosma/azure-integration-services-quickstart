@@ -10,14 +10,14 @@ For this scenario, you'll need to deploy all optional resources except for the E
 
 ![Deployed Resources](https://raw.githubusercontent.com/ronaldbosma/azure-integration-services-quickstart/refs/heads/main/images/deployed-resources.png)
 
-See the [Naming Convention](https://raw.githubusercontent.com/ronaldbosma/azure-integration-services-quickstart/refs/heads/main/README.md#naming-convention) section in the readme for more information on the naming convention.
+See the [Naming Convention](https://github.com/ronaldbosma/azure-integration-services-quickstart/blob/main/README.md#naming-convention) section in the readme for more information on the naming convention.
 
 
 ## 2. What can I demo from this scenario after deployment
 
 ### Publish messages
 
-Follow the [Test](https://raw.githubusercontent.com/ronaldbosma/azure-integration-services-quickstart/refs/heads/main/README.md#test) section in the README to publish a few messages to the Service Bus topic.
+Follow the [Test](https://github.com/ronaldbosma/azure-integration-services-quickstart/blob/main/README.md#test) section in the README to publish a few messages to the Service Bus topic.
 
 
 ### API Management
@@ -77,7 +77,7 @@ Show the Logic App and deployed workflow.
 
 Show the source code.  
 
-1. Open [SampleFunction.cs](https://raw.githubusercontent.com/ronaldbosma/azure-integration-services-quickstart/refs/heads/main/src/functionApp/SampleFunction.cs).  
+1. Open [SampleFunction.cs](https://github.com/ronaldbosma/azure-integration-services-quickstart/blob/main/src/functionApp/SampleFunction.cs).  
 1. Show the `ServiceBusTrigger` attribute, which is configured with the Service Bus topic and subscription, and uses the `ServiceBusConnection` connection.  
 1. Show the `TableOutput` output binding, which uses the `StorageAccountConnection` connection to store the return value in table storage.  
 
