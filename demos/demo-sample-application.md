@@ -2,22 +2,22 @@
 
 In this demo scenario, we will demonstrate the sample application that is deployed as part of the template. The application consists of an API Management API that allows a message to be published to a Service Bus topic. An Azure Function and a Logic App workflow are triggered by the message. The function stores the message in table storage, while the workflow stores the message in blob storage. Using the API, stored messages can be retrieved. See the following diagram for an overview:
 
-![Infra](../images/aisquick-diagrams-app.png)
+![Infra](https://raw.githubusercontent.com/ronaldbosma/azure-integration-services-quickstart/refs/heads/main/images/aisquick-diagrams-app.png)
 
 ## 1. What resources are getting deployed
 
 For this scenario, you'll need to deploy all optional resources except for the Event Hubs namespace. The following resources will be deployed:
 
-![Deployed Resources](../images/deployed-resources.png)
+![Deployed Resources](https://raw.githubusercontent.com/ronaldbosma/azure-integration-services-quickstart/refs/heads/main/images/deployed-resources.png)
 
-See the [Naming Convention](../readme.md#naming-convention) section in the readme for more information on the naming convention.
+See the [Naming Convention](https://github.com/ronaldbosma/azure-integration-services-quickstart/blob/main/README.md#naming-convention) section in the readme for more information on the naming convention.
 
 
 ## 2. What can I demo from this scenario after deployment
 
 ### Publish messages
 
-Follow the [Test](../README.md#test) section in the README to publish a few messages to the Service Bus topic.
+Follow the [Test](https://github.com/ronaldbosma/azure-integration-services-quickstart/blob/main/README.md#test) section in the README to publish a few messages to the Service Bus topic.
 
 
 ### API Management
@@ -77,7 +77,7 @@ Show the Logic App and deployed workflow.
 
 Show the source code.  
 
-1. Open [SampleFunction.cs](../src/functionApp/SampleFunction.cs).  
+1. Open [SampleFunction.cs](https://github.com/ronaldbosma/azure-integration-services-quickstart/blob/main/src/functionApp/SampleFunction.cs).  
 1. Show the `ServiceBusTrigger` attribute, which is configured with the Service Bus topic and subscription, and uses the `ServiceBusConnection` connection.  
 1. Show the `TableOutput` output binding, which uses the `StorageAccountConnection` connection to store the return value in table storage.  
 
