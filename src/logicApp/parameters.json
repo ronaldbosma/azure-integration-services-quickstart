@@ -1,10 +1,10 @@
 {
-    "api-management-gateway-url": {
-        "type": "String",
-        "value": "@appsetting('ApiManagement_gatewayUrl')"
-    },
-    "api-management-subscription-key": {
-        "type": "String",
-        "value": "@appsetting('ApiManagement_subscriptionKey')"
-    }
+  "api-management-gateway-url": {
+    "type": "String",
+    "value": "@appsetting('ApiManagement_gatewayUrl')"
+  },
+  "api-management-subscription-key": {
+    "type": "String",
+    "value": "@appsetting('ApiManagement_subscriptionKey')"
+  }
 }
