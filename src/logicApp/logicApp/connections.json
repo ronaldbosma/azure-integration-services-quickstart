@@ -1,83 +1,83 @@
 {
-    "managedApiConnections": {},
-    "serviceProviderConnections": {
-        "AzureBlob": {
-            "displayName": "blob-storage",
-            "parameterSetName": "ManagedServiceIdentity",
-            "parameterValues": {
-                "authProvider": {
-                    "Type": "ManagedServiceIdentity"
-                },
-                "blobStorageEndpoint": "@appsetting('AzureBlob_blobStorageEndpoint')"
-            },
-            "serviceProvider": {
-                "id": "/serviceProviders/AzureBlob"
-            }
+  "managedApiConnections": {},
+  "serviceProviderConnections": {
+    "AzureBlob": {
+      "displayName": "blob-storage",
+      "parameterSetName": "ManagedServiceIdentity",
+      "parameterValues": {
+        "authProvider": {
+          "Type": "ManagedServiceIdentity"
         },
-        "AzureFile": {
-            "displayName": "file-storage",
-            "parameterSetName": "ManagedServiceIdentity",
-            "parameterValues": {
-                "authProvider": {
-                    "Type": "ManagedServiceIdentity"
-                },
-                "storageAccountUri": "@appsetting('AzureFile_storageAccountUri')"
-            },
-            "serviceProvider": {
-                "id": "/serviceProviders/AzureFile"
-            }
+        "blobStorageEndpoint": "@appsetting('AzureBlob_blobStorageEndpoint')"
+      },
+      "serviceProvider": {
+        "id": "/serviceProviders/AzureBlob"
+      }
+    },
+    "AzureFile": {
+      "displayName": "file-storage",
+      "parameterSetName": "ManagedServiceIdentity",
+      "parameterValues": {
+        "authProvider": {
+          "Type": "ManagedServiceIdentity"
         },
-        "azurequeues": {
-            "displayName": "queue-storage",
-            "parameterSetName": "ManagedServiceIdentity",
-            "parameterValues": {
-                "authProvider": {
-                    "Type": "ManagedServiceIdentity"
-                },
-                "queueServiceUri": "@appsetting('AzureQueues_queueServiceUri')"
-            },
-            "serviceProvider": {
-                "id": "/serviceProviders/azurequeues"
-            }
+        "storageAccountUri": "@appsetting('AzureFile_storageAccountUri')"
+      },
+      "serviceProvider": {
+        "id": "/serviceProviders/AzureFile"
+      }
+    },
+    "azurequeues": {
+      "displayName": "queue-storage",
+      "parameterSetName": "ManagedServiceIdentity",
+      "parameterValues": {
+        "authProvider": {
+          "Type": "ManagedServiceIdentity"
         },
-        "azureTables": {
-            "displayName": "table-storage",
-            "parameterSetName": "ManagedServiceIdentity",
-            "parameterValues": {
-                "authProvider": {
-                    "Type": "ManagedServiceIdentity"
-                },
-                "tableStorageEndpoint": "@appsetting('AzureTables_tableStorageEndpoint')"
-            },
-            "serviceProvider": {
-                "id": "/serviceProviders/azureTables"
-            }
+        "queueServiceUri": "@appsetting('AzureQueues_queueServiceUri')"
+      },
+      "serviceProvider": {
+        "id": "/serviceProviders/azurequeues"
+      }
+    },
+    "azureTables": {
+      "displayName": "table-storage",
+      "parameterSetName": "ManagedServiceIdentity",
+      "parameterValues": {
+        "authProvider": {
+          "Type": "ManagedServiceIdentity"
         },
-        "eventHub": {
-            "displayName": "event-hubs-namespace",
-            "parameterSetName": "ManagedServiceIdentity",
-            "parameterValues": {
-                "authProvider": {
-                    "Type": "ManagedServiceIdentity"
-                },
-                "fullyQualifiedNamespace": "@appsetting('EventHub_fullyQualifiedNamespace')"
-            },
-            "serviceProvider": {
-                "id": "/serviceProviders/eventHub"
-            }
+        "tableStorageEndpoint": "@appsetting('AzureTables_tableStorageEndpoint')"
+      },
+      "serviceProvider": {
+        "id": "/serviceProviders/azureTables"
+      }
+    },
+    "eventHub": {
+      "displayName": "event-hubs-namespace",
+      "parameterSetName": "ManagedServiceIdentity",
+      "parameterValues": {
+        "authProvider": {
+          "Type": "ManagedServiceIdentity"
         },
-        "serviceBus": {
-            "displayName": "service-bus",
-            "parameterSetName": "ManagedServiceIdentity",
-            "parameterValues": {
-                "authProvider": {
-                    "Type": "ManagedServiceIdentity"
-                },
-                "fullyQualifiedNamespace": "@appsetting('ServiceBus_fullyQualifiedNamespace')"
-            },
-            "serviceProvider": {
-                "id": "/serviceProviders/serviceBus"
-            }
-        }
+        "fullyQualifiedNamespace": "@appsetting('EventHub_fullyQualifiedNamespace')"
+      },
+      "serviceProvider": {
+        "id": "/serviceProviders/eventHub"
+      }
+    },
+    "serviceBus": {
+      "displayName": "service-bus",
+      "parameterSetName": "ManagedServiceIdentity",
+      "parameterValues": {
+        "authProvider": {
+          "Type": "ManagedServiceIdentity"
+        },
+        "fullyQualifiedNamespace": "@appsetting('ServiceBus_fullyQualifiedNamespace')"
+      },
+      "serviceProvider": {
+        "id": "/serviceProviders/serviceBus"
+      }
     }
+  }
 }
