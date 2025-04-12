@@ -7,5 +7,11 @@
     "azureFunctions.deploySubpath": "src\\functionApp/bin/Release/net8.0/publish",
     "azureFunctions.projectLanguage": "C#",
     "azureFunctions.projectRuntime": "~4",
-    "azureFunctions.preDeployTask": "publish (functions)"
+    "azureFunctions.preDeployTask": "publish (functions)",
+    "terminal.integrated.env.windows": {
+        "PATH": "${env:USERPROFILE}\\.azurelogicapps\\dependencies\\DotNetSDK;${env:PATH}"
+    },
+    "omnisharp.dotNetCliPaths": [
+        "${env:USERPROFILE}\\.azurelogicapps\\dependencies\\DotNetSDK"
+    ]
 }
