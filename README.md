@@ -339,7 +339,7 @@ If you've previously deployed this template and deleted the resources, you may e
 ```json
 {
     "code": "DeploymentFailed",
-    "target": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-aisquick-dev-sdc-5spzh/providers/Microsoft.Resources/deployments/apiManagement",
+    "target": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-aisquick-sdc-5spzh/providers/Microsoft.Resources/deployments/apiManagement",
     "message": "At least one resource deployment operation failed. Please list deployment operations for details. Please see https://aka.ms/arm-deployment-operations for usage details.",
     "details": [
         {
