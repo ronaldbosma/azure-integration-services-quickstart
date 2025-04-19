@@ -416,6 +416,6 @@ To resolve this, first remove the environment using `azd down --purge`. Then, pe
 az monitor log-analytics workspace delete --resource-group rg-aisquick-sdc-5spzh --workspace-name log-aisquick-sdc-5spzh --force
 ```
 
-After that, redeploy the template.
+After that, redeploy the template. If logging still doesn't appear, deploy the template in a different region or using a different environment name.
 
 I've registered https://github.com/Azure/azure-dev/issues/5080 in the Azure Developer CLI repository to track this issue.
