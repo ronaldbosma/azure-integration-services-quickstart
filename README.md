@@ -53,7 +53,7 @@ Once `azd` is installed on your machine, you can deploy this template using the 
     azd auth login
     ```
 
-1. Run the `azd up` command to provision the resources in your Azure subscription. This will deploy both the infrastructure and the sample application. _(Use `azd provision` to only deploy the infrastructure.)_
+1. Run the `azd up` command to provision the resources in your Azure subscription. This will deploy both the infrastructure and the sample application, and typically takes around 5 minutes to complete. _(Use `azd provision` to only deploy the infrastructure.)_
 
     ```cmd
     azd up
