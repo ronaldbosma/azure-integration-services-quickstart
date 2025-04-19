@@ -155,6 +155,7 @@ When disabling an already deployed service, it will not be removed when running 
 The repository consists of the following files and directories:
 
 ```
+├── demos                      [ Demo guide(s) ]
 ├── images                     [ Images used in the README ]
 ├── infra                      [ Infrastructure As Code files ]
 │   |── functions              [ Bicep user-defined functions ]
