@@ -408,6 +408,6 @@ Use the `azd down --purge` command to delete the resources, then deploy the temp
 
 ### Logging doesn't show in App Insights
 
-Sometimes the requests and traces don't show up in Application Insights & Log Analytics. I've had this happen when I'd taken down an environment and redeployed it with the same name. When this happens, manually remove the Log Analytics Workspace and execute `azd provision` again.
+Sometimes the requests and traces don't show up in Application Insights & Log Analytics. I've had this happen when I'd taken down an environment and redeployed it with the same name. When this happens, manually remove the Log Analytics Workspace and execute `azd provision --no-state`.
 
 I've registered https://github.com/Azure/azure-dev/issues/5080 in the Azure Developer CLI repository to track this issue.
