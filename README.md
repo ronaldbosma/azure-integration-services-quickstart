@@ -37,7 +37,7 @@ Before you can deploy this template, make sure you have the following tools inst
 
 ### Deployment
 
-Once `azd` is installed on your machine, you can deploy this template using the following steps:
+Once the prerequisites are installed on your machine, you can deploy this template using the following steps:
 
 1. Run the `azd init` command in an empty directory with the `--template` parameter to clone this template into the current directory.  
 
