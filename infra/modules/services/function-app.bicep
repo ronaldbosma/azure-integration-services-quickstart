@@ -107,6 +107,26 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' existing 
 // Resources
 //=============================================================================
 
+// Create Function App user-assigned identity and assign roles to it
+
+resource functionAppIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2024-11-30' = {
+  name: functionAppSettings.identityName
+  location: location
+  tags: tags
+}
+
+module assignRolesToFunctionAppUserAssignedIdentity '../shared/assign-roles-to-principal.bicep' = {
+  name: 'assignRolesToFunctionAppUserAssignedIdentity'
+  params: {
+    principalId: functionAppIdentity.properties.principalId
+    principalType: 'ServicePrincipal'
+    eventHubSettings: eventHubSettings
+    keyVaultName: keyVaultName
+    serviceBusSettings: serviceBusSettings
+    storageAccountName: storageAccountName
+  }
+}
+
 // Create the App Service Plan for the Function App
 
 resource hostingPlan 'Microsoft.Web/serverfarms@2024-04-01' = {
@@ -130,7 +150,10 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
   tags: serviceTags
   kind: 'functionapp'
   identity: {
-    type: 'SystemAssigned'
+    type: 'SystemAssigned, UserAssigned'
+    userAssignedIdentities: {
+      '${functionAppIdentity.id}': {}
+    }
   }
   properties: {
     serverFarmId: hostingPlan.id

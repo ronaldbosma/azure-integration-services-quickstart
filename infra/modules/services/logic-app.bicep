@@ -110,6 +110,26 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' existing 
 // Resources
 //=============================================================================
 
+// Create Logic App user-assigned identity and assign roles to it
+
+resource logicAppIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2024-11-30' = {
+  name: logicAppSettings.identityName
+  location: location
+  tags: tags
+}
+
+module assignRolesToLogicAppUserAssignedIdentity '../shared/assign-roles-to-principal.bicep' = {
+  name: 'assignRolesToLogicAppUserAssignedIdentity'
+  params: {
+    principalId: logicAppIdentity.properties.principalId
+    principalType: 'ServicePrincipal'
+    eventHubSettings: eventHubSettings
+    keyVaultName: keyVaultName
+    serviceBusSettings: serviceBusSettings
+    storageAccountName: storageAccountName
+  }
+}
+
 // Create the App Service Plan for the Logic App
 
 resource hostingPlan 'Microsoft.Web/serverfarms@2024-04-01' = {
@@ -135,7 +155,10 @@ resource logicApp 'Microsoft.Web/sites@2024-04-01' = {
   tags: serviceTags
   kind: 'functionapp,workflowapp'
   identity: {
-    type: 'SystemAssigned'
+    type: 'SystemAssigned, UserAssigned'
+    userAssignedIdentities: {
+      '${logicAppIdentity.id}': {}
+    }
   }
   properties: {
     serverFarmId: hostingPlan.id

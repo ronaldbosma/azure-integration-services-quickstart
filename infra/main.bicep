@@ -59,6 +59,7 @@ var resourceGroupName = getResourceName('resourceGroup', environmentName, locati
 
 var apiManagementSettings = !includeApiManagement ? null : {
   serviceName: getResourceName('apiManagement', environmentName, location, instanceId)
+  identityName: getResourceName('managedIdentity', environmentName, location, 'apim-${instanceId}')
   publisherName: 'admin@example.org'
   publisherEmail: 'admin@example.org'
 }
@@ -75,12 +76,14 @@ var eventHubSettings = !includeEventHubsNamespace ? null : {
 
 var functionAppSettings = !includeFunctionApp ? null : {
   functionAppName: getResourceName('functionApp', environmentName, location, instanceId)
+  identityName: getResourceName('managedIdentity', environmentName, location, 'functionapp-${instanceId}')
   appServicePlanName: getResourceName('appServicePlan', environmentName, location, 'functionapp-${instanceId}')
   netFrameworkVersion: 'v9.0'
 }
 
 var logicAppSettings = !includeLogicApp ? null : {
   logicAppName: getResourceName('logicApp', environmentName, location, instanceId)
+  identityName: getResourceName('managedIdentity', environmentName, location, 'logicapp-${instanceId}')
   appServicePlanName: getResourceName('appServicePlan', environmentName, location, 'logicapp-${instanceId}')
   netFrameworkVersion: 'v9.0'
 }

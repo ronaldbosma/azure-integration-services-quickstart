@@ -16,6 +16,9 @@ import { eventHubSettingsType, serviceBusSettingsType } from '../../types/settin
 @description('The id of the principal that will be assigned the roles')
 param principalId string
 
+@description('The type of the principal that will be assigned the roles')
+param principalType string?
+
 @description('The flag to determine if the principal is an admin or not')
 param isAdmin bool = false
 
@@ -91,6 +94,7 @@ resource assignRolesOnEventHubNamespaceToManagedIdentity 'Microsoft.Authorizatio
   properties: {
     roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', role)
     principalId: principalId
+    principalType: principalType
   }
 }]
 
@@ -102,6 +106,7 @@ resource assignRolesOnKeyVaultToManagedIdentity 'Microsoft.Authorization/roleAss
   properties: {
     roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', keyVaultRole)
     principalId: principalId
+    principalType: principalType
   }
 }
 
@@ -113,6 +118,7 @@ resource assignRolesOnServiceBusToManagedIdentity 'Microsoft.Authorization/roleA
   properties: {
     roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', role)
     principalId: principalId
+    principalType: principalType
   }
 }]
 
@@ -124,5 +130,6 @@ resource assignRolesOnStorageAccountToManagedIdentity 'Microsoft.Authorization/r
   properties: {
     roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', role)
     principalId: principalId
+    principalType: principalType
   }
 }]
