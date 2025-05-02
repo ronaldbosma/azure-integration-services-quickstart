@@ -225,7 +225,7 @@ When the `includeLogicApp` parameter or the corresponding `INCLUDE_LOGIC_APP` en
 - The worker runtime is configured to .NET 9 to enable the use of [custom .NET code](https://learn.microsoft.com/en-us/azure/logic-apps/create-run-custom-code-functions). 
 - Both a user-assigned managed identity and system-assigned managed identity are deployed to provide access to other services. See the [Role Assignments](#role-assignments) section for more information.
 
-The following app settings (environment variables) are configured to facilitate connections to other services. These are used in the [connections.json](./src/logicApp/connections.json) file of the sample application.
+The following app settings (environment variables) are configured to facilitate connections to other services. These are used in the [connections.json](./src/logicApp/Workflows/connections.json) file of the sample application.
 
 | Name                                   | Description                                                                                                                |
 |----------------------------------------|----------------------------------------------------------------------------------------------------------------------------|
@@ -299,7 +299,7 @@ The [functionApp](./src/functionApp) directory contains the code for the Azure F
 
 The [logicApp](./src/logicApp) directory contains the Logic App workflow. The workflow is triggered by messages sent to the Service Bus topic and stores the message in a blob container within the Storage Account.  
 
-The sample [connections.json](./src/logicApp/connections.json) file includes connections to the various Storage Account services, the Service Bus and the Event Hubs namespace.  
+The sample [connections.json](./src/logicApp/Workflows/connections.json) file includes connections to the various Storage Account services, the Service Bus and the Event Hubs namespace.  
 
 
 ## Naming Convention
