@@ -9,7 +9,7 @@ services:
     host: function
     language: csharp
   logicApp:
-    project: ./src/logicApp
+    project: ./src/logicApp/Workflows
     host: function
     language: js  # Logic Apps aren't natively supported by azd yet. By using js, the logic app will be zipped and deployed.
 requiredVersions: 
