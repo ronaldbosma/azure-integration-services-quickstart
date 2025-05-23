@@ -174,6 +174,7 @@ module assignRolesToFunctionAppSystemAssignedIdentity '../shared/assign-roles-to
   name: 'assignRolesToFunctionAppSystemAssignedIdentity'
   params: {
     principalId: functionApp.identity.principalId
+    principalType: 'ServicePrincipal'
     eventHubSettings: eventHubSettings
     keyVaultName: keyVaultName
     serviceBusSettings: serviceBusSettings

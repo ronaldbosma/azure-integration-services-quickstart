@@ -179,6 +179,7 @@ module assignRolesToLogicAppSystemAssignedIdentity '../shared/assign-roles-to-pr
   name: 'assignRolesToLogicAppSystemAssignedIdentity'
   params: {
     principalId: logicApp.identity.principalId
+    principalType: 'ServicePrincipal'
     eventHubSettings: eventHubSettings
     keyVaultName: keyVaultName
     serviceBusSettings: serviceBusSettings
