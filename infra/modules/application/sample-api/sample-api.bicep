@@ -22,7 +22,7 @@ param serviceBusSettings serviceBusSettingsType?
 // Existing resources
 //=============================================================================
 
-resource apiManagementService 'Microsoft.ApiManagement/service@2023-09-01-preview' existing = {
+resource apiManagementService 'Microsoft.ApiManagement/service@2024-06-01-preview' existing = {
   name: apiManagementServiceName
 }
 
@@ -30,7 +30,7 @@ resource apiManagementService 'Microsoft.ApiManagement/service@2023-09-01-previe
 // Resources
 //=============================================================================
 
-resource sampleApi 'Microsoft.ApiManagement/service/apis@2023-09-01-preview' = {
+resource sampleApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview' = {
   name: 'aisquick-sample'
   parent: apiManagementService
   properties: {
@@ -53,7 +53,7 @@ resource sampleApi 'Microsoft.ApiManagement/service/apis@2023-09-01-preview' = {
   }
 }
 
-resource getBlobOperation 'Microsoft.ApiManagement/service/apis/operations@2023-09-01-preview' existing = {
+resource getBlobOperation 'Microsoft.ApiManagement/service/apis/operations@2024-06-01-preview' existing = {
   name: 'get-blob'
   parent: sampleApi
 
@@ -66,7 +66,7 @@ resource getBlobOperation 'Microsoft.ApiManagement/service/apis/operations@2023-
   }
 }
 
-resource getTableEntityOperation 'Microsoft.ApiManagement/service/apis/operations@2023-09-01-preview' existing = {
+resource getTableEntityOperation 'Microsoft.ApiManagement/service/apis/operations@2024-06-01-preview' existing = {
   name: 'get-table-entity'
   parent: sampleApi
 
@@ -80,7 +80,7 @@ resource getTableEntityOperation 'Microsoft.ApiManagement/service/apis/operation
 }
 
 // Only set policy on publish message operation if the Service Bus has been deployed, otherwise it will fail
-resource publishMessageOperation 'Microsoft.ApiManagement/service/apis/operations@2023-09-01-preview' existing = if (serviceBusSettings != null) {
+resource publishMessageOperation 'Microsoft.ApiManagement/service/apis/operations@2024-06-01-preview' existing = if (serviceBusSettings != null) {
   name: 'publish-message'
   parent: sampleApi
 
