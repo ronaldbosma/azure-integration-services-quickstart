@@ -410,6 +410,7 @@ local.settings.json
 __blobstorage__/
 __queuestorage__/
 __azurite_db*.json
+AzuriteConfig
 
 # Ignore this settings file as it keeps getting recreated with settings containing local user paths
 /.vscode/settings.json
