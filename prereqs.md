@@ -4,3 +4,4 @@
 
 - [.NET Core 9 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)
 - [npm CLI](https://nodejs.org/)
+- [PowerShell (optional)](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell)

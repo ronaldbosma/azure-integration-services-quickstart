@@ -35,6 +35,11 @@ Before you can deploy this template, make sure you have the following tools inst
 - [npm CLI](https://nodejs.org/) _(This template uses a workaround to deploy the Logic App workflow, which requires the npm CLI.)_
 - You need **Owner** permissions, or a combination of **Contributor** and **Role Based Access Control Administrator** permissions on an Azure Subscription to deploy this template.
 
+#### Optional Prerequisites
+
+- [PowerShell](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell)  
+  _(This templates uses a hook to permanently delete the Log Analytics Workspace. If you do not have PowerShell installed, remove the hook from [azure.yaml](azure.yaml). See [this section](#hooks) for more information.)_
+
 ### Deployment
 
 Once the prerequisites are installed on your machine, you can deploy this template using the following steps:
@@ -156,6 +161,7 @@ The repository consists of the following files and directories:
 
 ```
 ├── demos                      [ Demo guide(s) ]
+├── hooks                      [ AZD Hooks to execute at different stages of the deployment process ]
 ├── images                     [ Images used in the README ]
 ├── infra                      [ Infrastructure As Code files ]
 │   |── functions              [ Bicep user-defined functions ]
@@ -313,6 +319,16 @@ This [naming convention](infra/functions/naming-conventions.bicep) is implemente
 The following image displays an example of the resources deployed with this template:
 
 ![Deployed Resources](images/deployed-resources.png)
+
+
+## Hooks
+
+This template has hooks that are executed at different stages of the deployment process. The following hooks are included:
+  
+- [predown-remove-law.ps1](hooks/predown-remove-law.ps1): 
+  This PowerShell script is executed before the resources are removed. 
+  It permanently deletes the Log Analytics workspace to prevent issues with future deployments. 
+  Sometimes the requests and traces don't show up in Application Insights & Log Analytics when removing and deploying the template multiple times.
 
 
 ## Troubleshooting
