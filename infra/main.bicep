@@ -110,7 +110,6 @@ resource resourceGroup 'Microsoft.Resources/resourceGroups@2024-07-01' = {
 }
 
 module keyVault 'modules/services/key-vault.bicep' = {
-  name: 'keyVault'
   scope: resourceGroup
   params: {
     location: location
@@ -120,7 +119,6 @@ module keyVault 'modules/services/key-vault.bicep' = {
 }
 
 module storageAccount 'modules/services/storage-account.bicep' = {
-  name: 'storageAccount'
   scope: resourceGroup
   params: {
     location: location
@@ -130,7 +128,6 @@ module storageAccount 'modules/services/storage-account.bicep' = {
 }
 
 module appInsights 'modules/services/app-insights.bicep' = {
-  name: 'appInsights'
   scope: resourceGroup
   params: {
     location: location
@@ -140,7 +137,6 @@ module appInsights 'modules/services/app-insights.bicep' = {
 }
 
 module eventHubsNamespace 'modules/services/event-hubs-namespace.bicep' = if (eventHubSettings != null) {
-  name: 'eventHubsNamespace'
   scope: resourceGroup
   params: {
     location: location
@@ -150,7 +146,6 @@ module eventHubsNamespace 'modules/services/event-hubs-namespace.bicep' = if (ev
 }
 
 module serviceBus 'modules/services/service-bus.bicep' = if (serviceBusSettings != null) {
-  name: 'serviceBus'
   scope: resourceGroup
   params: {
     location: location
@@ -160,7 +155,6 @@ module serviceBus 'modules/services/service-bus.bicep' = if (serviceBusSettings 
 }
 
 module apiManagement 'modules/services/api-management.bicep' = if (apiManagementSettings != null) {
-  name: 'apiManagement'
   scope: resourceGroup
   params: {
     location: location
@@ -181,7 +175,6 @@ module apiManagement 'modules/services/api-management.bicep' = if (apiManagement
 }
 
 module functionApp 'modules/services/function-app.bicep' = if (functionAppSettings != null) {
-  name: 'functionApp'
   scope: resourceGroup
   params: {
     location: location
@@ -204,7 +197,6 @@ module functionApp 'modules/services/function-app.bicep' = if (functionAppSettin
 }
 
 module logicApp 'modules/services/logic-app.bicep' = if (logicAppSettings != null) {
-  name: 'logicApp'
   scope: resourceGroup
   params: {
     location: location
@@ -227,7 +219,6 @@ module logicApp 'modules/services/logic-app.bicep' = if (logicAppSettings != nul
 }
 
 module assignRolesToDeployer 'modules/shared/assign-roles-to-principal.bicep' = {
-  name: 'assignRolesToDeployer'
   scope: resourceGroup
   params: {
     principalId: deployer().objectId
@@ -251,7 +242,6 @@ module assignRolesToDeployer 'modules/shared/assign-roles-to-principal.bicep' = 
 //=============================================================================
 
 module applicationResources 'modules/application/application.bicep' = if (includeApplicationInfraResources) {
-  name: 'applicationResources'
   scope: resourceGroup
   params: {
     apiManagementSettings: apiManagementSettings
