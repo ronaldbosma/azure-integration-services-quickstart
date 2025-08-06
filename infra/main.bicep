@@ -10,8 +10,6 @@ targetScope = 'subscription'
 //=============================================================================
 
 import { getResourceName, getInstanceId } from './functions/naming-conventions.bicep'
-import * as settings from './types/settings.bicep'
-
 
 //=============================================================================
 // Parameters
