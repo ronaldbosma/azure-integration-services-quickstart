@@ -60,7 +60,7 @@ func removeHyphens(value string) string => replace(value, '-', '')
 // Sanitize the resource name by removing illegal characters and converting it to lower case.
 func sanitizeResourceName(value string) string => toLower(removeTrailingHyphen(removeColons(removeCommas(removeDots(removeSemicolons(removeUnderscores(removeWhiteSpaces(value))))))))
 
-func removeTrailingHyphen(value string) string => endsWith(value, '-') ? substring(value, 0, length(value)-1) : value
+func removeTrailingHyphen(value string) string => endsWith(value, '-') ? substring(value, 0, max(0, length(value)-1)) : value
 func removeColons(value string) string => replace(value, ':', '')
 func removeCommas(value string) string => replace(value, ',', '')
 func removeDots(value string) string => replace(value, '.', '')
