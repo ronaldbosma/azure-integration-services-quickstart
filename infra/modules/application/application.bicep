@@ -33,7 +33,6 @@ param storageAccountName string
 //=============================================================================
 
 module sampleApi 'sample-api/sample-api.bicep' = if (apiManagementSettings != null) {
-  name: 'sampleApi'
   params: {
     apiManagementServiceName: apiManagementSettings!.serviceName
     serviceBusSettings: serviceBusSettings
@@ -41,7 +40,6 @@ module sampleApi 'sample-api/sample-api.bicep' = if (apiManagementSettings != nu
 }
 
 module topicsAndSubscriptions 'service-bus/topics-and-subscriptions.bicep' = if (serviceBusSettings != null) {
-  name: 'topicsAndSubscriptions'
   params: {
     serviceBusSettings: serviceBusSettings!
     functionAppSettings: functionAppSettings
@@ -50,7 +48,6 @@ module topicsAndSubscriptions 'service-bus/topics-and-subscriptions.bicep' = if 
 }
 
 module storageAccount 'storage-account/storage-account.bicep' = {
-  name: 'storageAccount'
   params: {
     storageAccountName: storageAccountName
   }

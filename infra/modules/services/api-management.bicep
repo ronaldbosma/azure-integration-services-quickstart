@@ -53,7 +53,7 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
   name: appInsightsName
 }
 
-resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' existing = {
+resource keyVault 'Microsoft.KeyVault/vaults@2024-11-01' existing = {
   name: keyVaultName
 }
 
@@ -75,7 +75,6 @@ resource apimIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2024-11-
 }
 
 module assignRolesToApimUserAssignedIdentity '../shared/assign-roles-to-principal.bicep' = {
-  name: 'assignRolesToApimUserAssignedIdentity'
   params: {
     principalId: apimIdentity.properties.principalId
     principalType: 'ServicePrincipal'
@@ -111,7 +110,6 @@ resource apiManagementService 'Microsoft.ApiManagement/service@2024-06-01-previe
 // Assign roles to system-assigned identity of API Management
 
 module assignRolesToApimSystemAssignedIdentity '../shared/assign-roles-to-principal.bicep' = {
-  name: 'assignRolesToApimSystemAssignedIdentity'
   params: {
     principalId: apiManagementService.identity.principalId
     principalType: 'ServicePrincipal'
@@ -166,7 +164,7 @@ resource apimInsightsDiagnostics 'Microsoft.ApiManagement/service/diagnostics@20
 
 // Store master subscription key in Key Vault
 
-resource apimMasterSubscriptionKeySecret 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
+resource apimMasterSubscriptionKeySecret 'Microsoft.KeyVault/vaults/secrets@2024-11-01' = {
   name: 'apim-master-subscription-key'
   parent: keyVault
   properties: {

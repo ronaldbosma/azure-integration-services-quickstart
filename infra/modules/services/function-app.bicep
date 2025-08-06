@@ -116,7 +116,6 @@ resource functionAppIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2
 }
 
 module assignRolesToFunctionAppUserAssignedIdentity '../shared/assign-roles-to-principal.bicep' = {
-  name: 'assignRolesToFunctionAppUserAssignedIdentity'
   params: {
     principalId: functionAppIdentity.properties.principalId
     principalType: 'ServicePrincipal'
@@ -171,7 +170,6 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
 // Assign roles to system-assigned identity of Function App
 
 module assignRolesToFunctionAppSystemAssignedIdentity '../shared/assign-roles-to-principal.bicep' = {
-  name: 'assignRolesToFunctionAppSystemAssignedIdentity'
   params: {
     principalId: functionApp.identity.principalId
     principalType: 'ServicePrincipal'
@@ -188,7 +186,6 @@ module assignRolesToFunctionAppSystemAssignedIdentity '../shared/assign-roles-to
 //        to prevent other (manually) created app settings from being removed.
 
 module setFunctionAppSettings '../shared/merge-app-settings.bicep' = {
-  name: 'setFunctionAppSettings'
   params: {
     siteName: functionAppSettings.functionAppName
     currentAppSettings: list('${functionApp.id}/config/appsettings', functionApp.apiVersion).properties
