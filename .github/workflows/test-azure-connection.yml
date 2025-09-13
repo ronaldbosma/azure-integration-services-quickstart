@@ -1,0 +1,38 @@
+name: Test Azure Connection
+on:
+  workflow_dispatch: # Allows manual triggering from GitHub Actions tab
+
+jobs: 
+  test-azure-connection:
+    permissions:
+      id-token: write # Required to fetch an OIDC token for Azure authentication
+      contents: read  # Required to checkout code if needed
+
+    runs-on: ubuntu-latest
+    environment: aisquick
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Azure CLI Login
+      uses: azure/login@v2
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  
+    - name: Test Azure CLI connection
+      uses: azure/cli@v2
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Testing Azure connection..."
+          az account show
+          echo "✅ Successfully connected to Azure!"
+          
+          echo "Current subscription details:"
+          az account show --query "{subscriptionId:id, subscriptionName:name, tenantId:tenantId}" --output table
+          
+          echo "Available resource groups:"
+          az group list --query "[].{Name:name, Location:location}" --output table
