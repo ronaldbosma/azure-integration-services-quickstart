@@ -31,8 +31,8 @@ jobs:
           az account show
           echo "✅ Successfully connected to Azure!"
           
-          echo "Current subscription details:"
+          echo "Current subscription details: "
           az account show --query "{subscriptionId:id, subscriptionName:name, tenantId:tenantId}" --output table
           
-          echo "Available resource groups:"
+          echo "Available resource groups: "
           az group list --query "[].{Name:name, Location:location}" --output table
