@@ -1,6 +1,7 @@
 name: Test Azure Connection
 on:
   workflow_dispatch: # Allows manual triggering from GitHub Actions tab
+  push: # Triggers on every push to the repository
 
 jobs: 
   test-azure-connection:
