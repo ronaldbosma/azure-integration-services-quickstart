@@ -37,8 +37,10 @@ Before you can deploy this template, make sure you have the following tools inst
 
 #### Optional Prerequisites
 
-- [PowerShell](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell)  
-  _(This templates uses a hook to permanently delete the Log Analytics Workspace. If you do not have PowerShell installed, remove the hook from [azure.yaml](azure.yaml). See [this section](#hooks) for more information.)_
+This templates uses a hook to permanently delete the Log Analytics Workspace. If you do not have the following tools installed, remove the hook from [azure.yaml](azure.yaml). See [this section](#hooks) for more information.
+
+- [PowerShell](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell)
+- [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
 
 ### Deployment
 
