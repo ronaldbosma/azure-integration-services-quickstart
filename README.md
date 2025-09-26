@@ -25,14 +25,17 @@ A sample application is included in the template to demonstrate how the services
 
 ### Prerequisites  
 
-Before you can deploy this template, make sure you have the following tools installed and the necessary permissions:  
+Before you can deploy this template, make sure you have the following tools installed and the necessary permissions. 
 
+**Required Tools:**
 - [Azure Developer CLI (azd)](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/install-azd)  
   - Installing `azd` also installs the following tools:  
     - [GitHub CLI](https://cli.github.com)  
     - [Bicep CLI](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/install)  
 - [.NET Core 9 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)  
 - [npm CLI](https://nodejs.org/) _(This template uses a workaround to deploy the Logic App workflow, which requires the npm CLI.)_
+
+**Required Permissions:**
 - You need **Owner** permissions, or a combination of **Contributor** and **Role Based Access Control Administrator** permissions on an Azure Subscription to deploy this template.
 
 #### Optional Prerequisites
@@ -54,10 +57,16 @@ Once the prerequisites are installed on your machine, you can deploy this templa
 
     When prompted, specify the name of the environment, for example, `aisquick`. The maximum length is 32 characters.
 
-1. Run the `azd auth login` command to authenticate to your Azure subscription _(if you haven't already)_.
+1. Run the `azd auth login` command to authenticate to your Azure subscription using the **Azure Developer CLI** _(if you haven't already)_.
 
     ```cmd
     azd auth login
+    ```
+
+1. Run the `az login` command to authenticate to your Azure subscription using the **Azure CLI** _(if you haven't already)_. This is required for the [hooks](#hooks) to function properly. Make sure to log into the same tenant as the Azure Developer CLI.
+
+    ```cmd
+    az login
     ```
 
 1. Run the `azd up` command to provision the resources in your Azure subscription. This will deploy both the infrastructure and the sample application, and typically takes around 5 minutes to complete. _(Use `azd provision` to only deploy the infrastructure.)_
