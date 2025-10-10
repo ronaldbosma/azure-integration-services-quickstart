@@ -201,6 +201,9 @@ jobs:
           --client-id "$Env:AZURE_CLIENT_ID" `
           --federated-credential-provider "github" `
           --tenant-id "$Env:AZURE_TENANT_ID"
+      env:
+        AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+        AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
 
     # Ensure the azd environment is created before running subsequent azd commands.
     # This guarantees that any configured hooks are executed as expected.
