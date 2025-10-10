@@ -36,6 +36,7 @@ jobs:
       uses: Azure/setup-azd@v2
 
     - name: Setup .NET 9
+      if: env.INCLUDE_FUNCTION_APP == 'true'
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '9.0.x'
