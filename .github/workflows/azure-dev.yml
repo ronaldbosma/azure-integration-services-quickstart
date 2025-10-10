@@ -15,6 +15,10 @@ permissions:
   id-token: write # Required to fetch an OIDC token for Azure authentication
   contents: read  # Required to checkout code if needed
 
+defaults:
+  run:
+    shell: pwsh # Use PowerShell Core for all scripts (the azd hooks are written in PowerShell)
+
 env:
   AZURE_ENV_NAME: 'aisquick'
   AZURE_LOCATION: 'swedencentral'
@@ -101,7 +105,6 @@ jobs:
       uses: Azure/setup-azd@v2
 
     - name: Configure AZD to Use AZ CLI Authentication
-      shell: pwsh
       run: |
         azd config set auth.useAzCliAuth "true"
 
@@ -113,7 +116,6 @@ jobs:
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
     - name: Provision Infrastructure
-      shell: pwsh
       run: |
         azd provision --no-prompt
 
@@ -126,7 +128,6 @@ jobs:
 
     - name: Deploy Function App
       if: env.INCLUDE_FUNCTION_APP == 'true'
-      shell: pwsh
       run: |
         azd deploy functionApp --from-package ./artifacts/functionapp-package.zip --no-prompt
 
@@ -139,13 +140,11 @@ jobs:
 
     - name: Deploy Logic App
       if: env.INCLUDE_LOGIC_APP == 'true'
-      shell: pwsh
       run: |
         azd deploy logicApp --from-package ./artifacts/logicapp-package.zip --no-prompt
 
     - name: Get Output Variables
       id: get-outputs
-      shell: pwsh
       run: |
         $resourceGroup = (azd env get-values | Select-String "AZURE_RESOURCE_GROUP").ToString().Split('=')[1]
         $logWorkspace = (azd env get-values | Select-String "AZURE_LOG_ANALYTICS_WORKSPACE_NAME").ToString().Split('=')[1]
@@ -173,7 +172,6 @@ jobs:
       uses: Azure/setup-azd@v2
 
     - name: Configure AZD to Use AZ CLI Authentication
-      shell: pwsh
       run: |
         azd config set auth.useAzCliAuth "true"
 
@@ -185,7 +183,6 @@ jobs:
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
     - name: Cleanup Resources
-      shell: pwsh
       run: |
         azd down --purge --force --no-prompt
       env:
