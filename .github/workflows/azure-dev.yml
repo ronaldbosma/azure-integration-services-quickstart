@@ -93,6 +93,8 @@ jobs:
     needs: build-verify-package
     runs-on: ubuntu-latest
     environment: aisquick
+    env:
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
     outputs:
       azure-resource-group: ${{ steps.get-outputs.outputs.azure-resource-group }}
       azure-log-analytics-workspace-name: ${{ steps.get-outputs.outputs.azure-log-analytics-workspace-name }}
@@ -163,6 +165,8 @@ jobs:
       )
     runs-on: ubuntu-latest
     environment: aisquick
+    env:
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
     
     steps:
     - name: Checkout code
