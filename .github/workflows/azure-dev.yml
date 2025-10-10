@@ -57,7 +57,7 @@ jobs:
         az bicep lint --file ./infra/main.bicep
 
     - name: Create artifacts folder
-      if: env.INCLUDE_FUNCTION_APP == 'true' && env.INCLUDE_LOGIC_APP == 'true'
+      if: env.INCLUDE_FUNCTION_APP == 'true' || env.INCLUDE_LOGIC_APP == 'true'
       run: |
         mkdir -p ./artifacts
 
