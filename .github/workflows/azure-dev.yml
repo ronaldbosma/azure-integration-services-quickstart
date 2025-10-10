@@ -194,7 +194,7 @@ jobs:
 
     - name: Cleanup Resources
       run: |
-        azd down --purge --force --no-prompt --debug
+        azd down --purge --force --no-prompt
       env:
         AZURE_RESOURCE_GROUP: ${{ needs.deploy.outputs.azure-resource-group }}
         AZURE_LOG_ANALYTICS_WORKSPACE_NAME: ${{ needs.deploy.outputs.azure-log-analytics-workspace-name }}
