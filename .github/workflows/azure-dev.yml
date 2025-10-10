@@ -12,8 +12,8 @@ on:
     branches: [ main ]
 
 permissions:
-  id-token: write
-  contents: read
+  id-token: write # Required to fetch an OIDC token for Azure authentication
+  contents: read  # Required to checkout code if needed
 
 env:
   AZURE_ENV_NAME: 'aisquick'
