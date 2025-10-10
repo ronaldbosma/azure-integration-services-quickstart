@@ -2,12 +2,6 @@ name: azure-dev
 
 on:
   workflow_dispatch:
-    inputs:
-      cleanup_resources:
-        description: 'Clean up resources after deployment'
-        required: false
-        default: true
-        type: boolean
   pull_request:
     branches: [ main ]
 
@@ -153,14 +147,7 @@ jobs:
 
   cleanup:
     name: Clean Up Resources
-    needs: [build-verify-package, deploy]
-    if: |
-      always() && 
-      needs.build-verify-package.result == 'success' &&
-      (
-        (github.event_name == 'workflow_dispatch' && github.event.inputs.cleanup_resources == 'true') ||
-        (github.event_name != 'workflow_dispatch' && needs.deploy.result == 'success')
-      )
+    needs: deploy
     runs-on: ubuntu-latest
     environment: aisquick
     env:
