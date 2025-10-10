@@ -95,9 +95,6 @@ jobs:
     environment: aisquick
     env:
       AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-    outputs:
-      azure-resource-group: ${{ steps.get-outputs.outputs.azure-resource-group }}
-      azure-log-analytics-workspace-name: ${{ steps.get-outputs.outputs.azure-log-analytics-workspace-name }}
     
     steps:
     - name: Checkout code
@@ -145,14 +142,6 @@ jobs:
       run: |
         azd deploy logicApp --from-package ./artifacts/logicapp-package.zip --no-prompt
 
-    - name: Get Output Variables
-      id: get-outputs
-      run: |
-        $resourceGroup = (azd env get-values | Select-String "AZURE_RESOURCE_GROUP").ToString().Split('=')[1]
-        $logWorkspace = (azd env get-values | Select-String "AZURE_LOG_ANALYTICS_WORKSPACE_NAME").ToString().Split('=')[1]
-        echo "azure-resource-group=$resourceGroup" >> $env:GITHUB_OUTPUT
-        echo "azure-log-analytics-workspace-name=$logWorkspace" >> $env:GITHUB_OUTPUT
-
   cleanup:
     name: Clean Up Resources
     needs: [build-verify-package, deploy]
@@ -189,6 +178,3 @@ jobs:
     - name: Cleanup Resources
       run: |
         azd down --purge --force --no-prompt
-      env:
-        AZURE_RESOURCE_GROUP: ${{ needs.deploy.outputs.azure-resource-group }}
-        AZURE_LOG_ANALYTICS_WORKSPACE_NAME: ${{ needs.deploy.outputs.azure-log-analytics-workspace-name }}
