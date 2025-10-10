@@ -16,9 +16,14 @@ permissions:
   contents: read
 
 env:
-  AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-  AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-  AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  AZURE_ENV_NAME: 'aisquick'
+  AZURE_LOCATION: 'swedencentral'
+  INCLUDE_API_MANAGEMENT: true
+  INCLUDE_EVENT_HUBS_NAMESPACE: true
+  INCLUDE_FUNCTION_APP: true
+  INCLUDE_LOGIC_APP: true
+  INCLUDE_SERVICE_BUS: true
+  INCLUDE_APPLICATION_INFRA_RESOURCES: true
 
 jobs:
   build-verify-package:
@@ -40,50 +45,46 @@ jobs:
         node-version: 'latest'
         # This template uses a workaround to deploy the Logic App workflow, which requires the npm CLI.
 
-    - name: Install Azure CLI
-      run: |
-        curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-
     - name: Install azd
       uses: Azure/setup-azd@v2
 
-    - name: Configure AZD to Use AZ CLI Authentication
-      shell: pwsh
+    - name: Install Azure CLI
       run: |
-        azd config set auth.useAzCliAuth "true"
-
-    - name: Azure CLI Login
-      uses: azure/login@v2
-      with:
-        client-id: ${{ env.AZURE_CLIENT_ID }}
-        tenant-id: ${{ env.AZURE_TENANT_ID }}
-        subscription-id: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
     - name: Bicep Lint
       run: |
         az bicep lint --file ./infra/main.bicep
 
-    - name: Package Function App
+    - name: Create artifacts folder
+      if: env.INCLUDE_FUNCTION_APP == 'true' && env.INCLUDE_LOGIC_APP == 'true'
       run: |
-        mkdir -p ./dist
-        azd package functionApp --output-path ./dist/functionapp-package.zip --no-prompt
+        mkdir -p ./artifacts
 
-    - name: Package Logic App
+    - name: Package Function App
+      if: env.INCLUDE_FUNCTION_APP == 'true'
       run: |
-        azd package logicApp --output-path ./dist/logicapp-package.zip --no-prompt
+        azd package functionApp --output-path ./artifacts/functionapp-package.zip --no-prompt
 
     - name: Upload Function App Package
+      if: env.INCLUDE_FUNCTION_APP == 'true'
       uses: actions/upload-artifact@v4
       with:
         name: functionapp-package
-        path: ./dist/functionapp-package.zip
+        path: ./artifacts/functionapp-package.zip
         retention-days: 1
 
+    - name: Package Logic App
+      if: env.INCLUDE_LOGIC_APP == 'true'
+      run: |
+        azd package logicApp --output-path ./artifacts/logicapp-package.zip --no-prompt
+
     - name: Upload Logic App Package
+      if: env.INCLUDE_LOGIC_APP == 'true'
       uses: actions/upload-artifact@v4
       with:
         name: logicapp-package
-        path: ./dist/logicapp-package.zip
+        path: ./artifacts/logicapp-package.zip
         retention-days: 1
 
   deploy:
@@ -92,16 +93,8 @@ jobs:
     runs-on: ubuntu-latest
     environment: aisquick
     outputs:
-      azure-env-name: ${{ steps.get-env-name.outputs.azure-env-name }}
-    env:
-      AZURE_ENV_NAME: ${{ vars.AZURE_ENV_NAME }}
-      AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
-      INCLUDE_API_MANAGEMENT: ${{ vars.INCLUDE_API_MANAGEMENT }}
-      INCLUDE_EVENT_HUBS_NAMESPACE: ${{ vars.INCLUDE_EVENT_HUBS_NAMESPACE }}
-      INCLUDE_FUNCTION_APP: ${{ vars.INCLUDE_FUNCTION_APP }}
-      INCLUDE_LOGIC_APP: ${{ vars.INCLUDE_LOGIC_APP }}
-      INCLUDE_SERVICE_BUS: ${{ vars.INCLUDE_SERVICE_BUS }}
-      INCLUDE_APPLICATION_INFRA_RESOURCES: ${{ vars.INCLUDE_APPLICATION_INFRA_RESOURCES }}
+      azure-resource-group: ${{ steps.get-outputs.outputs.azure-resource-group }}
+      azure-log-analytics-workspace-name: ${{ steps.get-outputs.outputs.azure-log-analytics-workspace-name }}
     
     steps:
     - name: Checkout code
@@ -118,40 +111,61 @@ jobs:
     - name: Azure CLI Login
       uses: azure/login@v2
       with:
-        client-id: ${{ env.AZURE_CLIENT_ID }}
-        tenant-id: ${{ env.AZURE_TENANT_ID }}
-        subscription-id: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
     - name: Provision Infrastructure
-      run: |
-        azd provision --no-prompt
+      uses: azure/cli@v2
+      with:
+        azcliversion: latest
+        shell: pwsh
+        inlineScript: |
+          azd provision --no-prompt
 
     - name: Download Function App Package
+      if: env.INCLUDE_FUNCTION_APP == 'true'
       uses: actions/download-artifact@v4
       with:
         name: functionapp-package
         path: ./artifacts
 
+    - name: Deploy Function App
+      if: env.INCLUDE_FUNCTION_APP == 'true'
+      uses: azure/cli@v2
+      with:
+        azcliversion: latest
+        shell: pwsh
+        inlineScript: |
+          azd deploy functionApp --from-package ./artifacts/functionapp-package.zip --no-prompt
+
     - name: Download Logic App Package
+      if: env.INCLUDE_LOGIC_APP == 'true'
       uses: actions/download-artifact@v4
       with:
         name: logicapp-package
         path: ./artifacts
 
-    - name: Deploy Function App
-      if: env.INCLUDE_FUNCTION_APP == 'true'
-      run: |
-        azd deploy functionApp --from-package ./artifacts/functionapp-package.zip --no-prompt
-
     - name: Deploy Logic App
       if: env.INCLUDE_LOGIC_APP == 'true'
-      run: |
-        azd deploy logicApp --from-package ./artifacts/logicapp-package.zip --no-prompt
+      uses: azure/cli@v2
+      with:
+        azcliversion: latest
+        shell: pwsh
+        inlineScript: |
+          azd deploy logicApp --from-package ./artifacts/logicapp-package.zip --no-prompt
 
-    - name: Get Environment Name for Cleanup
-      id: get-env-name
-      run: |
-        echo "azure-env-name=${{ env.AZURE_ENV_NAME }}" >> $GITHUB_OUTPUT
+    - name: Get Output Variables
+      id: get-outputs
+      uses: azure/cli@v2
+      with:
+        azcliversion: latest
+        shell: pwsh
+        inlineScript: |
+          $resourceGroup = (azd env get-values | Select-String "AZURE_RESOURCE_GROUP").ToString().Split('=')[1]
+          $logWorkspace = (azd env get-values | Select-String "AZURE_LOG_ANALYTICS_WORKSPACE_NAME").ToString().Split('=')[1]
+          echo "azure-resource-group=$resourceGroup" >> $env:GITHUB_OUTPUT
+          echo "azure-log-analytics-workspace-name=$logWorkspace" >> $env:GITHUB_OUTPUT
 
   cleanup:
     name: Clean Up Resources
@@ -160,10 +174,8 @@ jobs:
       always() && 
       needs.build-verify-package.result == 'success' &&
       (
-        (github.event_name == 'workflow_dispatch' && 
-         github.event.inputs.cleanup_resources == 'true') ||
-        (github.event_name != 'workflow_dispatch' && 
-         needs.deploy.result == 'success')
+        (github.event_name == 'workflow_dispatch' && github.event.inputs.cleanup_resources == 'true') ||
+        (github.event_name != 'workflow_dispatch' && needs.deploy.result == 'success')
       )
     runs-on: ubuntu-latest
     environment: aisquick
@@ -171,16 +183,6 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-
-    - name: Setup PowerShell
-      shell: pwsh
-      run: |
-        # PowerShell Core is pre-installed on ubuntu-latest
-        Write-Host "PowerShell version: $($PSVersionTable.PSVersion)"
-
-    - name: Install Azure CLI
-      run: |
-        curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
     - name: Install azd
       uses: Azure/setup-azd@v2
@@ -193,19 +195,18 @@ jobs:
     - name: Azure CLI Login
       uses: azure/login@v2
       with:
-        client-id: ${{ env.AZURE_CLIENT_ID }}
-        tenant-id: ${{ env.AZURE_TENANT_ID }}
-        subscription-id: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
     - name: Cleanup Resources
-      run: |
-        azd down --purge --force --no-prompt
+      uses: azure/cli@v2
+      with:
+        azcliversion: latest
+        shell: pwsh
+        inlineScript: |
+          azd down --purge --force --no-prompt
       env:
-        AZURE_ENV_NAME: ${{ needs.deploy.outputs.azure-env-name }}
-
-    - name: Verify Resource Cleanup
-      run: |
-        echo "✅ Resource cleanup completed"
-        echo "Environment '${{ needs.deploy.outputs.azure-env-name }}' has been cleaned up"
-        echo "All Azure resources have been removed and purged"
+        AZURE_RESOURCE_GROUP: ${{ needs.deploy.outputs.azure-resource-group }}
+        AZURE_LOG_ANALYTICS_WORKSPACE_NAME: ${{ needs.deploy.outputs.azure-log-analytics-workspace-name }}
         
