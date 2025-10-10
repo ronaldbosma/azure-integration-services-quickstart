@@ -180,3 +180,10 @@ jobs:
       env:
         AZURE_RESOURCE_GROUP: ${{ needs.deploy.outputs.azure-resource-group }}
         AZURE_LOG_ANALYTICS_WORKSPACE_NAME: ${{ needs.deploy.outputs.azure-log-analytics-workspace-name }}
+
+    - name: Upload Logging Hooks
+      uses: actions/upload-artifact@v4
+      with:
+        name: logging
+        path: ./hooks
+        retention-days: 1

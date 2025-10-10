@@ -17,6 +17,26 @@ param(
     [string]$LogAnalyticsWorkspaceName = $env:AZURE_LOG_ANALYTICS_WORKSPACE_NAME
 )
 
+
+# Create the dist folder if it doesn't exist
+$distFolder = Join-Path -Path $PSScriptRoot -ChildPath "dist"
+if (-not (Test-Path -Path $distFolder)) {
+    New-Item -Path $distFolder -ItemType Directory | Out-Null
+}
+
+# Prepare parameter info
+$paramContent = @"
+SubscriptionId=$SubscriptionId
+ResourceGroup=$ResourceGroup
+LogAnalyticsWorkspaceName=$LogAnalyticsWorkspaceName
+"@
+
+# Write to hook-params.txt in the dist folder
+$paramFile = Join-Path -Path $distFolder -ChildPath "hook-params.txt"
+$paramContent | Set-Content -Path $paramFile -Encoding UTF8
+
+
+
 # Validate required parameters
 if ([string]::IsNullOrEmpty($SubscriptionId)) {
     throw "SubscriptionId parameter is required. Please provide it as a parameter or set the AZURE_SUBSCRIPTION_ID environment variable."
