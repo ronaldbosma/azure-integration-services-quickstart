@@ -39,5 +39,5 @@ if ($LASTEXITCODE -ne 0) {
 
 
 # Delete the Log Analytics workspace
-Write-Host "Deleting Log Analytics workspace $LogAnalyticsWorkspaceName"
+Write-Output "Deleting Log Analytics workspace $LogAnalyticsWorkspaceName"
 az monitor log-analytics workspace delete --subscription $SubscriptionId --resource-group $ResourceGroup --workspace-name $LogAnalyticsWorkspaceName --force --yes
