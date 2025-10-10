@@ -14,7 +14,7 @@ defaults:
     shell: pwsh # Use PowerShell Core for all scripts (the azd hooks are written in PowerShell)
 
 env:
-  AZURE_ENV_NAME: 'aisquick'
+  AZURE_ENV_NAME: ${{ github.event.pull_request.number && format('aisquick-pr-{0}', github.event.pull_request.number) || 'aisquick' }}
   AZURE_LOCATION: 'swedencentral'
   INCLUDE_API_MANAGEMENT: false
   INCLUDE_EVENT_HUBS_NAMESPACE: false
