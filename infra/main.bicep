@@ -278,7 +278,7 @@ output AZURE_STORAGE_ACCOUNT_NAME string = storageAccountName
 output INCLUDE_API_MANAGEMENT bool = includeApiManagement
 output INCLUDE_EVENT_HUBS_NAMESPACE bool = includeEventHubsNamespace
 output INCLUDE_FUNCTION_APP bool = includeFunctionApp
-output INCLUDE_LOGIC_APP bool = includeLogicAppasdf
+output INCLUDE_LOGIC_APP bool = includeLogicApp
 output INCLUDE_SERVICE_BUS bool = includeServiceBus
 
 // Return if the application infra resources are included in the deployment
