@@ -39,11 +39,12 @@ jobs:
       with:
         dotnet-version: '9.0.x'
 
+    # This template uses a workaround to deploy the Logic App workflow, which requires the npm CLI.
     - name: Setup Node.js
+      if: env.INCLUDE_LOGIC_APP == 'true'
       uses: actions/setup-node@v4
       with:
         node-version: 'latest'
-        # This template uses a workaround to deploy the Logic App workflow, which requires the npm CLI.
 
     - name: Install azd
       uses: Azure/setup-azd@v2
