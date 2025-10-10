@@ -7,7 +7,6 @@ hooks:
   predown:
     - shell: pwsh
       run: ./hooks/predown-remove-law.ps1
-      continueOnError: false
       interactive: true
 services:
   functionApp:
