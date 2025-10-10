@@ -113,12 +113,9 @@ jobs:
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
     - name: Provision Infrastructure
-      uses: azure/cli@v2
-      with:
-        azcliversion: latest
-        shell: pwsh
-        inlineScript: |
-          azd provision --no-prompt
+      shell: pwsh
+      run: |
+        azd provision --no-prompt
 
     - name: Download Function App Package
       if: env.INCLUDE_FUNCTION_APP == 'true'
@@ -129,12 +126,9 @@ jobs:
 
     - name: Deploy Function App
       if: env.INCLUDE_FUNCTION_APP == 'true'
-      uses: azure/cli@v2
-      with:
-        azcliversion: latest
-        shell: pwsh
-        inlineScript: |
-          azd deploy functionApp --from-package ./artifacts/functionapp-package.zip --no-prompt
+      shell: pwsh
+      run: |
+        azd deploy functionApp --from-package ./artifacts/functionapp-package.zip --no-prompt
 
     - name: Download Logic App Package
       if: env.INCLUDE_LOGIC_APP == 'true'
@@ -145,24 +139,18 @@ jobs:
 
     - name: Deploy Logic App
       if: env.INCLUDE_LOGIC_APP == 'true'
-      uses: azure/cli@v2
-      with:
-        azcliversion: latest
-        shell: pwsh
-        inlineScript: |
-          azd deploy logicApp --from-package ./artifacts/logicapp-package.zip --no-prompt
+      shell: pwsh
+      run: |
+        azd deploy logicApp --from-package ./artifacts/logicapp-package.zip --no-prompt
 
     - name: Get Output Variables
       id: get-outputs
-      uses: azure/cli@v2
-      with:
-        azcliversion: latest
-        shell: pwsh
-        inlineScript: |
-          $resourceGroup = (azd env get-values | Select-String "AZURE_RESOURCE_GROUP").ToString().Split('=')[1]
-          $logWorkspace = (azd env get-values | Select-String "AZURE_LOG_ANALYTICS_WORKSPACE_NAME").ToString().Split('=')[1]
-          echo "azure-resource-group=$resourceGroup" >> $env:GITHUB_OUTPUT
-          echo "azure-log-analytics-workspace-name=$logWorkspace" >> $env:GITHUB_OUTPUT
+      shell: pwsh
+      run: |
+        $resourceGroup = (azd env get-values | Select-String "AZURE_RESOURCE_GROUP").ToString().Split('=')[1]
+        $logWorkspace = (azd env get-values | Select-String "AZURE_LOG_ANALYTICS_WORKSPACE_NAME").ToString().Split('=')[1]
+        echo "azure-resource-group=$resourceGroup" >> $env:GITHUB_OUTPUT
+        echo "azure-log-analytics-workspace-name=$logWorkspace" >> $env:GITHUB_OUTPUT
 
   cleanup:
     name: Clean Up Resources
@@ -197,12 +185,9 @@ jobs:
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
     - name: Cleanup Resources
-      uses: azure/cli@v2
-      with:
-        azcliversion: latest
-        shell: pwsh
-        inlineScript: |
-          azd down --purge --force --no-prompt
+      shell: pwsh
+      run: |
+        azd down --purge --force --no-prompt
       env:
         AZURE_RESOURCE_GROUP: ${{ needs.deploy.outputs.azure-resource-group }}
         AZURE_LOG_ANALYTICS_WORKSPACE_NAME: ${{ needs.deploy.outputs.azure-log-analytics-workspace-name }}
