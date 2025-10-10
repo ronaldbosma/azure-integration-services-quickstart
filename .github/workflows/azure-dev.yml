@@ -145,6 +145,12 @@ jobs:
         $resourceGroupName = azd env get-value "AZURE_RESOURCE_GROUP"
         $logAnalyticsWorkspaceName = azd env get-value "AZURE_LOG_ANALYTICS_WORKSPACE_NAME"
 
+        Write-Host "Resource Group: $resourceGroupName"
+        Write-Host "Log Analytics Workspace Name: $logAnalyticsWorkspaceName"
+
+        echo "Resource Group: $resourceGroupName"
+        echo "Log Analytics Workspace Name: $logAnalyticsWorkspaceName"
+
         echo "azure-resource-group=$resourceGroupName" >> $env:GITHUB_OUTPUT
         echo "azure-log-analytics-workspace-name=$logAnalyticsWorkspaceName" >> $env:GITHUB_OUTPUT
 
@@ -176,6 +182,9 @@ jobs:
 
     - name: Cleanup Resources
       run: |
+        Write-Host "Resource Group: $env:AZURE_RESOURCE_GROUP"
+        Write-Host "Log Analytics Workspace Name: $env:AZURE_LOG_ANALYTICS_WORKSPACE_NAME"
+
         azd down --purge --force --no-prompt
       env:
         AZURE_RESOURCE_GROUP: ${{ needs.deploy.outputs.azure-resource-group }}
