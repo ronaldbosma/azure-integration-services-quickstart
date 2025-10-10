@@ -142,8 +142,11 @@ jobs:
     - name: Get Output Variables
       id: get-outputs
       run: |
-        echo "azure-resource-group=$env:AZURE_RESOURCE_GROUP" >> $env:GITHUB_OUTPUT
-        echo "azure-log-analytics-workspace-name=$env:AZURE_LOG_ANALYTICS_WORKSPACE_NAME" >> $env:GITHUB_OUTPUT
+        $resourceGroupName = azd env get-value "AZURE_RESOURCE_GROUP"
+        $logAnalyticsWorkspaceName = azd env get-value "AZURE_LOG_ANALYTICS_WORKSPACE_NAME"
+
+        echo "azure-resource-group=$resourceGroupName" >> $env:GITHUB_OUTPUT
+        echo "azure-log-analytics-workspace-name=$logAnalyticsWorkspaceName" >> $env:GITHUB_OUTPUT
 
   cleanup:
     name: Clean Up Resources
