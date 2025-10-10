@@ -51,6 +51,12 @@ jobs:
       run: |
         az bicep lint --file ./infra/main.bicep
 
+    # Ensure the azd environment is created before running subsequent azd commands.
+    # This guarantees that any configured hooks are executed as expected.
+    # See https://github.com/Azure/azure-dev/issues/3920 for more details.
+    - name: Create azd env
+      run: azd env new $env:AZURE_ENV_NAME
+
     - name: Create artifacts folder
       if: env.INCLUDE_FUNCTION_APP == 'true' || env.INCLUDE_LOGIC_APP == 'true'
       run: |
@@ -110,6 +116,12 @@ jobs:
         client-id: ${{ secrets.AZURE_CLIENT_ID }}
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+    # Ensure the azd environment is created before running subsequent azd commands.
+    # This guarantees that any configured hooks are executed as expected.
+    # See https://github.com/Azure/azure-dev/issues/3920 for more details.
+    - name: Create azd env
+      run: azd env new $env:AZURE_ENV_NAME
 
     - name: Provision Infrastructure
       run: |
@@ -173,6 +185,12 @@ jobs:
         client-id: ${{ secrets.AZURE_CLIENT_ID }}
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+    # Ensure the azd environment is created before running subsequent azd commands.
+    # This guarantees that any configured hooks are executed as expected.
+    # See https://github.com/Azure/azure-dev/issues/3920 for more details.
+    - name: Create azd env
+      run: azd env new $env:AZURE_ENV_NAME
 
     - name: Cleanup Resources
       run: |
