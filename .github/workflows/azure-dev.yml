@@ -114,6 +114,8 @@ jobs:
     - name: Provision Infrastructure
       run: |
         azd provision --no-prompt
+        Write-Output "AZURE_RESOURCE_GROUP=$env:AZURE_RESOURCE_GROUP"
+        Write-Output "AZURE_LOG_ANALYTICS_WORKSPACE_NAME=$env:AZURE_LOG_ANALYTICS_WORKSPACE_NAME"
 
     - name: Download Function App Package
       if: env.INCLUDE_FUNCTION_APP == 'true'
@@ -142,8 +144,10 @@ jobs:
     - name: Get Output Variables
       id: get-outputs
       run: |
-        echo "azure-resource-group=$env:AZURE_RESOURCE_GROUP" >> $env:GITHUB_OUTPUT
-        echo "azure-log-analytics-workspace-name=$env:AZURE_LOG_ANALYTICS_WORKSPACE_NAME" >> $env:GITHUB_OUTPUT
+        Write-Output "AZURE_RESOURCE_GROUP=$env:AZURE_RESOURCE_GROUP"
+        Write-Output "AZURE_LOG_ANALYTICS_WORKSPACE_NAME=$env:AZURE_LOG_ANALYTICS_WORKSPACE_NAME"
+        Write-Output "azure-resource-group=$env:AZURE_RESOURCE_GROUP" >> $env:GITHUB_OUTPUT
+        Write-Output "azure-log-analytics-workspace-name=$env:AZURE_LOG_ANALYTICS_WORKSPACE_NAME" >> $env:GITHUB_OUTPUT
 
   cleanup:
     name: Clean Up Resources
@@ -173,6 +177,8 @@ jobs:
 
     - name: Cleanup Resources
       run: |
+        Write-Output "AZURE_RESOURCE_GROUP=$env:AZURE_RESOURCE_GROUP"
+        Write-Output "AZURE_LOG_ANALYTICS_WORKSPACE_NAME=$env:AZURE_LOG_ANALYTICS_WORKSPACE_NAME"
         azd down --purge --force --no-prompt
       env:
         AZURE_RESOURCE_GROUP: ${{ needs.deploy.outputs.azure-resource-group }}
