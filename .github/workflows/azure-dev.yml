@@ -67,6 +67,11 @@ jobs:
       run: |
         azd package functionApp --output-path ./artifacts/functionapp-package.zip --no-prompt
 
+    - name: Package Logic App
+      if: env.INCLUDE_LOGIC_APP == 'true'
+      run: |
+        azd package logicApp --output-path ./artifacts/logicapp-package.zip --no-prompt
+
     - name: Upload Function App Package
       if: env.INCLUDE_FUNCTION_APP == 'true'
       uses: actions/upload-artifact@v4
@@ -74,11 +79,6 @@ jobs:
         name: functionapp-package
         path: ./artifacts/functionapp-package.zip
         retention-days: 1
-
-    - name: Package Logic App
-      if: env.INCLUDE_LOGIC_APP == 'true'
-      run: |
-        azd package logicApp --output-path ./artifacts/logicapp-package.zip --no-prompt
 
     - name: Upload Logic App Package
       if: env.INCLUDE_LOGIC_APP == 'true'
