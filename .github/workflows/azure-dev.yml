@@ -49,10 +49,6 @@ jobs:
     - name: Install azd
       uses: Azure/setup-azd@v2
 
-    - name: Install Azure CLI
-      run: |
-        curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-
     - name: Bicep Lint
       run: |
         az bicep lint --file ./infra/main.bicep
