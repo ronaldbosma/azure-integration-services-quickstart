@@ -14,6 +14,7 @@ defaults:
     shell: pwsh # Use PowerShell Core for all scripts (the azd hooks are written in PowerShell)
 
 env:
+  # Add a unique suffix for pull request environments to avoid name conflicts
   AZURE_ENV_NAME: ${{ github.event.pull_request.number && format('aisquick-pr{0}', github.event.pull_request.number) || 'aisquick' }}
   AZURE_LOCATION: 'swedencentral'
   INCLUDE_API_MANAGEMENT: false
@@ -24,6 +25,11 @@ env:
   INCLUDE_APPLICATION_INFRA_RESOURCES: false
 
 jobs:
+
+  # ------------------------------------------------------------
+  # Build, Verify and Package
+  # ------------------------------------------------------------
+
   build-verify-package:
     name: Build, Verify and Package
     runs-on: ubuntu-latest
@@ -89,6 +95,11 @@ jobs:
         path: ./artifacts/logicapp-package.zip
         retention-days: 1
 
+
+  # ------------------------------------------------------------
+  # Deploy to Azure
+  # ------------------------------------------------------------
+
   deploy:
     name: Deploy to Azure
     needs: build-verify-package
@@ -107,10 +118,12 @@ jobs:
     - name: Install azd
       uses: Azure/setup-azd@v2
 
+    # Use Azure CLI authentication with azd commands to ensure that any hooks relying on the Azure CLI don't fail.
     - name: Configure AZD to Use AZ CLI Authentication
       run: |
         azd config set auth.useAzCliAuth "true"
 
+    # Login to the Azure CLI with OpenID Connect (OIDC) using federated identity credentials.
     - name: Azure CLI Login
       uses: azure/login@v2
       with:
@@ -152,6 +165,7 @@ jobs:
       run: |
         azd deploy logicApp --from-package ./artifacts/logicapp-package.zip --no-prompt
 
+    # Extract relevant azd environment variables and make them available as job outputs for subsequent jobs.
     - name: Get Output Variables
       id: get-outputs
       run: |
@@ -160,6 +174,11 @@ jobs:
 
         echo "azure-resource-group=$resourceGroupName" >> $env:GITHUB_OUTPUT
         echo "azure-log-analytics-workspace-name=$logAnalyticsWorkspaceName" >> $env:GITHUB_OUTPUT
+
+
+  # ------------------------------------------------------------
+  # Clean Up Resources
+  # ------------------------------------------------------------
 
   cleanup:
     name: Clean Up Resources
@@ -176,10 +195,12 @@ jobs:
     - name: Install azd
       uses: Azure/setup-azd@v2
 
+    # Use Azure CLI authentication with azd commands to ensure that any hooks relying on the Azure CLI don't fail.
     - name: Configure AZD to Use AZ CLI Authentication
       run: |
         azd config set auth.useAzCliAuth "true"
 
+    # Login to the Azure CLI with OpenID Connect (OIDC) using federated identity credentials.
     - name: Azure CLI Login
       uses: azure/login@v2
       with:
@@ -193,9 +214,12 @@ jobs:
     - name: Create azd env
       run: azd env new $env:AZURE_ENV_NAME
 
+    # Clean up using the --purge flag to ensure all resources are permanently deleted, like API Management.
     - name: Cleanup Resources
       run: |
         azd down --purge --force --no-prompt
       env:
+        # Pass the deployed resource identifiers as environment variables so azd hooks can access them
+        # during cleanup operations (e.g., for custom resource deletion or additional cleanup tasks).
         AZURE_RESOURCE_GROUP: ${{ needs.deploy.outputs.azure-resource-group }}
         AZURE_LOG_ANALYTICS_WORKSPACE_NAME: ${{ needs.deploy.outputs.azure-log-analytics-workspace-name }}
