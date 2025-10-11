@@ -11,10 +11,7 @@ param(
     [string]$SubscriptionId = $env:AZURE_SUBSCRIPTION_ID,
     
     [Parameter(Mandatory = $false)]
-    [string]$ResourceGroup = $env:AZURE_RESOURCE_GROUP,
-    
-    [Parameter(Mandatory = $false)]
-    [string]$LogAnalyticsWorkspaceName = $env:AZURE_LOG_ANALYTICS_WORKSPACE_NAME
+    [string]$ResourceGroup = $env:AZURE_RESOURCE_GROUP
 )
 
 # Validate required parameters
@@ -26,10 +23,6 @@ if ([string]::IsNullOrEmpty($ResourceGroup)) {
     throw "ResourceGroup parameter is required. Please provide it as a parameter or set the AZURE_RESOURCE_GROUP environment variable."
 }
 
-if ([string]::IsNullOrEmpty($LogAnalyticsWorkspaceName)) {
-    throw "LogAnalyticsWorkspaceName parameter is required. Please provide it as a parameter or set the AZURE_LOG_ANALYTICS_WORKSPACE_NAME environment variable."
-}
-
 
 # First, ensure the Azure CLI is logged in and set to the correct subscription
 az account set --subscription $SubscriptionId
@@ -38,6 +31,10 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 
-# Delete the Log Analytics workspace
-Write-Host "Deleting Log Analytics workspace $LogAnalyticsWorkspaceName"
-az monitor log-analytics workspace delete --subscription $SubscriptionId --resource-group $ResourceGroup --workspace-name $LogAnalyticsWorkspaceName --force --yes
+# List all Log Analytics workspaces in the resource group and delete them
+$workspaces = az monitor log-analytics workspace list --subscription $SubscriptionId --resource-group $ResourceGroup | ConvertFrom-Json
+
+foreach ($workspace in $workspaces) {
+    Write-Host "Deleting Log Analytics workspace $($workspace.name)"
+    az monitor log-analytics workspace delete --subscription $SubscriptionId --resource-group $ResourceGroup --workspace-name $workspace.name --force --yes
+}
