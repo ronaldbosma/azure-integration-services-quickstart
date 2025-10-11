@@ -447,3 +447,4 @@ az monitor log-analytics workspace delete --resource-group rg-aisquick-sdc-5spzh
 After that, redeploy the template. If logging still doesn't appear, deploy the template in a different region or using a different environment name.
 
 I've registered https://github.com/Azure/azure-dev/issues/5080 in the Azure Developer CLI repository to track this issue.
+
