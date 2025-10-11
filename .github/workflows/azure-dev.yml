@@ -117,7 +117,6 @@ jobs:
       AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
     outputs:
       azure-resource-group: ${{ steps.get-outputs.outputs.azure-resource-group }}
-      azure-log-analytics-workspace-name: ${{ steps.get-outputs.outputs.azure-log-analytics-workspace-name }}
     
     steps:
     - name: Checkout code
@@ -178,10 +177,7 @@ jobs:
       id: get-outputs
       run: |
         $resourceGroupName = azd env get-value "AZURE_RESOURCE_GROUP"
-        $logAnalyticsWorkspaceName = azd env get-value "AZURE_LOG_ANALYTICS_WORKSPACE_NAME"
-
         echo "azure-resource-group=$resourceGroupName" >> $env:GITHUB_OUTPUT
-        echo "azure-log-analytics-workspace-name=$logAnalyticsWorkspaceName" >> $env:GITHUB_OUTPUT
 
 
   # ------------------------------------------------------------
@@ -230,4 +226,3 @@ jobs:
         # Pass the deployed resource identifiers as environment variables so azd hooks can access them
         # during cleanup operations (e.g., for custom resource deletion or additional cleanup tasks).
         AZURE_RESOURCE_GROUP: ${{ needs.deploy.outputs.azure-resource-group }}
-        AZURE_LOG_ANALYTICS_WORKSPACE_NAME: ${{ needs.deploy.outputs.azure-log-analytics-workspace-name }}
