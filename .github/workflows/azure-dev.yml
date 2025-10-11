@@ -22,15 +22,15 @@ defaults:
     shell: pwsh # Use PowerShell Core for all scripts (the azd hooks are written in PowerShell)
 
 env:
-  # Add a unique suffix for pull request environments to avoid name conflicts
-  AZURE_ENV_NAME: ${{ github.event.pull_request.number && format('aisquick-pr{0}', github.event.pull_request.number) || 'aisquick' }}
-  AZURE_LOCATION: 'swedencentral'
-  INCLUDE_API_MANAGEMENT: true
-  INCLUDE_EVENT_HUBS_NAMESPACE: true
-  INCLUDE_FUNCTION_APP: true
-  INCLUDE_LOGIC_APP: true
-  INCLUDE_SERVICE_BUS: true
-  INCLUDE_APPLICATION_INFRA_RESOURCES: true
+  # Add a unique suffix to the environment name for pull requests to avoid name conflicts
+  AZURE_ENV_NAME: ${{ github.event.pull_request.number && format('{0}-pr{1}', vars.AZURE_ENV_NAME, github.event.pull_request.number) || vars.AZURE_ENV_NAME }}
+  AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
+  INCLUDE_API_MANAGEMENT: ${{ vars.INCLUDE_API_MANAGEMENT }}
+  INCLUDE_EVENT_HUBS_NAMESPACE: ${{ vars.INCLUDE_EVENT_HUBS_NAMESPACE }}
+  INCLUDE_FUNCTION_APP: ${{ vars.INCLUDE_FUNCTION_APP }}
+  INCLUDE_LOGIC_APP: ${{ vars.INCLUDE_LOGIC_APP }}
+  INCLUDE_SERVICE_BUS: ${{ vars.INCLUDE_SERVICE_BUS }}
+  INCLUDE_APPLICATION_INFRA_RESOURCES: ${{ vars.INCLUDE_APPLICATION_INFRA_RESOURCES }}
 
 jobs:
 
