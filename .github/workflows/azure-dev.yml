@@ -2,6 +2,12 @@ name: azure-dev
 
 on:
   workflow_dispatch:
+    inputs:
+      cleanup-resources:
+        description: 'Clean up resources after deployment'
+        required: false
+        default: true
+        type: boolean
   pull_request:
     branches: 
       - main
@@ -22,15 +28,15 @@ defaults:
     shell: pwsh # Use PowerShell Core for all scripts (the azd hooks are written in PowerShell)
 
 env:
-  # Add a unique suffix for pull request environments to avoid name conflicts
-  AZURE_ENV_NAME: ${{ github.event.pull_request.number && format('aisquick-pr{0}', github.event.pull_request.number) || 'aisquick' }}
-  AZURE_LOCATION: 'swedencentral'
-  INCLUDE_API_MANAGEMENT: true
-  INCLUDE_EVENT_HUBS_NAMESPACE: true
-  INCLUDE_FUNCTION_APP: true
-  INCLUDE_LOGIC_APP: true
-  INCLUDE_SERVICE_BUS: true
-  INCLUDE_APPLICATION_INFRA_RESOURCES: true
+  # Add a unique suffix to the environment name for pull requests to avoid name conflicts
+  AZURE_ENV_NAME: ${{ github.event.pull_request.number && format('{0}-pr{1}', vars.AZURE_ENV_NAME, github.event.pull_request.number) || vars.AZURE_ENV_NAME }}
+  AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
+  INCLUDE_API_MANAGEMENT: ${{ vars.INCLUDE_API_MANAGEMENT }}
+  INCLUDE_EVENT_HUBS_NAMESPACE: ${{ vars.INCLUDE_EVENT_HUBS_NAMESPACE }}
+  INCLUDE_FUNCTION_APP: ${{ vars.INCLUDE_FUNCTION_APP }}
+  INCLUDE_LOGIC_APP: ${{ vars.INCLUDE_LOGIC_APP }}
+  INCLUDE_SERVICE_BUS: ${{ vars.INCLUDE_SERVICE_BUS }}
+  INCLUDE_APPLICATION_INFRA_RESOURCES: ${{ vars.INCLUDE_APPLICATION_INFRA_RESOURCES }}
 
 jobs:
 
@@ -112,9 +118,8 @@ jobs:
     name: Deploy to Azure
     needs: build-verify-package
     runs-on: ubuntu-latest
-    environment: aisquick
     env:
-      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID || vars.AZURE_SUBSCRIPTION_ID }}
     outputs:
       azure-resource-group: ${{ steps.get-outputs.outputs.azure-resource-group }}
     
@@ -125,7 +130,7 @@ jobs:
     - name: Install azd
       uses: Azure/setup-azd@v2
 
-    # Use Azure CLI authentication with azd commands to ensure that any hooks relying on the Azure CLI don't fail.
+    # Use Azure CLI authentication with azd commands so credentials are shared between azd commands and az (Azure CLI) commands used in hooks.
     - name: Configure AZD to Use AZ CLI Authentication
       run: |
         azd config set auth.useAzCliAuth "true"
@@ -134,9 +139,9 @@ jobs:
     - name: Azure CLI Login
       uses: azure/login@v2
       with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID }}
-        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        client-id: ${{ secrets.AZURE_CLIENT_ID || vars.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID || vars.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID || vars.AZURE_SUBSCRIPTION_ID }}
 
     # Ensure the azd environment is created before running subsequent azd commands.
     # This guarantees that any configured hooks are executed as expected.
@@ -187,10 +192,10 @@ jobs:
   cleanup:
     name: Clean Up Resources
     needs: deploy
+    if: ${{ success() && (github.event_name != 'workflow_dispatch' || github.event.inputs.cleanup-resources == 'true') }}
     runs-on: ubuntu-latest
-    environment: aisquick
     env:
-      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID || vars.AZURE_SUBSCRIPTION_ID }}
     
     steps:
     - name: Checkout code
@@ -199,7 +204,7 @@ jobs:
     - name: Install azd
       uses: Azure/setup-azd@v2
 
-    # Use Azure CLI authentication with azd commands to ensure that any hooks relying on the Azure CLI don't fail.
+    # Use Azure CLI authentication with azd commands so credentials are shared between azd commands and az (Azure CLI) commands used in hooks.
     - name: Configure AZD to Use AZ CLI Authentication
       run: |
         azd config set auth.useAzCliAuth "true"
@@ -208,9 +213,9 @@ jobs:
     - name: Azure CLI Login
       uses: azure/login@v2
       with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID }}
-        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        client-id: ${{ secrets.AZURE_CLIENT_ID || vars.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID || vars.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID || vars.AZURE_SUBSCRIPTION_ID }}
 
     # Ensure the azd environment is created before running subsequent azd commands.
     # This guarantees that any configured hooks are executed as expected.
