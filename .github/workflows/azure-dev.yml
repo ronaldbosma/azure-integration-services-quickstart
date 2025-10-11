@@ -1,0 +1,228 @@
+name: azure-dev
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: 
+      - main
+    paths:
+      - '.github/workflows/azure-dev.yml'
+      - 'hooks/**'
+      - 'infra/**'
+      - 'src/**'
+      - 'azure.yaml'
+      - 'bicepconfig.json'
+
+permissions:
+  id-token: write # Required to fetch an OIDC token for Azure authentication
+  contents: read  # Required to checkout code if needed
+
+defaults:
+  run:
+    shell: pwsh # Use PowerShell Core for all scripts (the azd hooks are written in PowerShell)
+
+env:
+  # Add a unique suffix for pull request environments to avoid name conflicts
+  AZURE_ENV_NAME: ${{ github.event.pull_request.number && format('aisquick-pr{0}', github.event.pull_request.number) || 'aisquick' }}
+  AZURE_LOCATION: 'swedencentral'
+  INCLUDE_API_MANAGEMENT: true
+  INCLUDE_EVENT_HUBS_NAMESPACE: true
+  INCLUDE_FUNCTION_APP: true
+  INCLUDE_LOGIC_APP: true
+  INCLUDE_SERVICE_BUS: true
+  INCLUDE_APPLICATION_INFRA_RESOURCES: true
+
+jobs:
+
+  # ------------------------------------------------------------
+  # Build, Verify and Package
+  # ------------------------------------------------------------
+
+  build-verify-package:
+    name: Build, Verify and Package
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install azd
+      uses: Azure/setup-azd@v2
+
+    - name: Setup .NET 9
+      if: env.INCLUDE_FUNCTION_APP == 'true'
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x'
+
+    # This template uses a workaround to deploy the Logic App workflow, which requires the npm CLI.
+    - name: Setup Node.js
+      if: env.INCLUDE_LOGIC_APP == 'true'
+      uses: actions/setup-node@v4
+      with:
+        node-version: 'latest'
+
+    - name: Bicep Lint
+      run: |
+        az bicep lint --file ./infra/main.bicep
+
+    # Ensure the azd environment is created before running subsequent azd commands.
+    # This guarantees that any configured hooks are executed as expected.
+    # See https://github.com/Azure/azure-dev/issues/3920 for more details.
+    - name: Create azd env
+      run: azd env new $env:AZURE_ENV_NAME
+
+    - name: Create artifacts folder
+      if: env.INCLUDE_FUNCTION_APP == 'true' || env.INCLUDE_LOGIC_APP == 'true'
+      run: |
+        mkdir -p ./artifacts
+
+    - name: Package Function App
+      if: env.INCLUDE_FUNCTION_APP == 'true'
+      run: |
+        azd package functionApp --output-path ./artifacts/functionapp-package.zip --no-prompt
+
+    - name: Package Logic App
+      if: env.INCLUDE_LOGIC_APP == 'true'
+      run: |
+        azd package logicApp --output-path ./artifacts/logicapp-package.zip --no-prompt
+
+    - name: Upload Function App Package
+      if: env.INCLUDE_FUNCTION_APP == 'true'
+      uses: actions/upload-artifact@v4
+      with:
+        name: functionapp-package
+        path: ./artifacts/functionapp-package.zip
+        retention-days: 1
+
+    - name: Upload Logic App Package
+      if: env.INCLUDE_LOGIC_APP == 'true'
+      uses: actions/upload-artifact@v4
+      with:
+        name: logicapp-package
+        path: ./artifacts/logicapp-package.zip
+        retention-days: 1
+
+
+  # ------------------------------------------------------------
+  # Deploy to Azure
+  # ------------------------------------------------------------
+
+  deploy:
+    name: Deploy to Azure
+    needs: build-verify-package
+    runs-on: ubuntu-latest
+    environment: aisquick
+    env:
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+    outputs:
+      azure-resource-group: ${{ steps.get-outputs.outputs.azure-resource-group }}
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install azd
+      uses: Azure/setup-azd@v2
+
+    # Use Azure CLI authentication with azd commands to ensure that any hooks relying on the Azure CLI don't fail.
+    - name: Configure AZD to Use AZ CLI Authentication
+      run: |
+        azd config set auth.useAzCliAuth "true"
+
+    # Login to the Azure CLI with OpenID Connect (OIDC) using federated identity credentials.
+    - name: Azure CLI Login
+      uses: azure/login@v2
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+    # Ensure the azd environment is created before running subsequent azd commands.
+    # This guarantees that any configured hooks are executed as expected.
+    # See https://github.com/Azure/azure-dev/issues/3920 for more details.
+    - name: Create azd env
+      run: azd env new $env:AZURE_ENV_NAME
+
+    - name: Provision Infrastructure
+      run: |
+        azd provision --no-prompt
+
+    - name: Download Function App Package
+      if: env.INCLUDE_FUNCTION_APP == 'true'
+      uses: actions/download-artifact@v4
+      with:
+        name: functionapp-package
+        path: ./artifacts
+
+    - name: Deploy Function App
+      if: env.INCLUDE_FUNCTION_APP == 'true'
+      run: |
+        azd deploy functionApp --from-package ./artifacts/functionapp-package.zip --no-prompt
+
+    - name: Download Logic App Package
+      if: env.INCLUDE_LOGIC_APP == 'true'
+      uses: actions/download-artifact@v4
+      with:
+        name: logicapp-package
+        path: ./artifacts
+
+    - name: Deploy Logic App
+      if: env.INCLUDE_LOGIC_APP == 'true'
+      run: |
+        azd deploy logicApp --from-package ./artifacts/logicapp-package.zip --no-prompt
+
+    # Extract relevant azd environment variables and make them available as job outputs for subsequent jobs.
+    - name: Get Output Variables
+      id: get-outputs
+      run: |
+        $resourceGroupName = azd env get-value "AZURE_RESOURCE_GROUP"
+        echo "azure-resource-group=$resourceGroupName" >> $env:GITHUB_OUTPUT
+
+
+  # ------------------------------------------------------------
+  # Clean Up Resources
+  # ------------------------------------------------------------
+
+  cleanup:
+    name: Clean Up Resources
+    needs: deploy
+    runs-on: ubuntu-latest
+    environment: aisquick
+    env:
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install azd
+      uses: Azure/setup-azd@v2
+
+    # Use Azure CLI authentication with azd commands to ensure that any hooks relying on the Azure CLI don't fail.
+    - name: Configure AZD to Use AZ CLI Authentication
+      run: |
+        azd config set auth.useAzCliAuth "true"
+
+    # Login to the Azure CLI with OpenID Connect (OIDC) using federated identity credentials.
+    - name: Azure CLI Login
+      uses: azure/login@v2
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+    # Ensure the azd environment is created before running subsequent azd commands.
+    # This guarantees that any configured hooks are executed as expected.
+    # See https://github.com/Azure/azure-dev/issues/3920 for more details.
+    - name: Create azd env
+      run: azd env new $env:AZURE_ENV_NAME
+
+    # Clean up using the --purge flag to ensure all resources are permanently deleted, like API Management.
+    - name: Cleanup Resources
+      run: |
+        azd down --purge --force --no-prompt
+      env:
+        # Pass the deployed resource identifiers as environment variables so azd hooks can access them
+        # during cleanup operations (e.g., for custom resource deletion or additional cleanup tasks).
+        AZURE_RESOURCE_GROUP: ${{ needs.deploy.outputs.azure-resource-group }}
