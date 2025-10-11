@@ -3,7 +3,15 @@ name: azure-dev
 on:
   workflow_dispatch:
   pull_request:
-    branches: [ main ]
+    branches: 
+      - main
+    paths:
+      - '.github/workflows/azure-dev.yml'
+      - 'hooks/**'
+      - 'infra/**'
+      - 'src/**'
+      - 'azure.yaml'
+      - 'bicepconfig.json'
 
 permissions:
   id-token: write # Required to fetch an OIDC token for Azure authentication
