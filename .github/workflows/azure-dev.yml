@@ -118,7 +118,6 @@ jobs:
     name: Deploy to Azure
     needs: build-verify-package
     runs-on: ubuntu-latest
-    environment: aisquick
     env:
       AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID || vars.AZURE_SUBSCRIPTION_ID }}
     outputs:
@@ -195,7 +194,6 @@ jobs:
     needs: deploy
     if: ${{ success() && (github.event_name != 'workflow_dispatch' || github.event.inputs.cleanup-resources == 'true') }}
     runs-on: ubuntu-latest
-    environment: aisquick
     env:
       AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID || vars.AZURE_SUBSCRIPTION_ID }}
     
