@@ -447,3 +447,28 @@ az monitor log-analytics workspace delete --resource-group rg-aisquick-sdc-5spzh
 After that, redeploy the template. If logging still doesn't appear, deploy the template in a different region or using a different environment name.
 
 I've registered https://github.com/Azure/azure-dev/issues/5080 in the Azure Developer CLI repository to track this issue.
+
+### ERROR: prompting for value: default value of select must be an int or string
+
+You may see this error when running `azd up` or `azd provision` from Azure Cloud Shell:
+
+```
+ERROR: prompting for value: default value of select must be an int or string
+```
+
+This template uses optional parameters to include or exclude resources, which doesn't seem to work in the Cloud Shell. 
+
+Workarounds:
+1. Run the command from another environment, like your local machine.
+1. Pre-set the environment variables so no interactive prompts are required, then run `azd up` or `azd provision` again.
+
+   For example, to deploy API Management and the Function App, but not the Logic App, Service Bus and Event Hubs namespace, execute the following commands:
+
+    ```cmd
+    azd env set INCLUDE_API_MANAGEMENT true
+    azd env set INCLUDE_APPLICATION_INFRA_RESOURCES false
+    azd env set INCLUDE_EVENT_HUBS_NAMESPACE false
+    azd env set INCLUDE_FUNCTION_APP true
+    azd env set INCLUDE_LOGIC_APP false
+    azd env set INCLUDE_SERVICE_BUS false
+    ```
