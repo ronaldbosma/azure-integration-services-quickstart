@@ -31,12 +31,17 @@ env:
   # Add a unique suffix to the environment name for pull requests to avoid name conflicts
   AZURE_ENV_NAME: ${{ github.event.pull_request.number && format('{0}-pr{1}', vars.AZURE_ENV_NAME, github.event.pull_request.number) || vars.AZURE_ENV_NAME }}
   AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
+  
+  # Individual resource inclusion flags
   INCLUDE_API_MANAGEMENT: ${{ vars.INCLUDE_API_MANAGEMENT }}
   INCLUDE_EVENT_HUBS_NAMESPACE: ${{ vars.INCLUDE_EVENT_HUBS_NAMESPACE }}
   INCLUDE_FUNCTION_APP: ${{ vars.INCLUDE_FUNCTION_APP }}
   INCLUDE_LOGIC_APP: ${{ vars.INCLUDE_LOGIC_APP }}
   INCLUDE_SERVICE_BUS: ${{ vars.INCLUDE_SERVICE_BUS }}
   INCLUDE_APPLICATION_INFRA_RESOURCES: ${{ vars.INCLUDE_APPLICATION_INFRA_RESOURCES }}
+
+  # It only makes sense to execute the integration tests if both API Management and the APIs are included in the deployment
+  EXECUTE_INTEGRATION_TESTS: ${{ vars.INCLUDE_API_MANAGEMENT == 'true' && vars.INCLUDE_APPLICATION_INFRA_RESOURCES == 'true' }}
 
 jobs:
 
@@ -93,9 +98,8 @@ jobs:
       run: |
         azd package logicApp --output-path ./artifacts/logicapp-package.zip --no-prompt
 
-    # Build Integration Tests - requires both API Management and Application Infra for the integration tests to make sense running
     - name: Build Integration Tests
-      if: env.INCLUDE_API_MANAGEMENT == 'true' && env.INCLUDE_APPLICATION_INFRA_RESOURCES == 'true'
+      if: env.EXECUTE_INTEGRATION_TESTS == 'true'
       run: |
         dotnet build ./tests/AISQuick.IntegrationTests/AISQuick.IntegrationTests.csproj --configuration Release --output ./artifacts/integration-tests
 
@@ -116,7 +120,7 @@ jobs:
         retention-days: 1
 
     - name: Upload Integration Tests Package
-      if: env.INCLUDE_API_MANAGEMENT == 'true' && env.INCLUDE_APPLICATION_INFRA_RESOURCES == 'true'
+      if: env.EXECUTE_INTEGRATION_TESTS == 'true'
       uses: actions/upload-artifact@v4
       with:
         name: integration-tests-package
@@ -191,28 +195,27 @@ jobs:
       run: |
         azd deploy logicApp --from-package ./artifacts/logicapp-package.zip --no-prompt
 
-    # Run Integration Tests - requires both API Management and Application Infra for the integration tests to make sense running
     - name: Download Integration Tests Package
-      if: env.INCLUDE_API_MANAGEMENT == 'true' && env.INCLUDE_APPLICATION_INFRA_RESOURCES == 'true'
+      if: env.EXECUTE_INTEGRATION_TESTS == 'true'
       uses: actions/download-artifact@v4
       with:
         name: integration-tests-package
         path: ./artifacts/integration-tests
 
     - name: Setup .NET 9 for Integration Tests
-      if: env.INCLUDE_API_MANAGEMENT == 'true' && env.INCLUDE_APPLICATION_INFRA_RESOURCES == 'true'
+      if: env.EXECUTE_INTEGRATION_TESTS == 'true'
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '9.0.x'
 
     - name: Run Integration Tests
-      if: env.INCLUDE_API_MANAGEMENT == 'true' && env.INCLUDE_APPLICATION_INFRA_RESOURCES == 'true'
+      if: env.EXECUTE_INTEGRATION_TESTS == 'true'
       run: |
         dotnet ./artifacts/integration-tests/AISQuick.IntegrationTests.dll --report-trx --results-directory ./artifacts/integration-tests/TestResults
       working-directory: ./
 
     - name: Upload Integration Test Results
-      if: env.INCLUDE_API_MANAGEMENT == 'true' && env.INCLUDE_APPLICATION_INFRA_RESOURCES == 'true' && always()
+      if: env.EXECUTE_INTEGRATION_TESTS == 'true' && always()
       uses: actions/upload-artifact@v4
       with:
         name: integration-test-results
