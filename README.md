@@ -347,15 +347,17 @@ This template has hooks that are executed at different stages of the deployment 
 
 ## Pipeline
 
-This template includes a GitHub Actions workflow that automates the build, deployment and cleanup process. The workflow is defined in [azure-dev.yml](.github/workflows/azure-dev.yml) and provides a complete CI/CD pipeline for your Azure Integration Services using the Azure Developer CLI.
+This template includes a GitHub Actions workflow that automates the build, deployment and cleanup process. The workflow is defined in [azure-dev.yml](.github/workflows/azure-dev.yml) and provides a complete CI/CD pipeline for this template using the Azure Developer CLI.
 
 ![GitHub Actions Workflow Summary](images/github-actions-workflow-summary.png)
 
 The pipeline consists of three main jobs:
 
 - **Build, Verify and Package**: This job sets up the build environment, performs Bicep linting and packages the Function App and Logic App applications.
-- **Deploy**: This job provisions the Azure infrastructure and deploys the packaged applications to the created resources.
-- **Cleanup**: This job removes all deployed Azure resources. By default, cleanup runs automatically after deployment. This can be disabled via an input parameter when the workflow is triggered manually.
+- **Deploy to Azure**: This job provisions the Azure infrastructure and deploys the packaged applications to the created resources.
+- **Clean Up Resources**: This job removes all deployed Azure resources.  
+
+  By default, cleanup runs automatically after deployment. This can be disabled via an input parameter when the workflow is triggered manually.
 
   ![GitHub Actions Manual Trigger](images/github-actions-workflow-manual-trigger.png)
 
@@ -367,7 +369,7 @@ To set up the pipeline in your own repository, run the following command:
 azd pipeline config
 ```
 
-Follow the instructions and choose either **Federated User Managed Identity (MSI + OIDC)** or **Federated Service Principal (SP + OIDC)** as these are the authentication methods the pipeline expects.
+Follow the instructions and choose either **Federated User Managed Identity (MSI + OIDC)** or **Federated Service Principal (SP + OIDC)**, as OpenID Connect (OIDC) is the authentication method used by the pipeline.
 
 For detailed guidance, refer to:
 - [Explore Azure Developer CLI support for CI/CD pipelines](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/configure-devops-pipeline)
@@ -377,7 +379,7 @@ For detailed guidance, refer to:
 > By default, `AZURE_CLIENT_ID`, `AZURE_TENANT_ID` and `AZURE_SUBSCRIPTION_ID` are created as variables when running `azd pipeline config`. However, [Microsoft recommends](https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure-openid-connect) using secrets for these values to avoid exposing them in logs. The workflow supports both approaches, so you can manually create secrets and remove the variables if desired.
 
 > [!NOTE]
-> The environment name in the `AZURE_ENV_NAME` variable is suffixed with `-pr{id}` for pull requests. This prevents conflicts when multiple PRs are open and avoids accidental removal of environments, because the environment name tag is used for resource removal.
+> The environment name in the `AZURE_ENV_NAME` variable is suffixed with `-pr{id}` for pull requests. This prevents conflicts when multiple PRs are open and avoids accidental removal of environments, because the environment name tag is used when removing resources.
 
 
 ## Troubleshooting
