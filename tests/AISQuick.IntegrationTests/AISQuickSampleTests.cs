@@ -24,11 +24,10 @@ namespace AISQuick.IntegrationTests
         [TestMethod]
         public async Task TestSampleApplicationWorkflow()
         {
-            // Arrange
-            var request = new PublishMessageRequest("Hello, world!");
-
             // 1. Publish a message to the aisquick-sample topic
+            var request = new PublishMessageRequest("Hello, world!");
             var publishResult = await _apimClient!.PublishMessageAsync(request);
+
             Assert.IsNotNull(publishResult, "Publish response should not be null");
             Assert.IsFalse(string.IsNullOrWhiteSpace(publishResult.Id), "Message ID should not be empty");
 
@@ -38,6 +37,7 @@ namespace AISQuick.IntegrationTests
             if (_configuration!.IncludeFunctionApp)
             {
                 var tableEntity = await _apimClient.GetTableEntityAsync(publishResult.Id);
+
                 Assert.IsNotNull(tableEntity, "Table entity should not be null");
                 Assert.AreEqual("aisquick-sample", tableEntity.PartitionKey, "Table entity should have correct partition key");
                 Assert.AreEqual(publishResult.Id, tableEntity.RowKey, "Table entity should have correct row key");
@@ -49,6 +49,7 @@ namespace AISQuick.IntegrationTests
             if (_configuration.IncludeLogicApp)
             {
                 var blobContent = await _apimClient.GetBlobAsync(publishResult.Id);
+
                 Assert.IsNotNull(blobContent, "Blob content should not be null");
                 Assert.AreEqual(request.Message, blobContent.Message, "Blob should contain the original message");
                 Assert.AreEqual(publishResult.Id, blobContent.Id, "Blob should contain the correct message ID");
