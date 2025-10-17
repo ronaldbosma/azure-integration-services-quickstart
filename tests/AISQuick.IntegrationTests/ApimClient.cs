@@ -1,6 +1,7 @@
 using AISQuick.IntegrationTests.Models;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
+using Polly;
 using System.Net.Http.Json;
 
 namespace AISQuick.IntegrationTests;
@@ -8,12 +9,12 @@ namespace AISQuick.IntegrationTests;
 public sealed class ApimClient : IDisposable
 {
     private readonly HttpClient _httpClient;
-    private readonly AzureEnvConfiguration _configuration;
+    private readonly IAsyncPolicy<HttpResponseMessage> _retryPolicy;
 
-    private ApimClient(AzureEnvConfiguration configuration, HttpClient httpClient)
+    private ApimClient(HttpClient httpClient)
     {
-        _configuration = configuration;
         _httpClient = httpClient;
+        _retryPolicy = CreateRetryPolicy();
     }
 
     public static async Task<ApimClient> CreateAsync(AzureEnvConfiguration configuration)
@@ -30,7 +31,7 @@ public sealed class ApimClient : IDisposable
         httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Trace", "true");
         httpClient.BaseAddress = new Uri($"https://{configuration.AzureApiManagementName}.azure-api.net");
 
-        return new ApimClient(configuration, httpClient);
+        return new ApimClient(httpClient);
     }
 
     public async Task<PublishMessageResponse> PublishMessageAsync(PublishMessageRequest request)
@@ -44,7 +45,14 @@ public sealed class ApimClient : IDisposable
 
     public async Task<TableEntityResponse> GetTableEntityAsync(string messageId)
     {
-        var response = await _httpClient.GetAsync($"/aisquick-sample/table-entities/{messageId}");
+        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(60));
+        
+        var response = await _retryPolicy.ExecuteAsync(async () =>
+        {
+            var httpResponse = await _httpClient.GetAsync($"/aisquick-sample/table-entities/{messageId}", cts.Token);
+            return httpResponse;
+        });
+        
         response.EnsureSuccessStatusCode();
         
         var result = await response.Content.ReadFromJsonAsync<TableEntityResponse>();
@@ -53,11 +61,34 @@ public sealed class ApimClient : IDisposable
 
     public async Task<BlobResponse> GetBlobAsync(string messageId)
     {
-        var response = await _httpClient.GetAsync($"/aisquick-sample/blobs/{messageId}");
+        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(60));
+        
+        var response = await _retryPolicy.ExecuteAsync(async () =>
+        {
+            var httpResponse = await _httpClient.GetAsync($"/aisquick-sample/blobs/{messageId}", cts.Token);
+            return httpResponse;
+        });
+        
         response.EnsureSuccessStatusCode();
         
         var result = await response.Content.ReadFromJsonAsync<BlobResponse>();
         return result ?? throw new InvalidOperationException("Failed to deserialize blob response");
+    }
+
+    private static IAsyncPolicy<HttpResponseMessage> CreateRetryPolicy()
+    {
+        return Policy
+            .Handle<HttpRequestException>()
+            .Or<TaskCanceledException>()
+            .OrResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
+            .WaitAndRetryAsync(
+                retryCount: 10,
+                sleepDurationProvider: retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+                onRetry: (outcome, timespan, retryCount, context) =>
+                {
+                    var methodName = context.ContainsKey("MethodName") ? context["MethodName"] : "Unknown";
+                    Console.WriteLine($"Retry {retryCount} for {methodName} after {timespan} seconds");
+                });
     }
 
     private static async Task<string> GetSubscriptionKeyFromKeyVaultAsync(AzureEnvConfiguration config)

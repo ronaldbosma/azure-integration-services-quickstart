@@ -31,8 +31,6 @@ namespace AISQuick.IntegrationTests
             Assert.IsNotNull(publishResult, "Publish response should not be null");
             Assert.IsFalse(string.IsNullOrWhiteSpace(publishResult.Id), "Message ID should not be empty");
 
-            await Task.Delay(20000);
-
             // 4a. Get the table entity (if Function App is included)
             if (_configuration!.IncludeFunctionApp)
             {
