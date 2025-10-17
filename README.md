@@ -174,6 +174,8 @@ When disabling an already deployed service, it will not be removed when running 
 The repository consists of the following files and directories:
 
 ```
+├── .github                    
+│   └── workflows              [ GitHub Actions workflow(s) ]
 ├── demos                      [ Demo guide(s) ]
 ├── hooks                      [ AZD Hooks to execute at different stages of the deployment process ]
 ├── images                     [ Images used in the README ]
