@@ -374,10 +374,10 @@ For detailed guidance, refer to:
 - [Create a GitHub Actions CI/CD pipeline using the Azure Developer CLI](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/pipeline-github-actions)
 
 > [!TIP]
-> By default, `AZURE_CLIENT_ID`, `AZURE_TENANT_ID` and `AZURE_SUBSCRIPTION_ID` are created as variables when running `azd pipeline config`. However, [these instructions](https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure-openid-connect) from the official Microsoft documentation suggest using secrets for these values so they don't end up in your logging. The workflow can handle both, so you can manually create the secrets and remove the variables.
+> By default, `AZURE_CLIENT_ID`, `AZURE_TENANT_ID` and `AZURE_SUBSCRIPTION_ID` are created as variables when running `azd pipeline config`. However, [Microsoft recommends](https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure-openid-connect) using secrets for these values to avoid exposing them in logs. The workflow supports both approaches, so you can manually create secrets and remove the variables if desired.
 
 > [!NOTE]
-> The environment name configured in the `AZURE_ENV_NAME` variable is suffixed with `-pr{id}` for Pull Requests. This prevents conflicts when multiple PRs are opened, and also prevents removal of environments, even if you differentiate on region, because the env name tag is used when removing resources.
+> The environment name in the `AZURE_ENV_NAME` variable is suffixed with `-pr{id}` for pull requests. This prevents conflicts when multiple PRs are open and avoids accidental removal of environments, because the environment name tag is used for resource removal.
 
 
 ## Troubleshooting
