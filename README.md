@@ -456,7 +456,7 @@ You may see this error when running `azd up` or `azd provision` from Azure Cloud
 ERROR: prompting for value: default value of select must be an int or string
 ```
 
-This template uses optional parameters to include or exclude resources, which doesn't seem to work in the Cloud Shell. 
+This template uses optional boolean parameters to include or exclude resources, which doesn't seem to work in the Cloud Shell. 
 
 Workarounds:
 1. Run the command from another environment, like your local machine.
