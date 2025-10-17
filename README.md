@@ -472,3 +472,5 @@ Workarounds:
     azd env set INCLUDE_LOGIC_APP false
     azd env set INCLUDE_SERVICE_BUS false
     ```
+
+I've registered [this issue](https://github.com/Azure/azure-dev/issues/5944) in the Azure Developer CLI repository to track this problem.
