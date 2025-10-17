@@ -93,6 +93,12 @@ jobs:
       run: |
         azd package logicApp --output-path ./artifacts/logicapp-package.zip --no-prompt
 
+    # Build Integration Tests - requires both API Management and Application Infra for the integration tests to make sense running
+    - name: Build Integration Tests
+      if: env.INCLUDE_API_MANAGEMENT == 'true' && env.INCLUDE_APPLICATION_INFRA_RESOURCES == 'true'
+      run: |
+        dotnet build ./tests/AISQuick.IntegrationTests/AISQuick.IntegrationTests.csproj --configuration Release --output ./artifacts/integration-tests
+
     - name: Upload Function App Package
       if: env.INCLUDE_FUNCTION_APP == 'true'
       uses: actions/upload-artifact@v4
@@ -107,6 +113,14 @@ jobs:
       with:
         name: logicapp-package
         path: ./artifacts/logicapp-package.zip
+        retention-days: 1
+
+    - name: Upload Integration Tests Package
+      if: env.INCLUDE_API_MANAGEMENT == 'true' && env.INCLUDE_APPLICATION_INFRA_RESOURCES == 'true'
+      uses: actions/upload-artifact@v4
+      with:
+        name: integration-tests-package
+        path: ./artifacts/integration-tests/
         retention-days: 1
 
 
@@ -176,6 +190,34 @@ jobs:
       if: env.INCLUDE_LOGIC_APP == 'true'
       run: |
         azd deploy logicApp --from-package ./artifacts/logicapp-package.zip --no-prompt
+
+    # Run Integration Tests - requires both API Management and Application Infra for the integration tests to make sense running
+    - name: Download Integration Tests Package
+      if: env.INCLUDE_API_MANAGEMENT == 'true' && env.INCLUDE_APPLICATION_INFRA_RESOURCES == 'true'
+      uses: actions/download-artifact@v4
+      with:
+        name: integration-tests-package
+        path: ./artifacts/integration-tests
+
+    - name: Setup .NET 9 for Integration Tests
+      if: env.INCLUDE_API_MANAGEMENT == 'true' && env.INCLUDE_APPLICATION_INFRA_RESOURCES == 'true'
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x'
+
+    - name: Run Integration Tests
+      if: env.INCLUDE_API_MANAGEMENT == 'true' && env.INCLUDE_APPLICATION_INFRA_RESOURCES == 'true'
+      run: |
+        dotnet test ./artifacts/integration-tests/AISQuick.IntegrationTests.dll --logger trx --results-directory ./artifacts/integration-tests/TestResults
+      working-directory: ./
+
+    - name: Upload Integration Test Results
+      if: env.INCLUDE_API_MANAGEMENT == 'true' && env.INCLUDE_APPLICATION_INFRA_RESOURCES == 'true' && always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: integration-test-results
+        path: ./artifacts/integration-tests/TestResults/
+        retention-days: 1
 
     # Extract relevant azd environment variables and make them available as job outputs for subsequent jobs.
     - name: Get Output Variables
