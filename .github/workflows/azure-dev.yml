@@ -208,7 +208,7 @@ jobs:
     - name: Run Integration Tests
       if: env.INCLUDE_API_MANAGEMENT == 'true' && env.INCLUDE_APPLICATION_INFRA_RESOURCES == 'true'
       run: |
-        dotnet test ./artifacts/integration-tests/AISQuick.IntegrationTests.dll --logger trx --results-directory ./artifacts/integration-tests/TestResults
+        dotnet ./artifacts/integration-tests/AISQuick.IntegrationTests.dll --report-trx --results-directory ./artifacts/integration-tests/TestResults
       working-directory: ./
 
     - name: Upload Integration Test Results
