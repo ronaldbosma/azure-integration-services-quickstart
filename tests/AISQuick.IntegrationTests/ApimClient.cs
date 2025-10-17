@@ -6,6 +6,14 @@ using System.Net.Http.Json;
 
 namespace AISQuick.IntegrationTests;
 
+/// <summary>
+/// Provides a client for interacting with Azure API Management (APIM).
+/// </summary>
+/// <remarks>
+/// This client is designed to simplify communication with Azure API Management by handling common tasks
+/// such as authentication, retry policies, and HTTP request/response handling. Use <see cref="CreateAsync"/> to
+/// instantiate the client with the necessary configuration.
+/// </remarks>
 public sealed class ApimClient : IDisposable
 {
     private readonly HttpClient _httpClient;
@@ -17,6 +25,18 @@ public sealed class ApimClient : IDisposable
         _retryPolicy = CreateRetryPolicy();
     }
 
+    /// <summary>
+    /// Creates a new instance of the <see cref="ApimClient"/> class configured to interact with an Azure API Management
+    /// instance.
+    /// </summary>
+    /// <remarks>This method retrieves the subscription key from Azure Key Vault and configures an <see cref="HttpClient"/> 
+    /// with the necessary headers and base address for interacting with the specified Azure API Management instance.</remarks>
+    /// <param name="configuration">
+    /// The configuration settings for the Azure environment, including the API Management instance name and other required details.
+    /// </param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains an <see cref="ApimClient"/> instance
+    /// configured with the appropriate subscription key and base address.</returns>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="configuration"/> is <see langword="null"/>.</exception>
     public static async Task<ApimClient> CreateAsync(AzureEnvConfiguration configuration)
     {
         if (configuration == null)
@@ -75,6 +95,9 @@ public sealed class ApimClient : IDisposable
         return result ?? throw new InvalidOperationException("Failed to deserialize blob response");
     }
 
+    /// <summary>
+    /// Creates an asynchronous retry policy for HTTP requests with exponential backoff that can be used to poll for results.
+    /// </summary>
     private static IAsyncPolicy<HttpResponseMessage> CreateRetryPolicy()
     {
         return Policy
@@ -91,6 +114,9 @@ public sealed class ApimClient : IDisposable
                 });
     }
 
+    /// <summary>
+    /// Retrieve the API Management subscription key from Azure Key Vault.
+    /// </summary>
     private static async Task<string> GetSubscriptionKeyFromKeyVaultAsync(AzureEnvConfiguration config)
     {
         var keyVaultUri = new Uri($"https://{config.AzureKeyVaultName}.vault.azure.net/");

@@ -21,6 +21,9 @@ public sealed class AzureEnvConfiguration
 
     public readonly string ApimSubscriptionKeySecretName = "apim-master-subscription-key";
 
+    /// <summary>
+    /// Loads the Azure environment configuration.
+    /// </summary>
     public static AzureEnvConfiguration FromEnvironment()
     {
         LoadAzureEnvironmentFile();
