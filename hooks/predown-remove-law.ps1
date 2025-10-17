@@ -8,10 +8,10 @@
 
 param(
     [Parameter(Mandatory = $false)]
-    [string]$SubscriptionId = $env:AZURE_SUBSCRIPTION_ID,
+    [string]$SubscriptionId = (azd env get-value AZURE_SUBSCRIPTION_ID),
     
     [Parameter(Mandatory = $false)]
-    [string]$ResourceGroup = $env:AZURE_RESOURCE_GROUP
+    [string]$ResourceGroup = (azd env get-value AZURE_RESOURCE_GROUP)
 )
 
 # Validate required parameters
