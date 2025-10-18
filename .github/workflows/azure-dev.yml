@@ -54,7 +54,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Install azd
+    - name: Setup azd
       uses: Azure/setup-azd@v2
 
     - name: Setup .NET 9
@@ -146,7 +146,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Install azd
+    - name: Setup azd
       uses: Azure/setup-azd@v2
 
     # Use Azure CLI authentication with azd commands so credentials are shared between azd commands and az (Azure CLI) commands used in hooks.
@@ -285,7 +285,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Install azd
+    - name: Setup azd
       uses: Azure/setup-azd@v2
 
     # Use Azure CLI authentication with azd commands so credentials are shared between azd commands and az (Azure CLI) commands used in hooks.
