@@ -175,26 +175,27 @@ The repository consists of the following files and directories:
 
 ```
 ├── .github                    
-│   └── workflows              [ GitHub Actions workflow(s) ]
-├── demos                      [ Demo guide(s) ]
-├── hooks                      [ AZD Hooks to execute at different stages of the deployment process ]
-├── images                     [ Images used in the README ]
-├── infra                      [ Infrastructure As Code files ]
-│   |── functions              [ Bicep user-defined functions ]
-│   ├── modules                
-│   │   ├── application        [ Modules for application infrastructure resources ]
-│   │   ├── services           [ Modules for all Azure services ]
-│   │   └── shared             [ Reusable modules ]
-│   ├── types                  [ Bicep user-defined types ]
-│   ├── main.bicep             [ Main infrastructure file ]
-│   └── main.parameters.json   [ Parameters file ]
-├── src                        [ Application code ]
-│   ├── functionApp            [ Azure Functions ]
-│   └── logicApp               [ Logic App workflow]
+│   └── workflows                  [ GitHub Actions workflow(s) ]
+├── demos                          [ Demo guide(s) ]
+├── hooks                          [ AZD Hooks to execute at different stages of the deployment process ]
+├── images                         [ Images used in the README ]
+├── infra                          [ Infrastructure As Code files ]
+│   |── functions                  [ Bicep user-defined functions ]
+│   ├── modules                    
+│   │   ├── application            [ Modules for application infrastructure resources ]
+│   │   ├── services               [ Modules for all Azure services ]
+│   │   └── shared                 [ Reusable modules ]
+│   ├── types                      [ Bicep user-defined types ]
+│   ├── main.bicep                 [ Main infrastructure file ]
+│   └── main.parameters.json       [ Parameters file ]
+├── src                            [ Application code ]
+│   ├── functionApp                [ Azure Functions ]
+│   └── logicApp                   [ Logic App workflow]
 ├── tests                      
-│   └── tests.http             [ HTTP requests to test the deployed resources ]
-├── azure.yaml                 [ Describes the apps and types of Azure resources ]
-└── bicepconfig.json           [ Bicep configuration file ]
+│   ├── AISQuick.IntegrationTests  [ Integration tests for the sample application ]
+│   └── tests.http                 [ HTTP requests to test the deployed resources ]
+├── azure.yaml                     [ Describes the apps and types of Azure resources ]
+└── bicepconfig.json               [ Bicep configuration file ]
 ```
 
 
