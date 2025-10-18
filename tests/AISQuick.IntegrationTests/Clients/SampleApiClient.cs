@@ -18,6 +18,11 @@ public class SampleApiClient : IDisposable
     private readonly HttpClient _httpClient;
     private readonly IAsyncPolicy<HttpResponseMessage> _retryPolicy;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SampleApiClient"/> class for interacting with the sample API.
+    /// </summary>
+    /// <param name="apiManagementName">The name of the Azure API Management instance.</param>
+    /// <param name="subscriptionKey">The subscription key for authenticating requests to the API.</param>
     public SampleApiClient(string apiManagementName, string subscriptionKey)
     {
         _httpClient = new HttpClient();
