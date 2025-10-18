@@ -195,33 +195,6 @@ jobs:
       run: |
         azd deploy logicApp --from-package ./artifacts/logicapp-package.zip --no-prompt
 
-    - name: Download Integration Tests Package
-      if: env.EXECUTE_INTEGRATION_TESTS == 'true'
-      uses: actions/download-artifact@v4
-      with:
-        name: integration-tests-package
-        path: ./artifacts/integration-tests
-
-    - name: Setup .NET 9 for Integration Tests
-      if: env.EXECUTE_INTEGRATION_TESTS == 'true'
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '9.0.x'
-
-    - name: Run Integration Tests
-      if: env.EXECUTE_INTEGRATION_TESTS == 'true'
-      run: |
-        dotnet ./artifacts/integration-tests/AISQuick.IntegrationTests.dll --report-trx --results-directory ./artifacts/integration-tests/TestResults
-      working-directory: ./
-
-    - name: Upload Integration Test Results
-      if: env.EXECUTE_INTEGRATION_TESTS == 'true' && always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: integration-test-results
-        path: ./artifacts/integration-tests/TestResults/
-        retention-days: 1
-
     # Extract relevant azd environment variables and make them available as job outputs for subsequent jobs.
     - name: Get Output Variables
       id: get-outputs
@@ -231,13 +204,66 @@ jobs:
 
 
   # ------------------------------------------------------------
+  # Execute Integration Tests
+  # ------------------------------------------------------------
+
+  integration-tests:
+    name: Execute Integration Tests
+    needs: deploy
+    if: env.EXECUTE_INTEGRATION_TESTS == 'true'
+    runs-on: ubuntu-latest
+    
+    steps:
+    # Login to the Azure CLI with OpenID Connect (OIDC) using federated identity credentials.
+    # This is necessary for the integration test to retrieve the APIM subscription key from Key Vault.
+    - name: Azure CLI Login
+      uses: azure/login@v2
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID || vars.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID || vars.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID || vars.AZURE_SUBSCRIPTION_ID }}
+
+    - name: Download Integration Tests Package
+      uses: actions/download-artifact@v4
+      with:
+        name: integration-tests-package
+        path: ./artifacts/integration-tests
+
+    - name: Setup .NET 9 for Integration Tests
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x'
+
+    - name: Run Integration Tests
+      run: |
+        dotnet ./artifacts/integration-tests/AISQuick.IntegrationTests.dll --report-trx --results-directory ./artifacts/integration-tests/TestResults
+      working-directory: ./
+
+    - name: Upload Integration Test Results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: integration-test-results
+        path: ./artifacts/integration-tests/TestResults/
+        retention-days: 1
+
+
+  # ------------------------------------------------------------
   # Clean Up Resources
   # ------------------------------------------------------------
 
   cleanup:
     name: Clean Up Resources
-    needs: deploy
-    if: ${{ success() && (github.event_name != 'workflow_dispatch' || github.event.inputs.cleanup-resources == 'true') }}
+    needs: [deploy, integration-tests]
+    # Execute the cleanup job if:
+    # - The workflow was not manually triggered, or the cleanup-resources input is true
+    # - AND either the integration tests succeeded or were skipped and deployment succeeded
+    if: |
+      (github.event_name != 'workflow_dispatch' || github.event.inputs.cleanup-resources == 'true') &&
+      (
+        needs.integration-tests.result == 'success' ||
+        (needs.integration-tests.result == 'skipped' && needs.deploy.result == 'success')
+      )
     runs-on: ubuntu-latest
     env:
       AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID || vars.AZURE_SUBSCRIPTION_ID }}
