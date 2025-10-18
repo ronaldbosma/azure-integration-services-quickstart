@@ -358,7 +358,7 @@ The pipeline consists of the following jobs:
 
 - **Build, Verify and Package**: This job sets up the build environment, performs Bicep linting and packages the Function App and Logic App applications.
 - **Deploy to Azure**: This job provisions the Azure infrastructure and deploys the packaged applications to the created resources.
-- **Execute Integration Tests**: This job runs automated integration tests on the deployed resources to verify correct functionality. Tests are executed only when both API Management and the Application Infrastructure resources are included in the deployment, as these components are prerequisites for successful test execution.
+- **Execute Integration Tests**: This job runs automated [integration tests](#integration-tests) on the deployed resources to verify correct functionality. Tests are executed only when both API Management and the Application Infrastructure resources are included in the deployment, as these components are prerequisites for successful test execution.
 - **Clean Up Resources**: This job removes all deployed Azure resources.  
 
   By default, cleanup runs automatically after deployment. This can be disabled via an input parameter when the workflow is triggered manually.
@@ -384,6 +384,20 @@ For detailed guidance, refer to:
 
 > [!NOTE]
 > The environment name in the `AZURE_ENV_NAME` variable is suffixed with `-pr{id}` for pull requests. This prevents conflicts when multiple PRs are open and avoids accidental removal of environments, because the environment name tag is used when removing resources.
+
+
+## Integration Tests
+
+The project includes integration tests built with **.NET 9** that validate the complete message flow through the deployed Azure services. The test implements the same workflow described in the [Test](#test) section:
+
+1. Retrieves the API Management subscription key from Key Vault using `DefaultAzureCredential`
+2. Publishes a message to the Service Bus topic via API Management
+3. Verifies message processing:
+   - **Function App** (if included): Checks if the message is stored in Table Storage
+   - **Logic App** (if included): Checks if the message is stored in Blob Storage
+
+The tests automatically locate your azd environment's `.env` file to retrieve necessary configuration.
+The integration tests are located in [`tests/AISQuick.IntegrationTests/AISQuickSampleTests.cs`](tests/AISQuick.IntegrationTests/AISQuickSampleTests.cs).
 
 
 ## Troubleshooting
