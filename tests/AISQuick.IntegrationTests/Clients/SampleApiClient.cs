@@ -5,29 +5,29 @@ using Polly;
 using System.Diagnostics;
 using System.Net.Http.Json;
 
-namespace AISQuick.IntegrationTests;
+namespace AISQuick.IntegrationTests.Clients;
 
 /// <summary>
-/// Provides a client for interacting with Azure API Management (APIM).
+/// Provides a client for interacting with the Sample API on Azure API Management (APIM).
 /// </summary>
 /// <remarks>
-/// This client is designed to simplify communication with Azure API Management by handling common tasks
+/// This client is designed to simplify communication with the Sample API by handling common tasks
 /// such as authentication, retry policies, and HTTP request/response handling. Use <see cref="CreateAsync"/> to
 /// instantiate the client with the necessary configuration.
 /// </remarks>
-public sealed class ApimClient : IDisposable
+public sealed class SampleApiClient : IDisposable
 {
     private readonly HttpClient _httpClient;
     private readonly IAsyncPolicy<HttpResponseMessage> _retryPolicy;
 
-    private ApimClient(HttpClient httpClient)
+    private SampleApiClient(HttpClient httpClient)
     {
         _httpClient = httpClient;
         _retryPolicy = CreateRetryPolicy();
     }
 
     /// <summary>
-    /// Creates a new instance of the <see cref="ApimClient"/> class configured to interact with an Azure API Management
+    /// Creates a new instance of the <see cref="SampleApiClient"/> class configured to interact with an Azure API Management
     /// instance.
     /// </summary>
     /// <remarks>This method retrieves the subscription key from Azure Key Vault and configures an <see cref="HttpClient"/> 
@@ -35,10 +35,10 @@ public sealed class ApimClient : IDisposable
     /// <param name="configuration">
     /// The configuration settings for the Azure environment, including the API Management instance name and other required details.
     /// </param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains an <see cref="ApimClient"/> instance
+    /// <returns>A task that represents the asynchronous operation. The task result contains an <see cref="SampleApiClient"/> instance
     /// configured with the appropriate subscription key and base address.</returns>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="configuration"/> is <see langword="null"/>.</exception>
-    public static async Task<ApimClient> CreateAsync(AzureEnvConfiguration configuration)
+    public static async Task<SampleApiClient> CreateAsync(AzureEnvConfiguration configuration)
     {
         if (configuration == null)
             throw new ArgumentNullException(nameof(configuration));
@@ -52,7 +52,7 @@ public sealed class ApimClient : IDisposable
         httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Trace", "true");
         httpClient.BaseAddress = new Uri($"https://{configuration.AzureApiManagementName}.azure-api.net");
 
-        return new ApimClient(httpClient);
+        return new SampleApiClient(httpClient);
     }
 
     public async Task<PublishMessageResponse> PublishMessageAsync(PublishMessageRequest request)
