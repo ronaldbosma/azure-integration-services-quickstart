@@ -18,7 +18,7 @@ namespace AISQuick.IntegrationTests.Configuration.Azd
         {
             var azureDirectory = GetAzureDirectory(AppContext.BaseDirectory);
             var defaultEnvironmentName = GetDefaultEnvironmentName(azureDirectory);
-            return FindEnvFileForEnvironment(azureDirectory, defaultEnvironmentName);
+            return GetEnvFileForEnvironment(azureDirectory, defaultEnvironmentName);
         }
 
         private static string GetAzureDirectory(string startingDirectory)
@@ -62,7 +62,7 @@ namespace AISQuick.IntegrationTests.Configuration.Azd
             return defaultEnvironment;
         }
 
-        private static string FindEnvFileForEnvironment(string azureDirectory, string environmentName)
+        private static string GetEnvFileForEnvironment(string azureDirectory, string environmentName)
         {
             var envFile = Path.Combine(azureDirectory, environmentName, ".env");
             if (!File.Exists(envFile))
