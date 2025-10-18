@@ -16,8 +16,19 @@ namespace AISQuick.IntegrationTests.Configuration.Azd
         /// <returns>The <see cref="IConfigurationBuilder"/>.</returns>
         public static IConfigurationBuilder AddAzdEnvironmentVariables(this IConfigurationBuilder builder)
         {
-            string path = AzdEnvironmentFileLocator.LocateEnvFileOfDefaultAzdEnvironment();
-            return builder.AddAzdEnvironmentVariables(path);
+            return builder.AddAzdEnvironmentVariables(optional: false);
+        }
+
+        /// <summary>
+        /// Adds the azd environment variables configuration provider to <paramref name="builder"/>.
+        /// </summary>
+        /// <param name="builder">The <see cref="IConfigurationBuilder"/> to add to.</param>
+        /// <param name="optional">Indication if loading the azd env variables is optional.</param>
+        /// <returns>The <see cref="IConfigurationBuilder"/>.</returns>
+        public static IConfigurationBuilder AddAzdEnvironmentVariables(this IConfigurationBuilder builder, bool optional)
+        {
+            string path = AzdEnvironmentFileLocator.LocateEnvFileOfDefaultAzdEnvironment(optional);
+            return builder.AddAzdEnvironmentVariables(path, optional);
         }
 
         /// <summary>
@@ -25,13 +36,18 @@ namespace AISQuick.IntegrationTests.Configuration.Azd
         /// </summary>
         /// <param name="builder">The <see cref="IConfigurationBuilder"/> to add to.</param>
         /// <param name="path">The path to the .env file.</param>
+        /// <param name="optional">Indication if loading the azd env variables is optional.</param>
         /// <returns>The <see cref="IConfigurationBuilder"/>.</returns>
-        public static IConfigurationBuilder AddAzdEnvironmentVariables(this IConfigurationBuilder builder, string path)
+        public static IConfigurationBuilder AddAzdEnvironmentVariables(this IConfigurationBuilder builder, string path, bool optional)
         {
             if (string.IsNullOrWhiteSpace(path))
             {
-                throw new ArgumentException("Path to the .env file must be a non-empty string.", nameof(path));
-            }
+                if (!optional)
+                {
+                    throw new ArgumentException("Path to the azd .env file must be a non-empty string.", nameof(path)); 
+                }
+                return builder;
+            } 
 
             // We need to create our own PhysicalFileProvider because the default one excludes hiddens files and files starting with a dot.
             var root = Path.GetDirectoryName(path) ?? throw new ArgumentException($"Unable to determine directory from path: {path}", nameof(path));
@@ -40,7 +56,7 @@ namespace AISQuick.IntegrationTests.Configuration.Azd
             return builder.AddAzdEnvFile(s =>
             {
                 s.Path = Path.GetFileName(path);
-                s.Optional = false;
+                s.Optional = optional;
                 s.ReloadOnChange = false;
                 s.FileProvider = fileProvider;
             });

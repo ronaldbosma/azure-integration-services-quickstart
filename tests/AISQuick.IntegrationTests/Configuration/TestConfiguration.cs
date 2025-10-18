@@ -17,7 +17,7 @@ internal class TestConfiguration
     {
         var configuration = new ConfigurationBuilder()
             .AddEnvironmentVariables()
-            .AddAzdEnvironmentVariables()
+            .AddAzdEnvironmentVariables(optional: true) // Adds Azure Developer CLI environment variables; optional since CI/CD pipelines may use standard environment variables instead
             .Build();
 
         return new TestConfiguration

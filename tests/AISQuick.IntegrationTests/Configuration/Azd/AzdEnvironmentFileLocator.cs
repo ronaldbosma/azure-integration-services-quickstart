@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics;
+using System.Text.Json;
 
 namespace AISQuick.IntegrationTests.Configuration.Azd;
 
@@ -14,11 +15,24 @@ internal class AzdEnvironmentFileLocator
     /// <exception cref="DirectoryNotFoundException">Thrown when the .azure directory is not found.</exception>
     /// <exception cref="FileNotFoundException">Thrown when the .env file is not found.</exception>
     /// <exception cref="InvalidOperationException">Thrown when the default environment cannot be determined.</exception>
-    public static string LocateEnvFileOfDefaultAzdEnvironment()
+    public static string LocateEnvFileOfDefaultAzdEnvironment(bool optional)
     {
-        var azureDirectory = GetAzureDirectory(AppContext.BaseDirectory);
-        var defaultEnvironmentName = GetDefaultEnvironmentName(azureDirectory);
-        return GetEnvFileForEnvironment(azureDirectory, defaultEnvironmentName);
+        try
+        {
+            var azureDirectory = GetAzureDirectory(AppContext.BaseDirectory);
+            var defaultEnvironmentName = GetDefaultEnvironmentName(azureDirectory);
+            return GetEnvFileForEnvironment(azureDirectory, defaultEnvironmentName);
+        }
+        catch (Exception ex)
+        {
+            if (optional)
+            {
+                Trace.WriteLine($"Unable to locate .env file for default azd environment due to the following error. Continuing without.");
+                Trace.WriteLine($"Error locating .env file: {ex}");
+                return string.Empty;
+            }
+            throw;
+        }
     }
 
     private static string GetAzureDirectory(string startingDirectory)
