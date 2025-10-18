@@ -40,9 +40,6 @@ env:
   INCLUDE_SERVICE_BUS: ${{ vars.INCLUDE_SERVICE_BUS }}
   INCLUDE_APPLICATION_INFRA_RESOURCES: ${{ vars.INCLUDE_APPLICATION_INFRA_RESOURCES }}
 
-  # It only makes sense to execute the integration tests if both API Management and the API is included in the deployment
-  EXECUTE_INTEGRATION_TESTS: ${{ vars.INCLUDE_API_MANAGEMENT == 'true' && vars.INCLUDE_APPLICATION_INFRA_RESOURCES == 'true' }}
-
 jobs:
 
   # ------------------------------------------------------------
@@ -99,7 +96,8 @@ jobs:
         azd package logicApp --output-path ./artifacts/logicapp-package.zip --no-prompt
 
     - name: Build Integration Tests
-      if: env.EXECUTE_INTEGRATION_TESTS == 'true'
+      # It only makes sense to execute the integration tests if both API Management and the API is included in the deployment, else it will always fail
+      if: env.INCLUDE_API_MANAGEMENT == 'true' && env.INCLUDE_APPLICATION_INFRA_RESOURCES == 'true'
       run: |
         dotnet build ./tests/AISQuick.IntegrationTests/AISQuick.IntegrationTests.csproj --configuration Release --output ./artifacts/integration-tests
 
@@ -120,7 +118,8 @@ jobs:
         retention-days: 1
 
     - name: Upload Integration Tests Package
-      if: env.EXECUTE_INTEGRATION_TESTS == 'true'
+      # It only makes sense to execute the integration tests if both API Management and the API is included in the deployment, else it will always fail
+      if: env.INCLUDE_API_MANAGEMENT == 'true' && env.INCLUDE_APPLICATION_INFRA_RESOURCES == 'true'
       uses: actions/upload-artifact@v4
       with:
         name: integration-tests-package
@@ -210,7 +209,8 @@ jobs:
   integration-tests:
     name: Execute Integration Tests
     needs: deploy
-    if: ${{ env.EXECUTE_INTEGRATION_TESTS == 'true' }}
+    # It only makes sense to execute the integration tests if both API Management and the API is included in the deployment, else it will always fail
+    if: ${{ vars.INCLUDE_API_MANAGEMENT == 'true' && vars.INCLUDE_APPLICATION_INFRA_RESOURCES == 'true' }}
     runs-on: ubuntu-latest
     
     steps:
