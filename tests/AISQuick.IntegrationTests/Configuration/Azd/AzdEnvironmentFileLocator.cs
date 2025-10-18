@@ -56,7 +56,7 @@ namespace AISQuick.IntegrationTests.Configuration.Azd
             var defaultEnvironment = defaultEnvironmentElement.GetString();
             if (string.IsNullOrWhiteSpace(defaultEnvironment))
             {
-                throw new InvalidOperationException($"Value of 'defaultEnvironment' is null or white space in: {configFile}");
+                throw new InvalidOperationException($"Value of 'defaultEnvironment' is null or empty in: {configFile}");
             }
 
             return defaultEnvironment;

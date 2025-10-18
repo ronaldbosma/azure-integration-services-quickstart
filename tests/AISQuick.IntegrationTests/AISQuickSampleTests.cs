@@ -1,5 +1,10 @@
 ﻿using AISQuick.IntegrationTests.Clients;
+using AISQuick.IntegrationTests.Configuration;
+using AISQuick.IntegrationTests.Configuration.Azd;
 using AISQuick.IntegrationTests.Models;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.FileProviders.Physical;
 
 namespace AISQuick.IntegrationTests
 {
@@ -10,12 +15,12 @@ namespace AISQuick.IntegrationTests
         public async Task TestSampleApplicationWorkflow()
         {
             //Arrange
-            var configuration = AzureEnvConfiguration.FromEnvironment();
+            var config = AzdEnvironmentConfiguration.Load();
 
-            var keyVaultClient = new KeyVaultClient(configuration.AzureKeyVaultName);
+            var keyVaultClient = new KeyVaultClient(config.AzureKeyVaultName);
             var apimSubscriptionKey = await keyVaultClient.GetSecretValueAsync("apim-master-subscription-key");
 
-            using var apiClient = new SampleApiClient(configuration.AzureApiManagementName, apimSubscriptionKey);
+            using var apiClient = new SampleApiClient(config.AzureApiManagementName, apimSubscriptionKey);
 
             // Act & Assert
 
@@ -27,7 +32,7 @@ namespace AISQuick.IntegrationTests
             Assert.IsFalse(string.IsNullOrWhiteSpace(publishResult.Id), "Message ID should not be empty");
 
             // 4a. Get the table entity (if Function App is included)
-            if (configuration!.IncludeFunctionApp)
+            if (config.IncludeFunctionApp)
             {
                 var tableEntity = await apiClient.GetTableEntityAsync(publishResult.Id);
 
@@ -39,7 +44,7 @@ namespace AISQuick.IntegrationTests
             }
 
             // 4b. Get the blob (if Logic App is included)
-            if (configuration.IncludeLogicApp)
+            if (config.IncludeLogicApp)
             {
                 var blobContent = await apiClient.GetBlobAsync(publishResult.Id);
 
