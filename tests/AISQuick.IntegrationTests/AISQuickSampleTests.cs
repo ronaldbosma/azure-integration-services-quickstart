@@ -11,7 +11,11 @@ namespace AISQuick.IntegrationTests
         {
             //Arrange
             var configuration = AzureEnvConfiguration.FromEnvironment();
-            using var apiClient = await SampleApiClient.CreateAsync(configuration);
+
+            var keyVaultClient = new KeyVaultClient(configuration.AzureKeyVaultName);
+            var apimSubscriptionKey = await keyVaultClient.GetSecretValueAsync("apim-master-subscription-key");
+
+            using var apiClient = new SampleApiClient(configuration.AzureApiManagementName, apimSubscriptionKey);
 
             // Act & Assert
 

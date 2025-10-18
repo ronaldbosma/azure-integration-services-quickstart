@@ -1,6 +1,4 @@
 using AISQuick.IntegrationTests.Models;
-using Azure.Identity;
-using Azure.Security.KeyVault.Secrets;
 using Polly;
 using System.Diagnostics;
 using System.Net.Http.Json;
@@ -15,44 +13,18 @@ namespace AISQuick.IntegrationTests.Clients;
 /// such as authentication, retry policies, and HTTP request/response handling. Use <see cref="CreateAsync"/> to
 /// instantiate the client with the necessary configuration.
 /// </remarks>
-public sealed class SampleApiClient : IDisposable
+public class SampleApiClient : IDisposable
 {
     private readonly HttpClient _httpClient;
     private readonly IAsyncPolicy<HttpResponseMessage> _retryPolicy;
 
-    private SampleApiClient(HttpClient httpClient)
+    public SampleApiClient(string apiManagementName, string subscriptionKey)
     {
-        _httpClient = httpClient;
+        _httpClient = new HttpClient();
+        _httpClient.BaseAddress = new Uri($"https://{apiManagementName}.azure-api.net");
+        _httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", subscriptionKey);
+
         _retryPolicy = CreateRetryPolicy();
-    }
-
-    /// <summary>
-    /// Creates a new instance of the <see cref="SampleApiClient"/> class configured to interact with an Azure API Management
-    /// instance.
-    /// </summary>
-    /// <remarks>This method retrieves the subscription key from Azure Key Vault and configures an <see cref="HttpClient"/> 
-    /// with the necessary headers and base address for interacting with the specified Azure API Management instance.</remarks>
-    /// <param name="configuration">
-    /// The configuration settings for the Azure environment, including the API Management instance name and other required details.
-    /// </param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains an <see cref="SampleApiClient"/> instance
-    /// configured with the appropriate subscription key and base address.</returns>
-    /// <exception cref="ArgumentNullException">Thrown if <paramref name="configuration"/> is <see langword="null"/>.</exception>
-    public static async Task<SampleApiClient> CreateAsync(AzureEnvConfiguration configuration)
-    {
-        if (configuration == null)
-            throw new ArgumentNullException(nameof(configuration));
-
-        // Get subscription key from Key Vault
-        var subscriptionKey = await GetSubscriptionKeyFromKeyVaultAsync(configuration);
-        
-        // Set up HttpClient with default headers
-        var httpClient = new HttpClient();
-        httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", subscriptionKey);
-        httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Trace", "true");
-        httpClient.BaseAddress = new Uri($"https://{configuration.AzureApiManagementName}.azure-api.net");
-
-        return new SampleApiClient(httpClient);
     }
 
     public async Task<PublishMessageResponse> PublishMessageAsync(PublishMessageRequest request)
@@ -118,17 +90,6 @@ public sealed class SampleApiClient : IDisposable
                 {
                     Trace.WriteLine($"Retry {retryCount} after {timespan} seconds. Reason: {outcome.Result.ReasonPhrase}");
                 });
-    }
-
-    /// <summary>
-    /// Retrieve the API Management subscription key from Azure Key Vault.
-    /// </summary>
-    private static async Task<string> GetSubscriptionKeyFromKeyVaultAsync(AzureEnvConfiguration config)
-    {
-        var keyVaultUri = new Uri($"https://{config.AzureKeyVaultName}.vault.azure.net/");
-        var client = new SecretClient(keyVaultUri, new DefaultAzureCredential());
-        var secret = await client.GetSecretAsync(config.ApimSubscriptionKeySecretName);
-        return secret.Value.Value;
     }
 
     public void Dispose()
