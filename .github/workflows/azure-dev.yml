@@ -139,6 +139,8 @@ jobs:
       AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID || vars.AZURE_SUBSCRIPTION_ID }}
     outputs:
       azure-resource-group: ${{ steps.get-outputs.outputs.azure-resource-group }}
+      azure-api-management-name: ${{ steps.get-outputs.outputs.azure-api-management-name }}
+      azure-key-vault-name: ${{ steps.get-outputs.outputs.azure-key-vault-name }}
     
     steps:
     - name: Checkout code
@@ -199,7 +201,12 @@ jobs:
       id: get-outputs
       run: |
         $resourceGroupName = azd env get-value "AZURE_RESOURCE_GROUP"
+        $apiManagementName = azd env get-value "AZURE_API_MANAGEMENT_NAME"
+        $keyVaultName = azd env get-value "AZURE_KEY_VAULT_NAME"
+        
         echo "azure-resource-group=$resourceGroupName" >> $env:GITHUB_OUTPUT
+        echo "azure-api-management-name=$apiManagementName" >> $env:GITHUB_OUTPUT
+        echo "azure-key-vault-name=$keyVaultName" >> $env:GITHUB_OUTPUT
 
 
   # ------------------------------------------------------------
@@ -238,6 +245,12 @@ jobs:
       run: |
         dotnet ./artifacts/integration-tests/AISQuick.IntegrationTests.dll --report-trx --results-directory ./artifacts/integration-tests/TestResults
       working-directory: ./
+      env:
+        # Pass the necessary variables and deployed resource identifiers as environment variables so the integration tests can access them.
+        AZURE_API_MANAGEMENT_NAME: ${{ needs.deploy.outputs.azure-api-management-name }}
+        AZURE_KEY_VAULT_NAME: ${{ needs.deploy.outputs.azure-key-vault-name }}
+        INCLUDE_LOGIC_APP: ${{ env.INCLUDE_LOGIC_APP }}
+        INCLUDE_FUNCTION_APP: ${{ env.INCLUDE_FUNCTION_APP }}
 
     - name: Upload Integration Test Results
       if: always()
