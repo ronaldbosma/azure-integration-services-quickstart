@@ -4,16 +4,9 @@ using Microsoft.Extensions.Configuration;
 namespace AISQuick.IntegrationTests.Configuration;
 
 /// <summary>
-/// Provides Azure environment configuration by loading environment variables from a `.env` file 
-/// located within the `.azure` directory hierarchy and exposing configuration properties.
+/// Contains configuration settings for the integration tests.
 /// </summary>
-/// <remarks>
-/// This class searches for a `.azure` directory in the current working directory or its parent
-/// directories. Once located, it searches for a `.env` file within the subfolders of the `.azure` directory. If both
-/// the `.azure` directory and the `.env` file are found, the environment variables from the `.env` file are loaded into
-/// the current process using <see cref="Env"/>.
-/// </remarks>
-public class AzdEnvironmentConfiguration
+public class TestConfiguration
 {
     public required string AzureKeyVaultName { get; init; }
     public required string AzureApiManagementName { get; init; }
@@ -22,17 +15,14 @@ public class AzdEnvironmentConfiguration
 
     public readonly string ApimSubscriptionKeySecretName = "apim-master-subscription-key";
 
-    /// <summary>
-    /// Loads the Azure environment configuration.
-    /// </summary>
-    public static AzdEnvironmentConfiguration Load()
+    public static TestConfiguration Load()
     {
         var configuration = new ConfigurationBuilder()
             .AddEnvironmentVariables()
             .AddAzdEnvironmentVariables()
             .Build();
 
-        return new AzdEnvironmentConfiguration
+        return new TestConfiguration
         {
             AzureKeyVaultName = configuration.GetRequiredString("AZURE_KEY_VAULT_NAME"),
             AzureApiManagementName = configuration.GetRequiredString("AZURE_API_MANAGEMENT_NAME"),

@@ -11,7 +11,7 @@ namespace AISQuick.IntegrationTests
         public async Task TestSampleApplicationWorkflow()
         {
             //Arrange
-            var config = AzdEnvironmentConfiguration.Load();
+            var config = TestConfiguration.Load();
 
             var keyVaultClient = new KeyVaultClient(config.AzureKeyVaultName);
             var apimSubscriptionKey = await keyVaultClient.GetSecretValueAsync("apim-master-subscription-key");
