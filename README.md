@@ -392,7 +392,7 @@ For detailed guidance, refer to:
 
 The project includes integration tests built with **.NET 9** that validate the complete message flow through the deployed Azure services. The test implements the same workflow described in the [Test](#test) section:
 
-1. Retrieves the API Management subscription key from Key Vault using `DefaultAzureCredential`
+1. Retrieves the API Management subscription key from Key Vault using [DefaultAzureCredential](https://learn.microsoft.com/en-us/dotnet/api/azure.identity.defaultazurecredential?view=azure-dotnet), which leverages your Azure CLI or Azure Developer CLI authentication context
 2. Publishes a message to the Service Bus topic via API Management
 3. Verifies message processing:
    - **Function App** (if included): Checks if the message is stored in Table Storage
