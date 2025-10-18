@@ -2,6 +2,7 @@ using AISQuick.IntegrationTests.Models;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using Polly;
+using System.Diagnostics;
 using System.Net.Http.Json;
 
 namespace AISQuick.IntegrationTests;
@@ -105,12 +106,11 @@ public sealed class ApimClient : IDisposable
             .Or<TaskCanceledException>()
             .OrResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
             .WaitAndRetryAsync(
-                retryCount: 10,
-                sleepDurationProvider: retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+                retryCount: 50,
+                sleepDurationProvider: retryAttempt => TimeSpan.FromSeconds(1),
                 onRetry: (outcome, timespan, retryCount, context) =>
                 {
-                    var methodName = context.ContainsKey("MethodName") ? context["MethodName"] : "Unknown";
-                    Console.WriteLine($"Retry {retryCount} for {methodName} after {timespan} seconds");
+                    Trace.WriteLine($"Retry {retryCount} after {timespan} seconds. Reason: {outcome.Result.ReasonPhrase}");
                 });
     }
 
