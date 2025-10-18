@@ -6,14 +6,12 @@ namespace AISQuick.IntegrationTests.Configuration;
 /// <summary>
 /// Contains configuration settings for the integration tests.
 /// </summary>
-public class TestConfiguration
+internal class TestConfiguration
 {
     public required string AzureKeyVaultName { get; init; }
     public required string AzureApiManagementName { get; init; }
     public required bool IncludeFunctionApp { get; init; }
     public required bool IncludeLogicApp { get; init; }
-
-    public readonly string ApimSubscriptionKeySecretName = "apim-master-subscription-key";
 
     public static TestConfiguration Load()
     {
