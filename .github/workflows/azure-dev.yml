@@ -272,6 +272,7 @@ jobs:
     # - The workflow was not manually triggered, or the cleanup-resources input is true
     # - AND either the integration tests succeeded or were skipped and deployment succeeded
     if: |
+      always() &&
       (github.event_name != 'workflow_dispatch' || github.event.inputs.cleanup-resources == 'true') &&
       (
         needs.integration-tests.result == 'success' ||
