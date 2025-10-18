@@ -10,7 +10,7 @@ namespace AISQuick.IntegrationTests
         [TestMethod]
         public async Task TestSampleApplicationWorkflow()
         {
-            //Arrange
+            // Arrange
             var config = TestConfiguration.Load();
 
             var keyVaultClient = new KeyVaultClient(config.AzureKeyVaultName);
