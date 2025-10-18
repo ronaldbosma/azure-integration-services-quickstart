@@ -2,6 +2,9 @@
 
 namespace AISQuick.IntegrationTests.Configuration
 {
+    /// <summary>
+    /// Provides extension methods for <see cref="IConfiguration"/> to retrieve required configuration values.
+    /// </summary>
     internal static class IConfigurationExtensions
     {
         public static string GetRequiredString(this IConfiguration configuration, string key)
