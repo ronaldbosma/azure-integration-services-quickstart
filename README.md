@@ -92,7 +92,9 @@ If you only deploy the Function App or Logic App, use `azd provision` to deploy 
 
 ### Test
 
-The [tests.http](./tests/tests.http) file contains a set of HTTP requests that you can use to test the deployed resources. Note that you'll need to deploy the application infrastructure, API Management and Service Bus, and include the Function and/or Logic App.
+The [tests.http](./tests/tests.http) file contains a set of HTTP requests that you can use to manually test the deployed resources. Note that you'll need to deploy the application infrastructure, API Management and Service Bus, and include the Function and/or Logic App.
+
+> See the [Integration Tests](#integration-tests) section for automated tests to verify the complete message flow.
 
 Follow these steps to test the sample application using Visual Studio Code:
 
