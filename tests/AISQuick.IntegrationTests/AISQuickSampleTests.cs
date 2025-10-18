@@ -1,10 +1,6 @@
 ﻿using AISQuick.IntegrationTests.Clients;
 using AISQuick.IntegrationTests.Configuration;
-using AISQuick.IntegrationTests.Configuration.Azd;
 using AISQuick.IntegrationTests.Models;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.FileProviders.Physical;
 
 namespace AISQuick.IntegrationTests
 {

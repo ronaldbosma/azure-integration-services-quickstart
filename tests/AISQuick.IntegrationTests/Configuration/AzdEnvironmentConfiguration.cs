@@ -1,5 +1,4 @@
 using AISQuick.IntegrationTests.Configuration.Azd;
-using DotNetEnv;
 using Microsoft.Extensions.Configuration;
 
 namespace AISQuick.IntegrationTests.Configuration;
