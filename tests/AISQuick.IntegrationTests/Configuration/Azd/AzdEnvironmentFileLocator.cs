@@ -35,7 +35,7 @@ namespace AISQuick.IntegrationTests.Configuration.Azd
                 currentDirectory = currentDirectory.Parent;
             }
 
-            throw new DirectoryNotFoundException("Could not find .azure directory in parent directories");
+            throw new DirectoryNotFoundException($"Could not find .azure directory in parent directories of {startingDirectory}");
         }
 
         private static string GetDefaultEnvironmentName(string azureDirectory)
