@@ -249,8 +249,6 @@ jobs:
         # Pass the necessary variables and deployed resource identifiers as environment variables so the integration tests can access them.
         AZURE_API_MANAGEMENT_NAME: ${{ needs.deploy.outputs.azure-api-management-name }}
         AZURE_KEY_VAULT_NAME: ${{ needs.deploy.outputs.azure-key-vault-name }}
-        INCLUDE_LOGIC_APP: ${{ env.INCLUDE_LOGIC_APP }}
-        INCLUDE_FUNCTION_APP: ${{ env.INCLUDE_FUNCTION_APP }}
 
     - name: Upload Test Results
       if: always()
