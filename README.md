@@ -354,10 +354,11 @@ This template includes a GitHub Actions workflow that automates the build, deplo
 
 ![GitHub Actions Workflow Summary](images/github-actions-workflow-summary.png)
 
-The pipeline consists of three main jobs:
+The pipeline consists of the following jobs:
 
 - **Build, Verify and Package**: This job sets up the build environment, performs Bicep linting and packages the Function App and Logic App applications.
 - **Deploy to Azure**: This job provisions the Azure infrastructure and deploys the packaged applications to the created resources.
+- **Execute Integration Tests**: This job runs automated integration tests on the deployed resources to verify correct functionality. Tests are executed only when both API Management and the Application Infrastructure resources are included in the deployment, as these components are prerequisites for successful test execution.
 - **Clean Up Resources**: This job removes all deployed Azure resources.  
 
   By default, cleanup runs automatically after deployment. This can be disabled via an input parameter when the workflow is triggered manually.
