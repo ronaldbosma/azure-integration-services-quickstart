@@ -5,36 +5,26 @@ namespace AISQuick.IntegrationTests
     [TestClass]
     public sealed class AISQuickSampleTests
     {
-        private ApimClient? _apimClient = null;
-        private AzureEnvConfiguration? _configuration;
-
-        [TestInitialize]
-        public async Task TestInitialize()
-        {
-            _configuration = AzureEnvConfiguration.FromEnvironment();
-            _apimClient = await ApimClient.CreateAsync(_configuration);
-        }
-
-        [TestCleanup]
-        public void TestCleanup()
-        {
-            _apimClient?.Dispose();
-        }
-
         [TestMethod]
         public async Task TestSampleApplicationWorkflow()
         {
+            //Arrange
+            var configuration = AzureEnvConfiguration.FromEnvironment();
+            using var apimClient = await ApimClient.CreateAsync(configuration);
+
+            // Act & Assert
+
             // 1. Publish a message to the aisquick-sample topic
             var request = new PublishMessageRequest("Hello, world!");
-            var publishResult = await _apimClient!.PublishMessageAsync(request);
+            var publishResult = await apimClient!.PublishMessageAsync(request);
 
             Assert.IsNotNull(publishResult, "Publish response should not be null");
             Assert.IsFalse(string.IsNullOrWhiteSpace(publishResult.Id), "Message ID should not be empty");
 
             // 4a. Get the table entity (if Function App is included)
-            if (_configuration!.IncludeFunctionApp)
+            if (configuration!.IncludeFunctionApp)
             {
-                var tableEntity = await _apimClient.GetTableEntityAsync(publishResult.Id);
+                var tableEntity = await apimClient.GetTableEntityAsync(publishResult.Id);
 
                 Assert.IsNotNull(tableEntity, "Table entity should not be null");
                 Assert.AreEqual("aisquick-sample", tableEntity.PartitionKey, "Table entity should have correct partition key");
@@ -44,9 +34,9 @@ namespace AISQuick.IntegrationTests
             }
 
             // 4b. Get the blob (if Logic App is included)
-            if (_configuration.IncludeLogicApp)
+            if (configuration.IncludeLogicApp)
             {
-                var blobContent = await _apimClient.GetBlobAsync(publishResult.Id);
+                var blobContent = await apimClient.GetBlobAsync(publishResult.Id);
 
                 Assert.IsNotNull(blobContent, "Blob content should not be null");
                 Assert.AreEqual(request.Message, blobContent.Message, "Blob should contain the original message");
