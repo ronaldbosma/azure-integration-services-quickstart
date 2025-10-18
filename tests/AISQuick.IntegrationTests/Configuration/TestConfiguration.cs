@@ -17,7 +17,7 @@ internal class TestConfiguration
     {
         var configuration = new ConfigurationBuilder()
             .AddEnvironmentVariables()
-            //.AddAzdEnvironmentVariables()
+            .AddAzdEnvironmentVariables()
             .Build();
 
         return new TestConfiguration
