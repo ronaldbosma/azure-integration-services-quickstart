@@ -57,6 +57,8 @@ public sealed class ApimClient : IDisposable
 
     public async Task<PublishMessageResponse> PublishMessageAsync(PublishMessageRequest request)
     {
+        Trace.WriteLine("Publish message");
+
         var response = await _httpClient.PostAsJsonAsync("/aisquick-sample/messages", request);
         response.EnsureSuccessStatusCode();
         
@@ -66,6 +68,8 @@ public sealed class ApimClient : IDisposable
 
     public async Task<TableEntityResponse> GetTableEntityAsync(string messageId)
     {
+        Trace.WriteLine($"Retrieve table entity for message id: {messageId}");
+
         using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(60));
         
         var response = await _retryPolicy.ExecuteAsync(async () =>
@@ -82,6 +86,8 @@ public sealed class ApimClient : IDisposable
 
     public async Task<BlobResponse> GetBlobAsync(string messageId)
     {
+        Trace.WriteLine($"Retrieve blob for message id: {messageId}");
+
         using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(60));
         
         var response = await _retryPolicy.ExecuteAsync(async () =>
