@@ -221,7 +221,7 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - name: Setup .NET 9 for Integration Tests
+    - name: Setup .NET 9
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '9.0.x'
@@ -252,7 +252,7 @@ jobs:
         INCLUDE_LOGIC_APP: ${{ env.INCLUDE_LOGIC_APP }}
         INCLUDE_FUNCTION_APP: ${{ env.INCLUDE_FUNCTION_APP }}
 
-    - name: Upload Integration Test Results
+    - name: Upload Test Results
       if: always()
       uses: actions/upload-artifact@v4
       with:
