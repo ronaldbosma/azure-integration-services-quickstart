@@ -27,8 +27,7 @@ internal class AzdEnvironmentFileLocator
         {
             if (optional)
             {
-                Trace.WriteLine($"Unable to locate .env file for default azd environment due to the following error. Continuing without.");
-                Trace.WriteLine($"Error locating .env file: {ex}");
+                Trace.WriteLine($"Unable to locate .env file for default azd environment. Continuing without. Error: {ex}");
                 return string.Empty;
             }
             throw;
