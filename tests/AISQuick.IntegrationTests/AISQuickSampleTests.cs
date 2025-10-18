@@ -22,7 +22,7 @@ namespace AISQuick.IntegrationTests
 
             // 1. Publish a message to the aisquick-sample topic
             var request = new PublishMessageRequest("Hello, world!");
-            var publishResult = await apiClient!.PublishMessageAsync(request);
+            var publishResult = await apiClient.PublishMessageAsync(request);
 
             Assert.IsNotNull(publishResult, "Publish response should not be null");
             Assert.IsFalse(string.IsNullOrWhiteSpace(publishResult.Id), "Message ID should not be empty");
