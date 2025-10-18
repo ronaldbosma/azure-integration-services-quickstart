@@ -40,7 +40,7 @@ env:
   INCLUDE_SERVICE_BUS: ${{ vars.INCLUDE_SERVICE_BUS }}
   INCLUDE_APPLICATION_INFRA_RESOURCES: ${{ vars.INCLUDE_APPLICATION_INFRA_RESOURCES }}
 
-  # It only makes sense to execute the integration tests if both API Management and the APIs are included in the deployment
+  # It only makes sense to execute the integration tests if both API Management and the API is included in the deployment
   EXECUTE_INTEGRATION_TESTS: ${{ vars.INCLUDE_API_MANAGEMENT == 'true' && vars.INCLUDE_APPLICATION_INFRA_RESOURCES == 'true' }}
 
 jobs:
