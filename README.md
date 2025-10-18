@@ -399,7 +399,7 @@ The project includes integration tests built with **.NET 9** that validate the c
    - **Logic App** (if included): Checks if the message is stored in Blob Storage
 
 The tests automatically locate your azd environment's `.env` file to retrieve necessary configuration.
-The integration tests are located in [`tests/AISQuick.IntegrationTests/AISQuickSampleTests.cs`](tests/AISQuick.IntegrationTests/AISQuickSampleTests.cs).
+The integration tests are located in [AISQuickSampleTests.cs](tests/AISQuick.IntegrationTests/AISQuickSampleTests.cs).
 
 
 ## Troubleshooting
