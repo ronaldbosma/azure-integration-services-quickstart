@@ -35,7 +35,7 @@ Before you can deploy this template, make sure you have the following tools inst
   - Installing `azd` also installs the following tools:  
     - [GitHub CLI](https://cli.github.com)  
     - [Bicep CLI](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/install)  
-- [.NET Core 9 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)  
+- [.NET 9 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)  
 - [npm CLI](https://nodejs.org/) _(This template uses a workaround to deploy the Logic App workflow, which requires the npm CLI.)_
 
 **Required Permissions:**
@@ -92,7 +92,9 @@ If you only deploy the Function App or Logic App, use `azd provision` to deploy 
 
 ### Test
 
-The [tests.http](./tests/tests.http) file contains a set of HTTP requests that you can use to test the deployed resources. Note that you'll need to deploy the application infrastructure, API Management and Service Bus, and include the Function and/or Logic App.
+The [tests.http](./tests/tests.http) file contains a set of HTTP requests that you can use to manually test the deployed resources. Note that you'll need to deploy the application infrastructure, API Management and Service Bus, and include the Function and/or Logic App.
+
+> See the [Integration Tests](#integration-tests) section for automated tests to verify the complete message flow.
 
 Follow these steps to test the sample application using Visual Studio Code:
 
@@ -175,26 +177,27 @@ The repository consists of the following files and directories:
 
 ```
 ├── .github                    
-│   └── workflows              [ GitHub Actions workflow(s) ]
-├── demos                      [ Demo guide(s) ]
-├── hooks                      [ AZD Hooks to execute at different stages of the deployment process ]
-├── images                     [ Images used in the README ]
-├── infra                      [ Infrastructure As Code files ]
-│   |── functions              [ Bicep user-defined functions ]
-│   ├── modules                
-│   │   ├── application        [ Modules for application infrastructure resources ]
-│   │   ├── services           [ Modules for all Azure services ]
-│   │   └── shared             [ Reusable modules ]
-│   ├── types                  [ Bicep user-defined types ]
-│   ├── main.bicep             [ Main infrastructure file ]
-│   └── main.parameters.json   [ Parameters file ]
-├── src                        [ Application code ]
-│   ├── functionApp            [ Azure Functions ]
-│   └── logicApp               [ Logic App workflow]
+│   └── workflows                  [ GitHub Actions workflow(s) ]
+├── demos                          [ Demo guide(s) ]
+├── hooks                          [ AZD Hooks to execute at different stages of the deployment process ]
+├── images                         [ Images used in the README ]
+├── infra                          [ Infrastructure As Code files ]
+│   |── functions                  [ Bicep user-defined functions ]
+│   ├── modules                    
+│   │   ├── application            [ Modules for application infrastructure resources ]
+│   │   ├── services               [ Modules for all Azure services ]
+│   │   └── shared                 [ Reusable modules ]
+│   ├── types                      [ Bicep user-defined types ]
+│   ├── main.bicep                 [ Main infrastructure file ]
+│   └── main.parameters.json       [ Parameters file ]
+├── src                            [ Application code ]
+│   ├── functionApp                [ Azure Functions ]
+│   └── logicApp                   [ Logic App workflow]
 ├── tests                      
-│   └── tests.http             [ HTTP requests to test the deployed resources ]
-├── azure.yaml                 [ Describes the apps and types of Azure resources ]
-└── bicepconfig.json           [ Bicep configuration file ]
+│   ├── AISQuick.IntegrationTests  [ Integration tests for the sample application ]
+│   └── tests.http                 [ HTTP requests to test the deployed resources ]
+├── azure.yaml                     [ Describes the apps and types of Azure resources ]
+└── bicepconfig.json               [ Bicep configuration file ]
 ```
 
 
@@ -353,10 +356,11 @@ This template includes a GitHub Actions workflow that automates the build, deplo
 
 ![GitHub Actions Workflow Summary](images/github-actions-workflow-summary.png)
 
-The pipeline consists of three main jobs:
+The pipeline consists of the following jobs:
 
 - **Build, Verify and Package**: This job sets up the build environment, performs Bicep linting and packages the Function App and Logic App applications.
 - **Deploy to Azure**: This job provisions the Azure infrastructure and deploys the packaged applications to the created resources.
+- **Execute Integration Tests**: This job runs automated [integration tests](#integration-tests) on the deployed resources to verify correct functionality. Tests are executed only when both API Management and the Application Infrastructure resources are included in the deployment, as these components are prerequisites for successful test execution.
 - **Clean Up Resources**: This job removes all deployed Azure resources.  
 
   By default, cleanup runs automatically after deployment. This can be disabled via an input parameter when the workflow is triggered manually.
@@ -382,6 +386,20 @@ For detailed guidance, refer to:
 
 > [!NOTE]
 > The environment name in the `AZURE_ENV_NAME` variable is suffixed with `-pr{id}` for pull requests. This prevents conflicts when multiple PRs are open and avoids accidental removal of environments, because the environment name tag is used when removing resources.
+
+
+## Integration Tests
+
+The project includes integration tests built with **.NET 9** that validate the complete message flow through the deployed Azure services. The test implements the same workflow described in the [Test](#test) section:
+
+1. Retrieves the API Management subscription key from Key Vault using [DefaultAzureCredential](https://learn.microsoft.com/en-us/dotnet/api/azure.identity.defaultazurecredential?view=azure-dotnet), which leverages your Azure CLI or Azure Developer CLI authentication context
+2. Publishes a message to the Service Bus topic via API Management
+3. Verifies message processing:
+   - **Function App** (if included): Checks if the message is stored in Table Storage
+   - **Logic App** (if included): Checks if the message is stored in Blob Storage
+
+The tests automatically locate your azd environment's `.env` file to retrieve necessary configuration.
+The integration tests are located in [AISQuickSampleTests.cs](tests/AISQuick.IntegrationTests/AISQuickSampleTests.cs).
 
 
 ## Troubleshooting

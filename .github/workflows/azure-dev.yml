@@ -31,6 +31,8 @@ env:
   # Add a unique suffix to the environment name for pull requests to avoid name conflicts
   AZURE_ENV_NAME: ${{ github.event.pull_request.number && format('{0}-pr{1}', vars.AZURE_ENV_NAME, github.event.pull_request.number) || vars.AZURE_ENV_NAME }}
   AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
+  
+  # Individual resource inclusion flags
   INCLUDE_API_MANAGEMENT: ${{ vars.INCLUDE_API_MANAGEMENT }}
   INCLUDE_EVENT_HUBS_NAMESPACE: ${{ vars.INCLUDE_EVENT_HUBS_NAMESPACE }}
   INCLUDE_FUNCTION_APP: ${{ vars.INCLUDE_FUNCTION_APP }}
@@ -52,7 +54,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Install azd
+    - name: Setup azd
       uses: Azure/setup-azd@v2
 
     - name: Setup .NET 9
@@ -68,15 +70,15 @@ jobs:
       with:
         node-version: 'latest'
 
-    - name: Bicep Lint
-      run: |
-        az bicep lint --file ./infra/main.bicep
-
     # Ensure the azd environment is created before running subsequent azd commands.
     # This guarantees that any configured hooks are executed as expected.
     # See https://github.com/Azure/azure-dev/issues/3920 for more details.
     - name: Create azd env
       run: azd env new $env:AZURE_ENV_NAME
+
+    - name: Bicep Lint
+      run: |
+        az bicep lint --file ./infra/main.bicep
 
     - name: Create artifacts folder
       if: env.INCLUDE_FUNCTION_APP == 'true' || env.INCLUDE_LOGIC_APP == 'true'
@@ -92,6 +94,12 @@ jobs:
       if: env.INCLUDE_LOGIC_APP == 'true'
       run: |
         azd package logicApp --output-path ./artifacts/logicapp-package.zip --no-prompt
+
+    - name: Build Integration Tests
+      # It only makes sense to execute the integration tests if both API Management and the API is included in the deployment, else it will always fail
+      if: env.INCLUDE_API_MANAGEMENT == 'true' && env.INCLUDE_APPLICATION_INFRA_RESOURCES == 'true'
+      run: |
+        dotnet build ./tests/AISQuick.IntegrationTests/AISQuick.IntegrationTests.csproj --configuration Release --output ./artifacts/integration-tests
 
     - name: Upload Function App Package
       if: env.INCLUDE_FUNCTION_APP == 'true'
@@ -109,6 +117,15 @@ jobs:
         path: ./artifacts/logicapp-package.zip
         retention-days: 1
 
+    - name: Upload Integration Tests Package
+      # It only makes sense to execute the integration tests if both API Management and the API is included in the deployment, else it will always fail
+      if: env.INCLUDE_API_MANAGEMENT == 'true' && env.INCLUDE_APPLICATION_INFRA_RESOURCES == 'true'
+      uses: actions/upload-artifact@v4
+      with:
+        name: integration-tests-package
+        path: ./artifacts/integration-tests/
+        retention-days: 1
+
 
   # ------------------------------------------------------------
   # Deploy to Azure
@@ -122,12 +139,14 @@ jobs:
       AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID || vars.AZURE_SUBSCRIPTION_ID }}
     outputs:
       azure-resource-group: ${{ steps.get-outputs.outputs.azure-resource-group }}
+      azure-api-management-name: ${{ steps.get-outputs.outputs.azure-api-management-name }}
+      azure-key-vault-name: ${{ steps.get-outputs.outputs.azure-key-vault-name }}
     
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Install azd
+    - name: Setup azd
       uses: Azure/setup-azd@v2
 
     # Use Azure CLI authentication with azd commands so credentials are shared between azd commands and az (Azure CLI) commands used in hooks.
@@ -182,7 +201,62 @@ jobs:
       id: get-outputs
       run: |
         $resourceGroupName = azd env get-value "AZURE_RESOURCE_GROUP"
+        $apiManagementName = azd env get-value "AZURE_API_MANAGEMENT_NAME"
+        $keyVaultName = azd env get-value "AZURE_KEY_VAULT_NAME"
+        
         echo "azure-resource-group=$resourceGroupName" >> $env:GITHUB_OUTPUT
+        echo "azure-api-management-name=$apiManagementName" >> $env:GITHUB_OUTPUT
+        echo "azure-key-vault-name=$keyVaultName" >> $env:GITHUB_OUTPUT
+
+
+  # ------------------------------------------------------------
+  # Execute Integration Tests
+  # ------------------------------------------------------------
+
+  integration-tests:
+    name: Execute Integration Tests
+    needs: deploy
+    # It only makes sense to execute the integration tests if both API Management and the API is included in the deployment, else it will always fail
+    if: ${{ vars.INCLUDE_API_MANAGEMENT == 'true' && vars.INCLUDE_APPLICATION_INFRA_RESOURCES == 'true' }}
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Setup .NET 9
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x'
+
+    - name: Download Integration Tests Package
+      uses: actions/download-artifact@v4
+      with:
+        name: integration-tests-package
+        path: ./artifacts/integration-tests
+
+    # Login to the Azure CLI with OpenID Connect (OIDC) using federated identity credentials.
+    # This is necessary for the integration test to retrieve the APIM subscription key from Key Vault.
+    - name: Azure CLI Login
+      uses: azure/login@v2
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID || vars.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID || vars.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID || vars.AZURE_SUBSCRIPTION_ID }}
+
+    - name: Run Integration Tests
+      run: |
+        dotnet ./artifacts/integration-tests/AISQuick.IntegrationTests.dll --report-trx --results-directory ./artifacts/integration-tests/TestResults
+      working-directory: ./
+      env:
+        # Pass the necessary variables and deployed resource identifiers as environment variables so the integration tests can access them.
+        AZURE_API_MANAGEMENT_NAME: ${{ needs.deploy.outputs.azure-api-management-name }}
+        AZURE_KEY_VAULT_NAME: ${{ needs.deploy.outputs.azure-key-vault-name }}
+
+    - name: Upload Test Results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: integration-test-results
+        path: ./artifacts/integration-tests/TestResults/
+        retention-days: 1
 
 
   # ------------------------------------------------------------
@@ -191,8 +265,17 @@ jobs:
 
   cleanup:
     name: Clean Up Resources
-    needs: deploy
-    if: ${{ success() && (github.event_name != 'workflow_dispatch' || github.event.inputs.cleanup-resources == 'true') }}
+    needs: [deploy, integration-tests]
+    # Execute the cleanup job if:
+    # - The workflow was not manually triggered, or the cleanup-resources input is true
+    # - AND either the integration tests succeeded or were skipped and deployment succeeded
+    if: |
+      always() &&
+      (github.event_name != 'workflow_dispatch' || github.event.inputs.cleanup-resources == 'true') &&
+      (
+        needs.integration-tests.result == 'success' ||
+        (needs.integration-tests.result == 'skipped' && needs.deploy.result == 'success')
+      )
     runs-on: ubuntu-latest
     env:
       AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID || vars.AZURE_SUBSCRIPTION_ID }}
@@ -201,7 +284,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Install azd
+    - name: Setup azd
       uses: Azure/setup-azd@v2
 
     # Use Azure CLI authentication with azd commands so credentials are shared between azd commands and az (Azure CLI) commands used in hooks.
