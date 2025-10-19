@@ -150,7 +150,7 @@ jobs:
       uses: Azure/setup-azd@v2
 
     # Use Azure CLI authentication with azd commands so credentials are shared between azd commands and az (Azure CLI) commands used in hooks.
-    - name: Configure AZD to Use AZ CLI Authentication
+    - name: Configure azd to use Azure CLI Authentication
       run: |
         azd config set auth.useAzCliAuth "true"
 
@@ -288,7 +288,7 @@ jobs:
       uses: Azure/setup-azd@v2
 
     # Use Azure CLI authentication with azd commands so credentials are shared between azd commands and az (Azure CLI) commands used in hooks.
-    - name: Configure AZD to Use AZ CLI Authentication
+    - name: Configure azd to use Azure CLI Authentication
       run: |
         azd config set auth.useAzCliAuth "true"
 
