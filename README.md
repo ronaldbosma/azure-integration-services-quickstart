@@ -352,13 +352,13 @@ This template has hooks that are executed at different stages of the deployment 
 
 ## Pipeline
 
-This template includes a GitHub Actions workflow that automates the build, deployment and cleanup process. The workflow is defined in [azure-dev.yml](.github/workflows/azure-dev.yml) and provides a complete CI/CD pipeline for this template using the Azure Developer CLI.
+This template includes a GitHub Actions workflow that automates the build, deployment, test and cleanup process. The workflow is defined in [azure-dev.yml](.github/workflows/azure-dev.yml) and provides a complete CI/CD pipeline for this template using the Azure Developer CLI.
 
 ![GitHub Actions Workflow Summary](images/github-actions-workflow-summary.png)
 
 The pipeline consists of the following jobs:
 
-- **Build, Verify and Package**: This job sets up the build environment, performs Bicep linting and packages the Function App and Logic App applications.
+- **Build, Verify and Package**: This job sets up the build environment, performs Bicep linting and packages the Function App, Logic App and integration tests.
 - **Deploy to Azure**: This job provisions the Azure infrastructure and deploys the packaged applications to the created resources.
 - **Execute Integration Tests**: This job runs automated [integration tests](#integration-tests) on the deployed resources to verify correct functionality. Tests are executed only when both API Management and the Application Infrastructure resources are included in the deployment, as these components are prerequisites for successful test execution.
 - **Clean Up Resources**: This job removes all deployed Azure resources.  
