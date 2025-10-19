@@ -246,7 +246,7 @@ jobs:
         dotnet ./artifacts/integration-tests/AISQuick.IntegrationTests.dll --report-trx --results-directory ./artifacts/integration-tests/TestResults
       working-directory: ./
       env:
-        # Pass the necessary variables and deployed resource identifiers as environment variables so the integration tests can access them.
+        # Pass the necessary deployed resource identifiers as environment variables so the integration tests can access them.
         AZURE_API_MANAGEMENT_NAME: ${{ needs.deploy.outputs.azure-api-management-name }}
         AZURE_KEY_VAULT_NAME: ${{ needs.deploy.outputs.azure-key-vault-name }}
 
