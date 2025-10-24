@@ -31,7 +31,8 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 
-# List all Log Analytics workspaces in the resource group and delete them
+# Find all Log Analytics workspaces in the resource group and delete them
+Write-Host "Looking for Log Analytics workspaces in resource group $ResourceGroup"
 $workspaces = az monitor log-analytics workspace list --subscription $SubscriptionId --resource-group $ResourceGroup | ConvertFrom-Json
 
 foreach ($workspace in $workspaces) {
