@@ -363,7 +363,7 @@ The pipeline consists of the following jobs:
 - **Execute Integration Tests**: This job runs automated [integration tests](#integration-tests) on the deployed resources to verify correct functionality. Tests are executed only when both API Management and the Application Infrastructure resources are included in the deployment, as these components are prerequisites for successful test execution.
 - **Clean Up Resources**: This job removes all deployed Azure resources.  
 
-  By default, cleanup runs automatically after deployment. This can be disabled via an input parameter when the workflow is triggered manually.
+  By default, cleanup runs automatically after the deployment and integration tests. This can be disabled via an input parameter when the workflow is triggered manually.
 
   ![GitHub Actions Manual Trigger](images/github-actions-workflow-manual-trigger.png)
 
