@@ -16,6 +16,7 @@ on:
       - 'hooks/**'
       - 'infra/**'
       - 'src/**'
+      - 'tests/AISQuick.IntegrationTests/**'
       - 'azure.yaml'
       - 'bicepconfig.json'
 
