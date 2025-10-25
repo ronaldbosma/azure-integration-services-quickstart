@@ -16,6 +16,7 @@ on:
       - 'hooks/**'
       - 'infra/**'
       - 'src/**'
+      - 'tests/AISQuick.IntegrationTests/**'
       - 'azure.yaml'
       - 'bicepconfig.json'
 
@@ -31,6 +32,7 @@ env:
   # Add a unique suffix to the environment name for pull requests to avoid name conflicts
   AZURE_ENV_NAME: ${{ github.event.pull_request.number && format('{0}-pr{1}', vars.AZURE_ENV_NAME, github.event.pull_request.number) || vars.AZURE_ENV_NAME }}
   AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
+  AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID || vars.AZURE_SUBSCRIPTION_ID }}
   
   # Individual resource inclusion flags
   INCLUDE_API_MANAGEMENT: ${{ vars.INCLUDE_API_MANAGEMENT }}
@@ -135,8 +137,6 @@ jobs:
     name: Deploy to Azure
     needs: build-verify-package
     runs-on: ubuntu-latest
-    env:
-      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID || vars.AZURE_SUBSCRIPTION_ID }}
     outputs:
       azure-resource-group: ${{ steps.get-outputs.outputs.azure-resource-group }}
       azure-api-management-name: ${{ steps.get-outputs.outputs.azure-api-management-name }}
@@ -277,8 +277,6 @@ jobs:
         (needs.integration-tests.result == 'skipped' && needs.deploy.result == 'success')
       )
     runs-on: ubuntu-latest
-    env:
-      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID || vars.AZURE_SUBSCRIPTION_ID }}
     
     steps:
     - name: Checkout code
