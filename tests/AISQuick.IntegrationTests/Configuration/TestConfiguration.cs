@@ -8,8 +8,8 @@ namespace AISQuick.IntegrationTests.Configuration;
 /// </summary>
 internal class TestConfiguration
 {
-    public required string AzureApiManagementName { get; init; }
-    public required string AzureKeyVaultName { get; init; }
+    public required string AzureApiManagementGatewayUrl { get; init; }
+    public required string AzureKeyVaultUri { get; init; }
     public required bool IncludeFunctionApp { get; init; }
     public required bool IncludeLogicApp { get; init; }
 
@@ -22,8 +22,8 @@ internal class TestConfiguration
 
         return new TestConfiguration
         {
-            AzureApiManagementName = configuration.GetRequiredString("AZURE_API_MANAGEMENT_NAME"),
-            AzureKeyVaultName = configuration.GetRequiredString("AZURE_KEY_VAULT_NAME"),
+            AzureApiManagementGatewayUrl = configuration.GetRequiredString("AZURE_API_MANAGEMENT_GATEWAY_URL"),
+            AzureKeyVaultUri = configuration.GetRequiredString("AZURE_KEY_VAULT_URI"),
             IncludeFunctionApp = configuration.GetRequiredBool("INCLUDE_FUNCTION_APP"),
             IncludeLogicApp = configuration.GetRequiredBool("INCLUDE_LOGIC_APP")
         };

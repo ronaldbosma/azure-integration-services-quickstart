@@ -13,11 +13,10 @@ internal class KeyVaultClient
     /// <summary>
     /// Creates an instance of <see cref="KeyVaultClient"/> to interact with the specified Key Vault.
     /// </summary>
-    /// <param name="keyVaultName">The name of the Azure Key Vault instance.</param>
-    public KeyVaultClient(string keyVaultName)
+    /// <param name="keyVaultUri">The URI of the Azure Key Vault instance.</param>
+    public KeyVaultClient(string keyVaultUri)
     {
-        var keyVaultUri = new Uri($"https://{keyVaultName}.vault.azure.net/");
-        _secretClient = new SecretClient(keyVaultUri, new DefaultAzureCredential());
+        _secretClient = new SecretClient(new Uri(keyVaultUri), new DefaultAzureCredential());
     }
 
     /// <summary>
