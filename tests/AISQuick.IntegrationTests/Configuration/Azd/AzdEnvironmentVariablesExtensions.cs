@@ -38,9 +38,13 @@ namespace AISQuick.IntegrationTests.Configuration.Azd
         /// <returns>The <see cref="IConfigurationBuilder"/>.</returns>
         private static IConfigurationBuilder AddAzdEnvironmentVariables(this IConfigurationBuilder builder, string path, bool optional)
         {
-            if (string.IsNullOrWhiteSpace(path) && !optional)
+            if (string.IsNullOrWhiteSpace(path))
             {
-                throw new ArgumentException("Path to the azd .env file must be a non-empty string.", nameof(path)); 
+                if (!optional)
+                {
+                    throw new ArgumentException("Path to the azd .env file must be a non-empty string.", nameof(path));
+                }
+                return builder;
             }
 
             return builder.AddEnvFile(path, optional);
