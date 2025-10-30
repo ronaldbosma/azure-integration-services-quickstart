@@ -20,10 +20,6 @@ on:
       - 'azure.yaml'
       - 'bicepconfig.json'
 
-permissions:
-  id-token: write # Required to fetch an OIDC token for Azure authentication
-  contents: read  # Required to checkout code if needed
-
 defaults:
   run:
     shell: pwsh # Use PowerShell Core for all scripts (the azd hooks are written in PowerShell)
@@ -51,7 +47,9 @@ jobs:
   build-verify-package:
     name: Build, Verify and Package
     runs-on: ubuntu-latest
-    
+    permissions:
+      contents: read  # Required to checkout code if needed
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -137,6 +135,10 @@ jobs:
     name: Deploy to Azure
     needs: build-verify-package
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write # Required to fetch an OIDC token for Azure authentication
+      contents: read  # Required to checkout code if needed
+    
     outputs:
       AZURE_RESOURCE_GROUP: ${{ steps.get-outputs.outputs.AZURE_RESOURCE_GROUP }}
       AZURE_API_MANAGEMENT_NAME: ${{ steps.get-outputs.outputs.AZURE_API_MANAGEMENT_NAME }}
@@ -213,6 +215,8 @@ jobs:
     # It only makes sense to execute the integration tests if both API Management and the API is included in the deployment, else it will always fail
     if: ${{ vars.INCLUDE_API_MANAGEMENT == 'true' && vars.INCLUDE_APPLICATION_INFRA_RESOURCES == 'true' }}
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write # Required to fetch an OIDC token for Azure authentication
     
     steps:
     - name: Setup .NET 9
@@ -271,6 +275,9 @@ jobs:
         (needs.integration-tests.result == 'skipped' && needs.deploy.result == 'success')
       )
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write # Required to fetch an OIDC token for Azure authentication
+      contents: read  # Required to checkout code if needed
     
     steps:
     - name: Checkout code
