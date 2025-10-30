@@ -3,7 +3,7 @@
 namespace AISQuick.IntegrationTests.Configuration.Azd
 {
     /// <summary>
-    /// Extension methods for adding <see cref="EnvFileConfigurationProvider"/>.
+    /// Azd specific extension methods for adding <see cref="EnvFileConfigurationProvider"/>.
     /// </summary>
     internal static class AzdEnvironmentVariablesExtensions
     {
