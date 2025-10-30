@@ -200,4 +200,4 @@ module setFunctionAppSettings '../shared/merge-app-settings.bicep' = {
 // Outputs
 //=============================================================================
 
-output defaultHostName string = functionApp.properties.defaultHostName
+output endpoint string = 'https://${functionApp.properties.defaultHostName}'

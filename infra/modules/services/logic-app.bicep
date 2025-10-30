@@ -205,4 +205,4 @@ module setLogicAppSettings '../shared/merge-app-settings.bicep' = {
 // Outputs
 //=============================================================================
 
-output defaultHostName string = logicApp.properties.defaultHostName
+output endpoint string = 'https://${logicApp.properties.defaultHostName}'
