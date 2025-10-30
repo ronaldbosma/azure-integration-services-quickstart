@@ -244,3 +244,9 @@ resource tableStorageBackend 'Microsoft.ApiManagement/service/backends@2024-06-0
     }
   }
 }
+
+//=============================================================================
+// Outputs
+//=============================================================================
+
+output gatewayUrl string = apiManagementService.properties.gatewayUrl

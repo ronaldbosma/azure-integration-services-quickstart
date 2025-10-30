@@ -287,3 +287,7 @@ output INCLUDE_SERVICE_BUS bool = includeServiceBus
 
 // Return if the application infra resources are included in the deployment
 output INCLUDE_APPLICATION_INFRA_RESOURCES bool = includeApplicationInfraResources
+
+// Return resource endpoints
+output AZURE_API_MANAGEMENT_GATEWAY_URL string = apiManagement.?outputs.gatewayUrl ?? ''
+output AZURE_KEY_VAULT_URI string = keyVault.outputs.vaultUri
