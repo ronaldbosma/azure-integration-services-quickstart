@@ -141,8 +141,8 @@ jobs:
     
     outputs:
       AZURE_RESOURCE_GROUP: ${{ steps.get-outputs.outputs.AZURE_RESOURCE_GROUP }}
-      AZURE_API_MANAGEMENT_NAME: ${{ steps.get-outputs.outputs.AZURE_API_MANAGEMENT_NAME }}
-      AZURE_KEY_VAULT_NAME: ${{ steps.get-outputs.outputs.AZURE_KEY_VAULT_NAME }}
+      AZURE_API_MANAGEMENT_GATEWAY_URL: ${{ steps.get-outputs.outputs.AZURE_API_MANAGEMENT_GATEWAY_URL }}
+      AZURE_KEY_VAULT_URI: ${{ steps.get-outputs.outputs.AZURE_KEY_VAULT_URI }}
     
     steps:
     - name: Checkout code
@@ -202,7 +202,7 @@ jobs:
     - name: Get Output Variables
       id: get-outputs
       run: |
-        .\.github\workflows\scripts\export-azd-env-variables.ps1 -VariableNames @("AZURE_RESOURCE_GROUP", "AZURE_API_MANAGEMENT_NAME", "AZURE_KEY_VAULT_NAME")
+        .\.github\workflows\scripts\export-azd-env-variables.ps1 -VariableNames @("AZURE_RESOURCE_GROUP", "AZURE_API_MANAGEMENT_GATEWAY_URL", "AZURE_KEY_VAULT_URI")
 
 
   # ------------------------------------------------------------
@@ -244,9 +244,9 @@ jobs:
         dotnet ./artifacts/integration-tests/AISQuick.IntegrationTests.dll --report-trx --results-directory ./artifacts/integration-tests/TestResults
       working-directory: ./
       env:
-        # Pass the necessary deployed resource identifiers as environment variables so the integration tests can access them.
-        AZURE_API_MANAGEMENT_NAME: ${{ needs.deploy.outputs.AZURE_API_MANAGEMENT_NAME }}
-        AZURE_KEY_VAULT_NAME: ${{ needs.deploy.outputs.AZURE_KEY_VAULT_NAME }}
+        # Pass the necessary deployed resource properties as environment variables so the integration tests can access them.
+        AZURE_API_MANAGEMENT_GATEWAY_URL: ${{ needs.deploy.outputs.AZURE_API_MANAGEMENT_GATEWAY_URL }}
+        AZURE_KEY_VAULT_URI: ${{ needs.deploy.outputs.AZURE_KEY_VAULT_URI }}
 
     - name: Upload Test Results
       if: always()
