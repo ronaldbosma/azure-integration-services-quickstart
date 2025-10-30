@@ -5,13 +5,13 @@ namespace AISQuick.IntegrationTests.Configuration.Azd;
 /// <summary>
 /// Provides configuration key-value pairs that are obtained from an .env file.
 /// </summary>
-internal class AzdEnvironmentVariablesConfigurationProvider : FileConfigurationProvider
+internal class EnvFileConfigurationProvider : FileConfigurationProvider
 {
     /// <summary>
     /// Initializes a new instance with the specified source.
     /// </summary>
     /// <param name="source">The source settings.</param>
-    public AzdEnvironmentVariablesConfigurationProvider(FileConfigurationSource source) : base(source)
+    public EnvFileConfigurationProvider(FileConfigurationSource source) : base(source)
     {
     }
 
