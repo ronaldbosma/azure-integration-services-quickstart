@@ -200,3 +200,9 @@ module setLogicAppSettings '../shared/merge-app-settings.bicep' = {
     assignRolesToLogicAppSystemAssignedIdentity // App settings might be dependent on the logic app having access to e.g. Key Vault
   ]
 }
+
+//=============================================================================
+// Outputs
+//=============================================================================
+
+output defaultHostName string = logicApp.properties.defaultHostName

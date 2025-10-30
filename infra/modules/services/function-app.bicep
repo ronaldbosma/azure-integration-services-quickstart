@@ -195,3 +195,9 @@ module setFunctionAppSettings '../shared/merge-app-settings.bicep' = {
     assignRolesToFunctionAppSystemAssignedIdentity // App settings might be dependent on the function app having access to e.g. Key Vault
   ]
 }
+
+//=============================================================================
+// Outputs
+//=============================================================================
+
+output defaultHostName string = functionApp.properties.defaultHostName
