@@ -138,9 +138,9 @@ jobs:
     needs: build-verify-package
     runs-on: ubuntu-latest
     outputs:
-      azure-resource-group: ${{ steps.get-outputs.outputs.azure-resource-group }}
-      azure-api-management-name: ${{ steps.get-outputs.outputs.azure-api-management-name }}
-      azure-key-vault-name: ${{ steps.get-outputs.outputs.azure-key-vault-name }}
+      AZURE_RESOURCE_GROUP: ${{ steps.get-outputs.outputs.AZURE_RESOURCE_GROUP }}
+      AZURE_API_MANAGEMENT_NAME: ${{ steps.get-outputs.outputs.AZURE_API_MANAGEMENT_NAME }}
+      AZURE_KEY_VAULT_NAME: ${{ steps.get-outputs.outputs.AZURE_KEY_VAULT_NAME }}
     
     steps:
     - name: Checkout code
@@ -200,13 +200,7 @@ jobs:
     - name: Get Output Variables
       id: get-outputs
       run: |
-        $resourceGroupName = azd env get-value "AZURE_RESOURCE_GROUP"
-        $apiManagementName = azd env get-value "AZURE_API_MANAGEMENT_NAME"
-        $keyVaultName = azd env get-value "AZURE_KEY_VAULT_NAME"
-        
-        echo "azure-resource-group=$resourceGroupName" >> $env:GITHUB_OUTPUT
-        echo "azure-api-management-name=$apiManagementName" >> $env:GITHUB_OUTPUT
-        echo "azure-key-vault-name=$keyVaultName" >> $env:GITHUB_OUTPUT
+        .\.github\workflows\scripts\export-azd-env-variables.ps1 -VariableNames @("AZURE_RESOURCE_GROUP", "AZURE_API_MANAGEMENT_NAME", "AZURE_KEY_VAULT_NAME")
 
 
   # ------------------------------------------------------------
@@ -247,8 +241,8 @@ jobs:
       working-directory: ./
       env:
         # Pass the necessary deployed resource identifiers as environment variables so the integration tests can access them.
-        AZURE_API_MANAGEMENT_NAME: ${{ needs.deploy.outputs.azure-api-management-name }}
-        AZURE_KEY_VAULT_NAME: ${{ needs.deploy.outputs.azure-key-vault-name }}
+        AZURE_API_MANAGEMENT_NAME: ${{ needs.deploy.outputs.AZURE_API_MANAGEMENT_NAME }}
+        AZURE_KEY_VAULT_NAME: ${{ needs.deploy.outputs.AZURE_KEY_VAULT_NAME }}
 
     - name: Upload Test Results
       if: always()
@@ -311,4 +305,4 @@ jobs:
       env:
         # Pass the deployed resource identifiers as environment variables so azd hooks can access them
         # during cleanup operations (e.g., for custom resource deletion or additional cleanup tasks).
-        AZURE_RESOURCE_GROUP: ${{ needs.deploy.outputs.azure-resource-group }}
+        AZURE_RESOURCE_GROUP: ${{ needs.deploy.outputs.AZURE_RESOURCE_GROUP }}
