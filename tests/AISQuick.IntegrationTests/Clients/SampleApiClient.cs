@@ -21,12 +21,12 @@ public class SampleApiClient : IDisposable
     /// <summary>
     /// Initializes a new instance of the <see cref="SampleApiClient"/> class for interacting with the sample API.
     /// </summary>
-    /// <param name="apiManagementName">The name of the Azure API Management instance.</param>
+    /// <param name="apiManagementGatewayUrl">The URL of the Azure API Management gateway.</param>
     /// <param name="subscriptionKey">The subscription key for authenticating requests to the API.</param>
-    public SampleApiClient(string apiManagementName, string subscriptionKey)
+    public SampleApiClient(Uri apiManagementGatewayUrl, string subscriptionKey)
     {
         _httpClient = new HttpClient();
-        _httpClient.BaseAddress = new Uri($"https://{apiManagementName}.azure-api.net");
+        _httpClient.BaseAddress = apiManagementGatewayUrl;
         _httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", subscriptionKey);
 
         _retryPolicy = CreateRetryPolicy();

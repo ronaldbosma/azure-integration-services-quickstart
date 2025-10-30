@@ -7,6 +7,11 @@ namespace AISQuick.IntegrationTests.Configuration;
 /// </summary>
 internal static class IConfigurationExtensions
 {
+    public static Uri GetRequiredUri(this IConfiguration configuration, string key)
+    {
+        return new Uri(configuration.GetRequiredString(key));
+    }
+
     public static string GetRequiredString(this IConfiguration configuration, string key)
     {
         var value = configuration[key];

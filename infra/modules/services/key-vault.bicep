@@ -42,3 +42,9 @@ resource keyVault 'Microsoft.KeyVault/vaults@2024-11-01' = {
     }
   }
 }
+
+//=============================================================================
+// Outputs
+//=============================================================================
+
+output vaultUri string = keyVault.properties.vaultUri

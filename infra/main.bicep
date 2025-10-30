@@ -287,3 +287,11 @@ output INCLUDE_SERVICE_BUS bool = includeServiceBus
 
 // Return if the application infra resources are included in the deployment
 output INCLUDE_APPLICATION_INFRA_RESOURCES bool = includeApplicationInfraResources
+
+// Return resource endpoints
+output AZURE_API_MANAGEMENT_GATEWAY_URL string = apiManagement.?outputs.gatewayUrl ?? ''
+output AZURE_EVENT_HUB_NAMESPACE_ENDPOINT string = eventHubsNamespace.?outputs.serviceBusEndpoint ?? ''
+output AZURE_FUNCTION_APP_ENDPOINT string = functionApp.?outputs.endpoint ?? ''
+output AZURE_KEY_VAULT_URI string = keyVault.outputs.vaultUri
+output AZURE_LOGIC_APP_ENDPOINT string = logicApp.?outputs.endpoint ?? ''
+output AZURE_SERVICE_BUS_NAMESPACE_ENDPOINT string = serviceBus.?outputs.serviceBusEndpoint ?? ''

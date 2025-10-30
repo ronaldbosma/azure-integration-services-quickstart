@@ -36,3 +36,9 @@ resource serviceBusNamespace 'Microsoft.ServiceBus/namespaces@2024-01-01' = {
     minimumTlsVersion: '1.2'
   }
 }
+
+//=============================================================================
+// Outputs
+//=============================================================================
+
+output serviceBusEndpoint string = serviceBusNamespace.properties.serviceBusEndpoint
