@@ -49,6 +49,31 @@ Follow these steps to test the sample application using Visual Studio Code:
 1. Click on `Send Request` above the second request to retrieve the message from the storage table. A `404 Not Found` response might be returned if the message hasn't been processed yet or if you haven't deployed the Azure Function.
 1. Click on `Send Request` above the third request to retrieve the message from the blob container. A `404 Not Found` response might be returned if the message hasn't been processed yet or if you haven't deployed the Logic App workflow.
 
+#### Automated testing using .NET integration tests
+
+The repository includes a set of .NET-based integration tests that can be used to automatically validate the functionality of the sample application. 
+
+The main test in [AISQuickSampleTests.cs](https://github.com/ronaldbosma/azure-integration-services-quickstart/blob/main/tests/AISQuick.IntegrationTests/AISQuickSampleTests.cs) performs the following actions:
+1. Retrieves the API Management subscription key from Key Vault using your Azure CLI or Azure Developer CLI credentials.
+1. Sends a request to the API Management API that publishes a message to the Service Bus topic
+1. Validates that the Azure Function processes the message and stores it in table storage (if Function App is deployed)
+1. Confirms that the Logic App workflow processes the message and stores it in blob storage (if Logic App is deployed)
+
+The tests automatically adapt based on which components are deployed in your environment, using configuration flags to determine whether to validate Function App or Logic App functionality.
+
+**Prerequisites:** The tests use your local azd environment variables to connect to the deployed resources. Ensure that your azd environment is set to the correct deployment before running the tests.
+
+To run the integration tests from the command line, follow these steps:
+1. Ensure you have the [.NET SDK](https://dotnet.microsoft.com/en-us/download) installed on your machine.
+1. Open a terminal and navigate to the `tests/AISQuick.IntegrationTests` folder in the repository.
+1. Run the following command to execute the tests:
+
+   ```
+   dotnet run
+   ```
+
+When executing the tests from an IDE like Visual Studio, you can also view the request and response details in the test output window. 
+
 
 ### Review deployed resources
 
