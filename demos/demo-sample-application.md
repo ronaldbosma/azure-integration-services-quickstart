@@ -59,12 +59,9 @@ The main test in [AISQuickSampleTests.cs](https://github.com/ronaldbosma/azure-i
 1. Validates that the Azure Function processes the message and stores it in table storage (if Function App is deployed)
 1. Confirms that the Logic App workflow processes the message and stores it in blob storage (if Logic App is deployed)
 
-The tests automatically adapt based on which components are deployed in your environment, using configuration flags to determine whether to validate Function App or Logic App functionality.
-
 **Prerequisites:** The tests use your local azd environment variables from `.azure/<environment-name>/.env` to connect to the deployed resources. Ensure that your azd environment is set to the correct deployment before running the tests.
 
 To run the integration tests from the command line, follow these steps:
-1. Ensure you have the [.NET SDK](https://dotnet.microsoft.com/en-us/download) installed on your machine.
 1. Open a terminal and navigate to the `tests/AISQuick.IntegrationTests` folder in the repository.
 1. Run the following command to execute the tests:
 
@@ -72,7 +69,7 @@ To run the integration tests from the command line, follow these steps:
    dotnet run
    ```
 
-When executing the tests from an IDE like Visual Studio, you can also view the request and response details in the test output window. 
+When executing the tests from an IDE like Visual Studio, you can view the request and response details in the test output window. 
 
 
 ### Review deployed resources
