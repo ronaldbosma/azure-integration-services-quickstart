@@ -93,7 +93,7 @@ If you only deploy the Function App or Logic App, use `azd provision` to deploy 
 
 ### Demo and Test
 
-The [Demo Guide](demos/demo.md) provides a step-by-step walkthrough on how to test and demonstrate the deployed resources and sample application.
+The [Demo Guide](demos/demo-sample-application.md) provides a step-by-step walkthrough on how to test and demonstrate the deployed resources and sample application.
 
 
 ### Clean up
@@ -366,7 +366,7 @@ For detailed guidance, refer to:
 
 ## Integration Tests
 
-The project includes integration tests built with **.NET 9** that validate the complete message flow through the deployed Azure services. The test implements the same workflow described in the [Demo Guide](demos/demo.md):
+The project includes integration tests built with **.NET 9** that validate the complete message flow through the deployed Azure services. The test implements the same workflow described in the [Demo Guide](demos/demo-sample-application.md):
 
 1. Retrieves the API Management subscription key from Key Vault using [DefaultAzureCredential](https://learn.microsoft.com/en-us/dotnet/api/azure.identity.defaultazurecredential?view=azure-dotnet), which leverages your Azure CLI or Azure Developer CLI authentication context
 2. Publishes a message to the Service Bus topic via API Management
