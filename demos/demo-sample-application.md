@@ -61,7 +61,7 @@ The main test in [AISQuickSampleTests.cs](https://github.com/ronaldbosma/azure-i
 
 The tests automatically adapt based on which components are deployed in your environment, using configuration flags to determine whether to validate Function App or Logic App functionality.
 
-**Prerequisites:** The tests use your local azd environment variables to connect to the deployed resources. Ensure that your azd environment is set to the correct deployment before running the tests.
+**Prerequisites:** The tests use your local azd environment variables from `.azure/<environment-name>/.env` to connect to the deployed resources. Ensure that your azd environment is set to the correct deployment before running the tests.
 
 To run the integration tests from the command line, follow these steps:
 1. Ensure you have the [.NET SDK](https://dotnet.microsoft.com/en-us/download) installed on your machine.
