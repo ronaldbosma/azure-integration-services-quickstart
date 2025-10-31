@@ -90,35 +90,11 @@ Once the prerequisites are installed on your machine, you can deploy this templa
 
 If you only deploy the Function App or Logic App, use `azd provision` to deploy the infrastructure and then use `azd deploy functionApp` or `azd deploy logicApp` to deploy the sample Azure Function or Logic App workflow, respectively.
 
-### Test
 
-The [tests.http](./tests/tests.http) file contains a set of HTTP requests that you can use to manually test the deployed resources. Note that you'll need to deploy the application infrastructure, API Management and Service Bus, and include the Function and/or Logic App.
+### Demo and Test
 
-> See the [Integration Tests](#integration-tests) section for automated tests to verify the complete message flow.
+The [Demo Guide](demos/demo.md) provides a step-by-step walkthrough on how to test and demonstrate the deployed resources and sample application.
 
-Follow these steps to test the sample application using Visual Studio Code:
-
-1. Install the [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) extension in Visual Studio Code. 
-1. The API is protected and needs to be called with a subscription key. Either:
-   - Locate the `Built-in all-access` subscription in API Management and copy the primary key,
-   - Or locate the `apim-master-subscription-key` secret in Key Vault and copy the secret value.
-1. Add an environment to your Visual Studio Code user settings with the API Management hostname and subscription key. Use the following example and replace the values with your own:
-   ```
-   "rest-client.environmentVariables": {
-       "aisquick": {
-           "apimHostname": "apim-aisquick-sdc-5spzh.azure-api.net",
-           "apimSubscriptionKey": "1234567890abcdefghijklmnopqrstuv"
-       }
-   }
-   ```
-1. Open `tests.http` and at the bottom right of the editor, select the `aisquick` environment you just configured.
-1. Click on `Send Request` above the first request. This will send a message to the Service Bus topic.
-1. Click on `Send Request` above the second request to retrieve the message from the storage table. A `404 Not Found` response might be returned if the message hasn't been processed yet or if you haven't deployed the Azure Function.
-1. Click on `Send Request` above the third request to retrieve the message from the blob container. A `404 Not Found` response might be returned if the message hasn't been processed yet or if you haven't deployed the Logic App workflow.
-
-### Demo
-
-See the [Demo Guide](demos/demo-sample-application.md) for a step-by-step walkthrough on how to demonstrate the deployed resources and the sample application.
 
 ### Clean up
 
@@ -390,7 +366,7 @@ For detailed guidance, refer to:
 
 ## Integration Tests
 
-The project includes integration tests built with **.NET 9** that validate the complete message flow through the deployed Azure services. The test implements the same workflow described in the [Test](#test) section:
+The project includes integration tests built with **.NET 9** that validate the complete message flow through the deployed Azure services. The test implements the same workflow described in the [Demo Guide](demos/demo.md):
 
 1. Retrieves the API Management subscription key from Key Vault using [DefaultAzureCredential](https://learn.microsoft.com/en-us/dotnet/api/azure.identity.defaultazurecredential?view=azure-dotnet), which leverages your Azure CLI or Azure Developer CLI authentication context
 2. Publishes a message to the Service Bus topic via API Management

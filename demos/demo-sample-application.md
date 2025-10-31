@@ -15,12 +15,44 @@ See the [Naming Convention](https://github.com/ronaldbosma/azure-integration-ser
 
 ## 2. What can I demo from this scenario after deployment
 
-### Publish messages
+### Test the sample application
 
-Follow the [Test](https://github.com/ronaldbosma/azure-integration-services-quickstart/blob/main/README.md#test) section in the README to publish a few messages to the Service Bus topic.
+You can test the sample application in two ways:
+
+- **Manual Testing:** Use Visual Studio Code with the REST Client extension and the provided `tests.http` file to send requests and verify responses.
+- **Automated Integration Tests:** Run the .NET-based integration tests included in the repository to validate the application's functionality automatically.
+
+Note that you'll need to deploy the application infrastructure, API Management and Service Bus, and include the Function and/or Logic App.
+
+#### Manual testing using Visual Studio Code
+
+To manually test the sample application, you can use the provided HTTP requests in the [tests.http](https://github.com/ronaldbosma/azure-integration-services-quickstart/blob/main/tests/tests.http) file. 
+This file contains requests to publish a message to the Service Bus topic and to retrieve the stored messages from blob and table storage.
+
+Follow these steps to test the sample application using Visual Studio Code:
+
+1. Install the [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) extension in Visual Studio Code. 
+1. The API is protected and needs to be called with a subscription key. Either:
+   - Locate the `Built-in all-access` subscription in API Management and copy the primary key,
+   - Or locate the `apim-master-subscription-key` secret in Key Vault and copy the secret value.
+1. Add an environment to your Visual Studio Code user settings with the API Management hostname and subscription key. Use the following example and replace the values with your own:
+   ```
+   "rest-client.environmentVariables": {
+       "aisquick": {
+           "apimHostname": "apim-aisquick-sdc-5spzh.azure-api.net",
+           "apimSubscriptionKey": "1234567890abcdefghijklmnopqrstuv"
+       }
+   }
+   ```
+1. Open `tests.http` and at the bottom right of the editor, select the `aisquick` environment you just configured.
+1. Click on `Send Request` above the first request. This will send a message to the Service Bus topic.
+1. Click on `Send Request` above the second request to retrieve the message from the storage table. A `404 Not Found` response might be returned if the message hasn't been processed yet or if you haven't deployed the Azure Function.
+1. Click on `Send Request` above the third request to retrieve the message from the blob container. A `404 Not Found` response might be returned if the message hasn't been processed yet or if you haven't deployed the Logic App workflow.
 
 
-### API Management
+### Review deployed resources
+
+#### API Management
 
 Show the deployed API and its operations.
 
@@ -32,8 +64,7 @@ Show the deployed API and its operations.
     1. `GET Blob`: Retrieves a message from blob storage.  
     1. `GET Table Entity`: Retrieves a message from table storage.  
 
-
-### Key Vault  
+#### Key Vault  
 
 Show the secrets stored in Key Vault.  
 
@@ -41,8 +72,7 @@ Show the secrets stored in Key Vault.
 1. Click the `Secrets` tab.  
 1. Verify that a secret has been created for the API Management master subscription key.  
 
-
-### Service Bus  
+#### Service Bus  
 
 Show the Service Bus topic and its subscriptions.  
 
@@ -51,8 +81,7 @@ Show the Service Bus topic and its subscriptions.
 1. View the traffic that has passed through the topic in the overview.  
 1. Click the `Subscriptions` tab to see the subscriptions created for the Function App and Logic App.  
 
-
-### Logic App  
+#### Logic App  
 
 Show the Logic App and deployed workflow.
 
@@ -72,8 +101,7 @@ Show the Logic App and deployed workflow.
 1. Show that the `ApiManagement_subscriptionKey` variable uses a key vault reference.  
 1. Show the different variables used by the connections.  
 
-
-### Azure Function  
+#### Azure Function  
 
 Show the source code.  
 
@@ -93,8 +121,7 @@ Show the deployed function.
 1. Show that the `ApiManagement_subscriptionKey` variable uses a key vault reference.  
 1. Show the different `Connection` variables that can be used by triggers and bindings within the function.
 
-
-### Storage Account  
+#### Storage Account  
 
 Show the messages stored in blob and table storage.  
 
