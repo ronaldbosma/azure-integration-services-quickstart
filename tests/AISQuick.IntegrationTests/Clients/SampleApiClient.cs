@@ -1,3 +1,4 @@
+using AISQuick.IntegrationTests.Clients.Handlers;
 using AISQuick.IntegrationTests.Models;
 using Polly;
 using System.Diagnostics;
@@ -25,7 +26,7 @@ public class SampleApiClient : IDisposable
     /// <param name="subscriptionKey">The subscription key for authenticating requests to the API.</param>
     public SampleApiClient(Uri apiManagementGatewayUrl, string subscriptionKey)
     {
-        _httpClient = new HttpClient();
+        _httpClient = new HttpClient(new HttpMessageLoggingHandler(new HttpClientHandler()));
         _httpClient.BaseAddress = apiManagementGatewayUrl;
         _httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", subscriptionKey);
 
