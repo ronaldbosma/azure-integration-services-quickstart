@@ -48,6 +48,7 @@ var serviceTags { *: string } = union(tags, {
 var publisherName string = 'admin@example.org'
 var publisherEmail string = 'admin@example.org'
 
+// This will disable the specified weak/insecure cipher suites (https://ciphersuite.info/)
 var customProperties resourceInput<'Microsoft.ApiManagement/service@2024-05-01'>.properties.customProperties = {
   'Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Ciphers.TripleDes168': 'False'
   'Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Ciphers.TLS_RSA_WITH_AES_128_CBC_SHA': 'False'
