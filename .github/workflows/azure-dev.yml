@@ -80,6 +80,20 @@ jobs:
       run: |
         az bicep lint --file ./infra/main.bicep
 
+    - name: Validate Template
+      run: |
+        az deployment sub validate `
+          --template-file './infra/main.bicep' `
+          --location $env:AZURE_LOCATION `
+          --parameters location=$env:AZURE_LOCATION `
+                       environmentName=$env:AZURE_ENV_NAME `
+                       includeApiManagement=$env:INCLUDE_API_MANAGEMENT `
+                       includeEventHubsNamespace=$env:INCLUDE_EVENT_HUBS_NAMESPACE `
+                       includeFunctionApp=$env:INCLUDE_FUNCTION_APP `
+                       includeLogicApp=$env:INCLUDE_LOGIC_APP `
+                       includeServiceBus=$env:INCLUDE_SERVICE_BUS `
+                       includeApplicationInfraResources=$env:INCLUDE_APPLICATION_INFRA_RESOURCES
+
     - name: Create artifacts folder
       if: env.INCLUDE_FUNCTION_APP == 'true' || env.INCLUDE_LOGIC_APP == 'true'
       run: |
