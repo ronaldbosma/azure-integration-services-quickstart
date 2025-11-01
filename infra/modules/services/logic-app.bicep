@@ -80,7 +80,7 @@ var appSettings object = {
   FUNCTIONS_WORKER_RUNTIME: 'dotnet'
   WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: storageAccountConnectionString
   WEBSITE_CONTENTSHARE: toLower(logicAppSettings.logicAppName)
-  WEBSITE_NODE_DEFAULT_VERSION: '~20'
+  WEBSITE_NODE_DEFAULT_VERSION: '~22'
 
   // Storage Account App Settings
   AzureBlob_blobStorageEndpoint: helpers.getBlobStorageEndpoint(storageAccountName)
