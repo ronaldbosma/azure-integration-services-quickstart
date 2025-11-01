@@ -7,7 +7,7 @@ namespace AISQuick.IntegrationTests.Configuration;
 /// <summary>
 /// Helper class to locate the .env file for the default azd environment.
 /// </summary>
-internal class AzdDotEnv
+internal static class AzdDotEnv
 {
     /// <summary>
     /// Locates the .env file for the default azd environment and loads the environment variables.
