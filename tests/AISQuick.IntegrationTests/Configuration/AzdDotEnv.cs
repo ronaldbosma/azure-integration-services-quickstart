@@ -1,21 +1,28 @@
-﻿using System.Diagnostics;
+﻿using dotenv.net;
+using System.Diagnostics;
 using System.Text.Json;
 
-namespace AISQuick.IntegrationTests.Configuration.Azd;
+namespace AISQuick.IntegrationTests.Configuration;
 
 /// <summary>
 /// Helper class to locate the .env file for the default azd environment.
 /// </summary>
-internal class AzdEnvironmentFileLocator
+internal class AzdDotEnv
 {
     /// <summary>
-    /// Locates the .env file for the default azd environment.
+    /// Locates the .env file for the default azd environment and loads the environment variables.
     /// </summary>
-    /// <returns>File path to .env file of default azd environment.</returns>
-    /// <exception cref="DirectoryNotFoundException">Thrown when the .azure directory is not found.</exception>
-    /// <exception cref="FileNotFoundException">Thrown when the .env file is not found.</exception>
-    /// <exception cref="InvalidOperationException">Thrown when the default environment cannot be determined.</exception>
-    public static string LocateEnvFileOfDefaultAzdEnvironment(bool optional)
+    /// <param name="optional">Indication if loading the azd .env file is optional.</param>
+    /// <exception cref="DirectoryNotFoundException">Thrown when the .azure directory is not found and <paramref name="optional"/> is false.</exception>
+    /// <exception cref="FileNotFoundException">Thrown when the .env file is not found and <paramref name="optional"/> is false.</exception>
+    /// <exception cref="InvalidOperationException">Thrown when the default environment cannot be determined and <paramref name="optional"/> is false.</exception>
+    public static void Load(bool optional)
+    {
+        var azdEnvFilePath = LocateEnvFileOfDefaultAzdEnvironment(optional);
+        DotEnv.Load(options: new DotEnvOptions(ignoreExceptions: optional, envFilePaths: [azdEnvFilePath]));
+    }
+
+    private static string LocateEnvFileOfDefaultAzdEnvironment(bool optional)
     {
         try
         {
