@@ -1,6 +1,5 @@
 // API Management
 
-
 @description('The SKU of the API Management service')
 type apimSkuType = 'Consumption' | 'Developer' | 'Basic' | 'Standard' | 'Premium' | 'StandardV2' | 'BasicV2'
 
@@ -20,6 +19,9 @@ type apiManagementSettingsType = {
 
 // Application Insights
 
+@description('Retention options for Application Insights')
+type appInsightsRetentionInDaysType = 30 | 60 | 90 | 120 | 180 | 270 | 365 | 550 | 730
+
 @description('The settings for the App Insights instance')
 @export()
 type appInsightsSettingsType = {
@@ -30,7 +32,7 @@ type appInsightsSettingsType = {
   logAnalyticsWorkspaceName: string
 
   @description('Retention in days of the logging')
-  retentionInDays: int
+  retentionInDays: appInsightsRetentionInDaysType
 }
 
 
