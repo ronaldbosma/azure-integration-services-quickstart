@@ -10,6 +10,7 @@ targetScope = 'subscription'
 //=============================================================================
 
 import { getResourceName, getInstanceId } from './functions/naming-conventions.bicep'
+import { apiManagementSettingsType, appInsightsSettingsType, eventHubSettingsType, functionAppSettingsType, logicAppSettingsType, serviceBusSettingsType } from './types/settings.bicep'
 
 //=============================================================================
 // Parameters
@@ -51,49 +52,49 @@ param includeApplicationInfraResources bool
 //=============================================================================
 
 // Determine the instance id based on the provided instance or by generating a new one
-var instanceId = getInstanceId(environmentName, location, instance)
+var instanceId string = getInstanceId(environmentName, location, instance)
 
-var resourceGroupName = getResourceName('resourceGroup', environmentName, location, instanceId)
+var resourceGroupName string = getResourceName('resourceGroup', environmentName, location, instanceId)
 
-var apiManagementSettings = !includeApiManagement ? null : {
+var apiManagementSettings apiManagementSettingsType? = !includeApiManagement ? null : {
   serviceName: getResourceName('apiManagement', environmentName, location, instanceId)
   identityName: getResourceName('managedIdentity', environmentName, location, 'apim-${instanceId}')
   sku: 'Consumption'
 }
 
-var appInsightsSettings = {
+var appInsightsSettings appInsightsSettingsType = {
   appInsightsName: getResourceName('applicationInsights', environmentName, location, instanceId)
   logAnalyticsWorkspaceName: getResourceName('logAnalyticsWorkspace', environmentName, location, instanceId)
   retentionInDays: 30
 }
 
-var eventHubSettings = !includeEventHubsNamespace ? null : {
+var eventHubSettings eventHubSettingsType? = !includeEventHubsNamespace ? null : {
   namespaceName: getResourceName('eventHubsNamespace', environmentName, location, instanceId)
 }
 
-var functionAppSettings = !includeFunctionApp ? null : {
+var functionAppSettings functionAppSettingsType? = !includeFunctionApp ? null : {
   functionAppName: getResourceName('functionApp', environmentName, location, instanceId)
   identityName: getResourceName('managedIdentity', environmentName, location, 'functionapp-${instanceId}')
   appServicePlanName: getResourceName('appServicePlan', environmentName, location, 'functionapp-${instanceId}')
   netFrameworkVersion: 'v9.0'
 }
 
-var logicAppSettings = !includeLogicApp ? null : {
+var logicAppSettings logicAppSettingsType? = !includeLogicApp ? null : {
   logicAppName: getResourceName('logicApp', environmentName, location, instanceId)
   identityName: getResourceName('managedIdentity', environmentName, location, 'logicapp-${instanceId}')
   appServicePlanName: getResourceName('appServicePlan', environmentName, location, 'logicapp-${instanceId}')
   netFrameworkVersion: 'v9.0'
 }
 
-var keyVaultName = getResourceName('keyVault', environmentName, location, instanceId)
+var keyVaultName string = getResourceName('keyVault', environmentName, location, instanceId)
 
-var serviceBusSettings = !includeServiceBus ? null : {
+var serviceBusSettings serviceBusSettingsType? = !includeServiceBus ? null : {
   namespaceName: getResourceName('serviceBusNamespace', environmentName, location, instanceId)
 }
 
-var storageAccountName = getResourceName('storageAccount', environmentName, location, instanceId)
+var storageAccountName string = getResourceName('storageAccount', environmentName, location, instanceId)
 
-var tags = {
+var tags { *: string } = {
   'azd-env-name': environmentName
   'azd-template': 'ronaldbosma/azure-integration-services-quickstart'
   
