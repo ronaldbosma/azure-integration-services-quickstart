@@ -15,12 +15,6 @@ type apiManagementSettingsType = {
 
   @description('The SKU of the API Management service')
   sku: apimSkuType
-
-  @description('The name of the owner of the API Management service')
-  publisherName: string
-
-  @description('The email address of the owner of the API Management service')
-  publisherEmail: string
 }
 
 
