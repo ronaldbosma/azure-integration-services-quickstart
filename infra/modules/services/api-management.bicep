@@ -88,7 +88,7 @@ module assignRolesToApimUserAssignedIdentity '../shared/assign-roles-to-principa
   }
 }
 
-// API Management - Consumption tier (see also: https://learn.microsoft.com/en-us/azure/api-management/quickstart-bicep?tabs=CLI)
+// API Management
 
 resource apiManagementService 'Microsoft.ApiManagement/service@2024-06-01-preview' = {
   name: apiManagementSettings.serviceName
