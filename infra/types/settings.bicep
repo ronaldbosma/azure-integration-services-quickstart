@@ -1,5 +1,9 @@
 // API Management
 
+
+@description('The SKU of the API Management service')
+type apimSkuType = 'Consumption' | 'Developer' | 'Basic' | 'Standard' | 'Premium' | 'StandardV2' | 'BasicV2'
+
 @description('The settings for the API Management service')
 @export()
 type apiManagementSettingsType = {
@@ -8,6 +12,9 @@ type apiManagementSettingsType = {
 
   @description('The name of the user-assigned managed identity for the API Management service')
   identityName: string
+
+  @description('The SKU of the API Management service')
+  sku: apimSkuType
 
   @description('The name of the owner of the API Management service')
   publisherName: string

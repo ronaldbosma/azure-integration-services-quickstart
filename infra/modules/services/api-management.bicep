@@ -92,8 +92,8 @@ resource apiManagementService 'Microsoft.ApiManagement/service@2024-06-01-previe
   location: location
   tags: serviceTags
   sku: {
-    name: 'Consumption'
-    capacity: 0
+    name: apiManagementSettings.sku
+    capacity: apiManagementSettings.sku == 'Consumption' ? 0 : 1
   }
   properties: {
     publisherName: apiManagementSettings.publisherName

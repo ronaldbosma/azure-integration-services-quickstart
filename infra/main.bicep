@@ -58,6 +58,7 @@ var resourceGroupName = getResourceName('resourceGroup', environmentName, locati
 var apiManagementSettings = !includeApiManagement ? null : {
   serviceName: getResourceName('apiManagement', environmentName, location, instanceId)
   identityName: getResourceName('managedIdentity', environmentName, location, 'apim-${instanceId}')
+  sku: 'Consumption'
   publisherName: 'admin@example.org'
   publisherEmail: 'admin@example.org'
 }
