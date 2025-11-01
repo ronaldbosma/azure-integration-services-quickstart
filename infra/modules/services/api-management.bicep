@@ -41,9 +41,12 @@ param storageAccountName string
 // Variables
 //=============================================================================
 
-var serviceTags = union(tags, {
+var serviceTags { *: string } = union(tags, {
   'azd-service-name': 'apim'
 })
+
+var publisherName string = 'admin@example.org'
+var publisherEmail string = 'admin@example.org'
 
 //=============================================================================
 // Existing resources
@@ -85,19 +88,19 @@ module assignRolesToApimUserAssignedIdentity '../shared/assign-roles-to-principa
   }
 }
 
-// API Management - Consumption tier (see also: https://learn.microsoft.com/en-us/azure/api-management/quickstart-bicep?tabs=CLI)
+// API Management
 
 resource apiManagementService 'Microsoft.ApiManagement/service@2024-06-01-preview' = {
   name: apiManagementSettings.serviceName
   location: location
   tags: serviceTags
   sku: {
-    name: 'Consumption'
-    capacity: 0
+    name: apiManagementSettings.sku
+    capacity: apiManagementSettings.sku == 'Consumption' ? 0 : 1
   }
   properties: {
-    publisherName: apiManagementSettings.publisherName
-    publisherEmail: apiManagementSettings.publisherEmail
+    publisherName: publisherName
+    publisherEmail: publisherEmail
   }
   identity: {
     type: 'SystemAssigned, UserAssigned'

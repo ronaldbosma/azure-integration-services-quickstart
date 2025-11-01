@@ -27,7 +27,7 @@ param appInsightsSettings appInsightsSettingsType
 
 // Log Analytics Workspace
 
-resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
+resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2025-02-01' = {
   name: appInsightsSettings.logAnalyticsWorkspaceName
   location: location
   tags: tags

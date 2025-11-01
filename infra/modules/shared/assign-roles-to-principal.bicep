@@ -38,21 +38,21 @@ param storageAccountName string
 // Variables
 //=============================================================================
 
-var eventHubRoles = [
+var eventHubRoles string[] = [
   'a638d3c7-ab3a-418d-83e6-5f17a39d4fde'      // Azure Event Hubs Data Receiver
   '2b629674-e913-4c01-ae53-ef4638d8f975'      // Azure Event Hubs Data Sender
 ]
 
-var keyVaultRole = isAdmin 
+var keyVaultRole string = isAdmin 
   ? '00482a5a-887f-4fb3-b363-3b7fe8e74483'    // Key Vault Administrator
   : '4633458b-17de-408a-b874-0445c86b69e6'    // Key Vault Secrets User
 
-var serviceBusRoles = [
+var serviceBusRoles string[] = [
   '4f6d3b9b-027b-4f4c-9142-0e5a2a2247e0'      // Azure Service Bus Data Receiver
   '69a216fc-b8fb-44d8-bc22-1f3c2cd27a39'      // Azure Service Bus Data Sender
 ]
 
-var storageAccountRoles = [
+var storageAccountRoles string[] = [
   'ba92f5b4-2d11-453d-a403-e96b0029c9fe'      // Storage Blob Data Contributor
   isAdmin 
     ? '69566ab7-960f-475b-8e7c-b3118f30c6bd'  // Storage File Data Privileged Contributor (is able to browse file shares in Azure Portal)
