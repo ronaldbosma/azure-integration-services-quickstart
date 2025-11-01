@@ -59,7 +59,7 @@ var resourceGroupName string = getResourceName('resourceGroup', environmentName,
 var apiManagementSettings apiManagementSettingsType? = !includeApiManagement ? null : {
   serviceName: getResourceName('apiManagement', environmentName, location, instanceId)
   identityName: getResourceName('managedIdentity', environmentName, location, 'apim-${instanceId}')
-  sku: 'Consumption'
+  sku: 'Developer'
 }
 
 var appInsightsSettings appInsightsSettingsType = {
