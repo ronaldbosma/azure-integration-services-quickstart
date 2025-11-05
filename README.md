@@ -41,7 +41,7 @@ Before you can deploy this template, make sure you have the following tools inst
 **Required Permissions:**
 - You need **Owner** permissions, or a combination of **Contributor** and **Role Based Access Control Administrator** permissions on an Azure Subscription to deploy this template.
 
-#### Optional Prerequisites
+**Optional Prerequisites:**
 
 This templates uses a hook to permanently delete the Log Analytics Workspace. If you do not have the following tools installed, remove the hook from [azure.yaml](azure.yaml). See [this section](#hooks) for more information.
 
