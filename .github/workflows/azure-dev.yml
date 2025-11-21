@@ -71,6 +71,15 @@ jobs:
       with:
         node-version: 'latest'
 
+    - name: Print Tool Versions
+      run: |
+        az version
+        az bicep version
+        azd version
+        Write-Host ".NET SDK Version: $(dotnet --version)"
+        Write-Host "Node.js Version: $(node --version)"
+        Write-Host "npm Version: $(npm --version)"
+
     # Use Azure CLI authentication with azd commands so credentials are shared between azd commands and az (Azure CLI) commands used in hooks.
     - name: Configure azd to use Azure CLI Authentication
       run: |
