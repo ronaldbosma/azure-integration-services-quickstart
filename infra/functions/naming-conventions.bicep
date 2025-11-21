@@ -19,6 +19,7 @@ func getResourceNameByConvention(resourceType string, environment string, region
 func getInstanceId(environment string, region string, instance string) string =>
   removeWhiteSpaces(instance) == '' ? generateInstanceId(environment, region) : instance
 
+@export()
 func generateInstanceId(environment string, region string) string =>
   substring(uniqueString(subscription().subscriptionId, environment, region), 0, 5)
 
