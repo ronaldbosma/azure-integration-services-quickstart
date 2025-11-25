@@ -463,20 +463,6 @@ If you already have a Workflow Standard WS1 tier (`SKU=WS1`) Logic App deployed 
 
 Use the `azd down --purge` command to delete the resources, then deploy the template in a different region.
 
-### Logging doesn't show in App Insights
-
-Sometimes the requests and traces don't show up in Application Insights & Log Analytics. I've had this happen when I'd taken down an environment and redeployed it with the same name. 
-
-To resolve this, first remove the environment using `azd down --purge`. Then, permanently delete the Log Analytics workspace using the [`az monitor log-analytics workspace delete`](https://learn.microsoft.com/en-us/cli/azure/monitor/log-analytics/workspace?view=azure-cli-latest#az-monitor-log-analytics-workspace-delete) command. Here's an example:
-
-```cmd
-az monitor log-analytics workspace delete --resource-group rg-aisquick-sdc-5spzh --workspace-name log-aisquick-sdc-5spzh --force
-```
-
-After that, redeploy the template. If logging still doesn't appear, deploy the template in a different region or using a different environment name.
-
-I've registered https://github.com/Azure/azure-dev/issues/5080 in the Azure Developer CLI repository to track this issue.
-
 ### ERROR: prompting for value: default value of select must be an int or string
 
 You may see this error when running `azd up` or `azd provision` from Azure Cloud Shell:
