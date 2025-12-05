@@ -2,7 +2,7 @@
 
 name: azure-integration-services-quickstart
 metadata:
-  template: tdd-azure-integration-services-quickstart@1.9.0
+  template: tdd-azure-integration-services-quickstart@1.10.0
 hooks:
   predown:
     - shell: pwsh
