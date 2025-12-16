@@ -462,30 +462,3 @@ If you already have a Workflow Standard WS1 tier (`SKU=WS1`) Logic App deployed 
 ```
 
 Use the `azd down --purge` command to delete the resources, then deploy the template in a different region.
-
-### ERROR: prompting for value: default value of select must be an int or string
-
-You may see this error when running `azd up` or `azd provision` from Azure Cloud Shell:
-
-```
-ERROR: prompting for value: default value of select must be an int or string
-```
-
-This template uses optional boolean parameters to include or exclude resources, which doesn't seem to work in the Cloud Shell. 
-
-Workarounds:
-1. Run the command from another environment, like your local machine.
-1. Pre-set the environment variables so no interactive prompts are required, then run `azd up` or `azd provision` again.
-
-   For example, to deploy API Management and the Function App, but not the Logic App, Service Bus and Event Hubs namespace, execute the following commands:
-
-    ```cmd
-    azd env set INCLUDE_API_MANAGEMENT true
-    azd env set INCLUDE_APPLICATION_INFRA_RESOURCES false
-    azd env set INCLUDE_EVENT_HUBS_NAMESPACE false
-    azd env set INCLUDE_FUNCTION_APP true
-    azd env set INCLUDE_LOGIC_APP false
-    azd env set INCLUDE_SERVICE_BUS false
-    ```
-
-I've registered [this issue](https://github.com/Azure/azure-dev/issues/5944) in the Azure Developer CLI repository to track this problem.
