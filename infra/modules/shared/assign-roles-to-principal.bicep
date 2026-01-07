@@ -70,7 +70,7 @@ resource eventHubsNamespace 'Microsoft.EventHub/namespaces@2024-01-01' existing 
   name: eventHubSettings!.namespaceName
 }
 
-resource keyVault 'Microsoft.KeyVault/vaults@2024-11-01' existing = {
+resource keyVault 'Microsoft.KeyVault/vaults@2025-05-01' existing = {
   name: keyVaultName
 }
 

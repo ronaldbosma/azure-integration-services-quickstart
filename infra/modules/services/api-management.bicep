@@ -75,7 +75,7 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
   name: appInsightsName
 }
 
-resource keyVault 'Microsoft.KeyVault/vaults@2024-11-01' existing = {
+resource keyVault 'Microsoft.KeyVault/vaults@2025-05-01' existing = {
   name: keyVaultName
 }
 
@@ -187,7 +187,7 @@ resource apimInsightsDiagnostics 'Microsoft.ApiManagement/service/diagnostics@20
 
 // Store master subscription key in Key Vault
 
-resource apimMasterSubscriptionKeySecret 'Microsoft.KeyVault/vaults/secrets@2024-11-01' = {
+resource apimMasterSubscriptionKeySecret 'Microsoft.KeyVault/vaults/secrets@2025-05-01' = {
   name: 'apim-master-subscription-key'
   parent: keyVault
   properties: {
