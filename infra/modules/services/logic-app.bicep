@@ -131,7 +131,7 @@ module assignRolesToLogicAppUserAssignedIdentity '../shared/assign-roles-to-prin
 
 // Create the App Service Plan for the Logic App
 
-resource hostingPlan 'Microsoft.Web/serverfarms@2024-04-01' = {
+resource hostingPlan 'Microsoft.Web/serverfarms@2025-03-01' = {
   name: logicAppSettings.appServicePlanName
   location: location
   tags: tags
@@ -148,7 +148,7 @@ resource hostingPlan 'Microsoft.Web/serverfarms@2024-04-01' = {
 
 // Create the Logic App
 
-resource logicApp 'Microsoft.Web/sites@2024-04-01' = {
+resource logicApp 'Microsoft.Web/sites@2025-03-01' = {
   name: logicAppSettings.logicAppName
   location: location
   tags: serviceTags

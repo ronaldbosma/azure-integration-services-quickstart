@@ -128,7 +128,7 @@ module assignRolesToFunctionAppUserAssignedIdentity '../shared/assign-roles-to-p
 
 // Create the App Service Plan for the Function App
 
-resource hostingPlan 'Microsoft.Web/serverfarms@2024-04-01' = {
+resource hostingPlan 'Microsoft.Web/serverfarms@2025-03-01' = {
   name: functionAppSettings.appServicePlanName
   location: location
   tags: tags
@@ -143,7 +143,7 @@ resource hostingPlan 'Microsoft.Web/serverfarms@2024-04-01' = {
 
 // Create the Function App
 
-resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
+resource functionApp 'Microsoft.Web/sites@2025-03-01' = {
   name: functionAppSettings.functionAppName
   location: location
   tags: serviceTags
