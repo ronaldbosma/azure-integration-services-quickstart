@@ -53,21 +53,21 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Setup azd
       uses: Azure/setup-azd@v2
 
     - name: Setup .NET 9
       if: env.INCLUDE_FUNCTION_APP == 'true'
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
       with:
         dotnet-version: '9.0.x'
 
     # This template uses a workaround to deploy the Logic App workflow, which requires the npm CLI.
     - name: Setup Node.js
       if: env.INCLUDE_LOGIC_APP == 'true'
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
         node-version: 'latest'
 
@@ -134,7 +134,7 @@ jobs:
 
     - name: Upload Function App Package
       if: env.INCLUDE_FUNCTION_APP == 'true'
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: functionapp-package
         path: ./artifacts/functionapp-package.zip
@@ -142,7 +142,7 @@ jobs:
 
     - name: Upload Logic App Package
       if: env.INCLUDE_LOGIC_APP == 'true'
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: logicapp-package
         path: ./artifacts/logicapp-package.zip
@@ -151,7 +151,7 @@ jobs:
     - name: Upload Integration Tests Package
       # It only makes sense to execute the integration tests if both API Management and the API is included in the deployment, else it will always fail
       if: env.INCLUDE_API_MANAGEMENT == 'true' && env.INCLUDE_APPLICATION_INFRA_RESOURCES == 'true'
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: integration-tests-package
         path: ./artifacts/integration-tests/
@@ -177,7 +177,7 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Setup azd
       uses: Azure/setup-azd@v2
@@ -201,7 +201,7 @@ jobs:
 
     - name: Download Function App Package
       if: env.INCLUDE_FUNCTION_APP == 'true'
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v7
       with:
         name: functionapp-package
         path: ./artifacts
@@ -213,7 +213,7 @@ jobs:
 
     - name: Download Logic App Package
       if: env.INCLUDE_LOGIC_APP == 'true'
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v7
       with:
         name: logicapp-package
         path: ./artifacts
@@ -245,12 +245,12 @@ jobs:
     
     steps:
     - name: Setup .NET 9
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
       with:
         dotnet-version: '9.0.x'
 
     - name: Download Integration Tests Package
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v7
       with:
         name: integration-tests-package
         path: ./artifacts/integration-tests
@@ -275,7 +275,7 @@ jobs:
 
     - name: Upload Test Results
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: integration-test-results
         path: ./artifacts/integration-tests/TestResults/
@@ -306,7 +306,7 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Setup azd
       uses: Azure/setup-azd@v2
