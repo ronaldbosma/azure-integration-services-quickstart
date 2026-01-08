@@ -58,11 +58,11 @@ jobs:
     - name: Setup azd
       uses: Azure/setup-azd@v2
 
-    - name: Setup .NET 9
+    - name: Setup .NET 10
       if: env.INCLUDE_FUNCTION_APP == 'true'
       uses: actions/setup-dotnet@v5
       with:
-        dotnet-version: '9.0.x'
+        dotnet-version: '10.0.x'
 
     # This template uses a workaround to deploy the Logic App workflow, which requires the npm CLI.
     - name: Setup Node.js
@@ -244,10 +244,10 @@ jobs:
       id-token: write # Required to fetch an OIDC token for Azure authentication
     
     steps:
-    - name: Setup .NET 9
+    - name: Setup .NET 10
       uses: actions/setup-dotnet@v5
       with:
-        dotnet-version: '9.0.x'
+        dotnet-version: '10.0.x'
 
     - name: Download Integration Tests Package
       uses: actions/download-artifact@v7

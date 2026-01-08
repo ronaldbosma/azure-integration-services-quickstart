@@ -35,7 +35,7 @@ Before you can deploy this template, make sure you have the following tools inst
   - Installing `azd` also installs the following tools:  
     - [GitHub CLI](https://cli.github.com)  
     - [Bicep CLI](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/install)  
-- [.NET 9 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)  
+- [.NET 10 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)  
 - [npm CLI](https://nodejs.org/) _(This template uses a workaround to deploy the Logic App workflow, which requires the npm CLI.)_
 
 **Required Permissions:**
@@ -198,7 +198,7 @@ When the `includeApiManagement` parameter or the corresponding `INCLUDE_API_MANA
 When the `includeFunctionApp` parameter or the corresponding `INCLUDE_FUNCTION_APP` environment variable is set to `true`, a Function App is deployed via the [function-app.bicep](./infra/modules/services/function-app.bicep) module:
 
 - The `Y1` (Consumption) pricing tier is used. 
-- The worker runtime is configured to .NET 9 isolated. 
+- The worker runtime is configured to .NET 10 isolated. 
 - Both a user-assigned managed identity and system-assigned managed identity are deployed to provide access to other services. See the [Role Assignments](#role-assignments) section for more information.
 
 The following app settings (environment variables) are configured to facilitate connections to other services.
@@ -223,7 +223,7 @@ The `StorageAccountConnection`, `EventHubConnection` or `ServiceBusConnection` c
 When the `includeLogicApp` parameter or the corresponding `INCLUDE_LOGIC_APP` environment variable is set to `true`, a Standard single-tenant Logic App is deployed via the [logic-app.bicep](./infra/modules/services/logic-app.bicep) module:
 
 - The `WS1` (Workflow Standard) pricing tier is used. 
-- The worker runtime is configured to .NET 9 to enable the use of [custom .NET code](https://learn.microsoft.com/en-us/azure/logic-apps/create-run-custom-code-functions). 
+- The worker runtime is configured to .NET 8 to enable the use of [custom .NET code](https://learn.microsoft.com/en-us/azure/logic-apps/create-run-custom-code-functions). 
 - Both a user-assigned managed identity and system-assigned managed identity are deployed to provide access to other services. See the [Role Assignments](#role-assignments) section for more information.
 
 The following app settings (environment variables) are configured to facilitate connections to other services. These are used in the [connections.json](./src/logicApp/Workflows/connections.json) file of the sample application.
@@ -366,7 +366,7 @@ For detailed guidance, refer to:
 
 ## Integration Tests
 
-The project includes integration tests built with **.NET 9** that validate the complete message flow through the deployed Azure services. 
+The project includes integration tests built with **.NET 10** that validate the complete message flow through the deployed Azure services. 
 The integration tests are located in [AISQuickSampleTests.cs](tests/AISQuick.IntegrationTests/AISQuickSampleTests.cs).
 See the [Demo Guide](demos/demo-sample-application.md) for more information on how to run the tests.
 
