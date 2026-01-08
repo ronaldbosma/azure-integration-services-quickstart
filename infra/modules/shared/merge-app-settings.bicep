@@ -21,7 +21,7 @@ param newAppSettings object
 // Existing resources
 //=============================================================================
 
-resource site 'Microsoft.Web/sites@2024-04-01' existing = {
+resource site 'Microsoft.Web/sites@2025-03-01' existing = {
   name: siteName
 }
 
