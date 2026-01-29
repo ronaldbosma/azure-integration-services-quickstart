@@ -13,7 +13,6 @@ on:
       - main
     paths:
       - '.github/workflows/azure-dev.yml'
-      - 'hooks/**'
       - 'infra/**'
       - 'src/**'
       - 'tests/AISQuick.IntegrationTests/**'
@@ -171,7 +170,6 @@ jobs:
       contents: read  # Required to checkout code if needed
     
     outputs:
-      AZURE_RESOURCE_GROUP: ${{ steps.get-outputs.outputs.AZURE_RESOURCE_GROUP }}
       AZURE_API_MANAGEMENT_GATEWAY_URL: ${{ steps.get-outputs.outputs.AZURE_API_MANAGEMENT_GATEWAY_URL }}
       AZURE_KEY_VAULT_URI: ${{ steps.get-outputs.outputs.AZURE_KEY_VAULT_URI }}
     
@@ -227,7 +225,7 @@ jobs:
     - name: Get Output Variables
       id: get-outputs
       run: |
-        .\.github\workflows\scripts\export-azd-env-variables.ps1 -VariableNames @("AZURE_RESOURCE_GROUP", "AZURE_API_MANAGEMENT_GATEWAY_URL", "AZURE_KEY_VAULT_URI")
+        .\.github\workflows\scripts\export-azd-env-variables.ps1 -VariableNames @("AZURE_API_MANAGEMENT_GATEWAY_URL", "AZURE_KEY_VAULT_URI")
 
 
   # ------------------------------------------------------------
@@ -328,7 +326,3 @@ jobs:
     - name: Cleanup Resources
       run: |
         azd down --purge --force --no-prompt
-      env:
-        # Pass the deployed resource identifiers as environment variables so azd hooks can access them
-        # during cleanup operations (e.g., for custom resource deletion or additional cleanup tasks).
-        AZURE_RESOURCE_GROUP: ${{ needs.deploy.outputs.AZURE_RESOURCE_GROUP }}

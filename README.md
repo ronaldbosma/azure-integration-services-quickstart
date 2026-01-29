@@ -41,13 +41,6 @@ Before you can deploy this template, make sure you have the following tools inst
 **Required Permissions:**
 - You need **Owner** permissions, or a combination of **Contributor** and **Role Based Access Control Administrator** permissions on an Azure Subscription to deploy this template.
 
-**Optional Prerequisites:**
-
-This templates uses a hook to permanently delete the Log Analytics Workspace. If you do not have the following tools installed, remove the hook from [azure.yaml](azure.yaml). See [this section](#hooks) for more information.
-
-- [PowerShell](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell)
-- [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
-
 ### Deployment
 
 Once the prerequisites are installed on your machine, you can deploy this template using the following steps:
@@ -64,12 +57,6 @@ Once the prerequisites are installed on your machine, you can deploy this templa
 
     ```cmd
     azd auth login
-    ```
-
-1. Run the `az login` command to authenticate to your Azure subscription using the **Azure CLI** _(if you haven't already)_. This is required for the [hooks](#hooks) to function properly. Make sure to log into the same tenant as the Azure Developer CLI.
-
-    ```cmd
-    az login
     ```
 
 1. Run the `azd up` command to provision the resources in your Azure subscription. This will deploy both the infrastructure and the sample application, and typically takes around 5 minutes to complete. _(Use `azd provision` to only deploy the infrastructure.)_
@@ -98,7 +85,7 @@ The [Demo Guide](demos/demo-sample-application.md) provides a step-by-step walkt
 
 ### Clean up
 
-Once you're done and want to clean up, run the `azd down` command. By including the `--purge` parameter, you ensure that the API Management service doesn't remain in a soft-deleted state, which could block future deployments of the same environment.
+Once you're done and want to clean up, run the `azd down` command. By including the `--purge` parameter, you ensure that the API Management service and Log Analytics workspace don't remain in a soft-deleted state, which could cause issues with future deployments of the same environment.
 
 ```cmd
 azd down --purge
@@ -155,7 +142,6 @@ The repository consists of the following files and directories:
 ├── .github                    
 │   └── workflows                  [ GitHub Actions workflow(s) ]
 ├── demos                          [ Demo guide(s) ]
-├── hooks                          [ AZD Hooks to execute at different stages of the deployment process ]
 ├── images                         [ Images used in the README ]
 ├── infra                          [ Infrastructure As Code files ]
 │   |── functions                  [ Bicep user-defined functions ]
@@ -314,16 +300,6 @@ This [naming convention](infra/functions/naming-conventions.bicep) is implemente
 The following image displays an example of the resources deployed with this template:
 
 ![Deployed Resources](images/deployed-resources.png)
-
-
-## Hooks
-
-This template has hooks that are executed at different stages of the deployment process. The following hooks are included:
-  
-- [predown-remove-law.ps1](hooks/predown-remove-law.ps1): 
-  This PowerShell script is executed before the resources are removed. 
-  It permanently deletes all Log Analytics workspaces in the resource group to prevent issues with future deployments.
-  Sometimes the requests and traces don't show up in Application Insights & Log Analytics when removing and deploying the template multiple times.
 
 
 ## Pipeline
