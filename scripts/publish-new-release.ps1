@@ -87,7 +87,7 @@ try {
     }
     $tagDate = git log -1 --format=%aI $latestTag
     Write-Success "Latest tag: $latestTag"
-    Write-Host "Tag date: $tagDate"
+    Write-Host    "Tag date:   $tagDate"
     
     # ===== EXTRACT VERSION FROM TAG =====
     Write-Header "Parsing version from tag"
