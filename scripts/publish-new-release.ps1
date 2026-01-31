@@ -58,6 +58,13 @@ try {
     # ===== SWITCH TO MAIN BRANCH =====
     Write-Header "Switching to main branch"
     git checkout main
+    
+    # Verify we're actually on main
+    $currentBranch = git branch --show-current
+    if ($currentBranch -ne "main") {
+        Write-Error "Failed to switch to main branch. Currently on: $currentBranch"
+        exit 1
+    }
     Write-Success "Switched to main branch"
     
     # ===== CHECK FOR LOCAL CHANGES =====
