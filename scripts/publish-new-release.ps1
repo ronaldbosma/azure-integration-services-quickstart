@@ -139,7 +139,7 @@ try {
     Write-Header "Release Summary"
     Write-Host "Current version tag: $latestTag"
     Write-Host "New version:         $newVersion"
-    Write-Host "Merged PRs:"
+    Write-Host "Changes:"
     if ($prList.Count -gt 0) {
         $prList | ForEach-Object {
             Write-Host "- $($_.title) #$($_.number)"
