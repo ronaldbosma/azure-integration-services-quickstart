@@ -116,31 +116,25 @@ try {
         $prList = $mergedPRs | ConvertFrom-Json
         Write-Success "Found $($prList.Count) merged PR(s)"
     }
-    
-    # ===== DISPLAY MERGED PRS =====
-    Write-Header "Merged PRs"
-    if ($prList.Count -gt 0) {
-        $prList | ForEach-Object {
-            Write-Host "  #$($_.number): $($_.title)"
-        }
-    }
-    else {
-        Write-Host "  (none)" -ForegroundColor Yellow
-    }
-    
+        
     # ===== CALCULATE NEW VERSION =====
-    Write-Header "Calculating new version"
     $newMinor = $minor + 1
     $newPatch = 0
     $newVersion = "$major.$newMinor.$newPatch"
-    
-    Write-Success "New version: $newVersion"
     
     # ===== SUMMARY =====
     Write-Header "Release Summary"
     Write-Host "Current version tag: $latestTag"
     Write-Host "New version:         $newVersion"
-    Write-Host "Merged PRs:          $($prList.Count)"
+    Write-Host "Merged PRs:"
+    if ($prList.Count -gt 0) {
+        $prList | ForEach-Object {
+            Write-Host "- $($_.title) #$($_.number)"
+        }
+    }
+    else {
+        Write-Host "  (none)" -ForegroundColor Yellow
+    }
     Write-Host ""
     
 }
