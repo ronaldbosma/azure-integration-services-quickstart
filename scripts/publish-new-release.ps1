@@ -196,7 +196,7 @@ try {
     Write-Header "Creating and pushing tag"
     git tag $newVersion
     Write-Success "Tag $newVersion created"
-    exit 1
+    
     git push origin $newVersion
     Write-Success "Tag $newVersion pushed to GitHub"
     
