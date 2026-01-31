@@ -12,6 +12,11 @@
     - Finding PRs merged after the latest tag
     - Incrementing the version (minor bump, patch reset to 0)
     - Displaying the new version and merged PRs
+    - With user confirmation:
+      - Updating the azure.yaml template version
+      - Creating a new tag
+      - Push changes to GitHub
+      - Creating a GitHub release with generated release notes
 
 .NOTES
     Requirements: git CLI and GitHub CLI (gh) must be installed and authenticated
@@ -85,9 +90,9 @@ try {
         Write-Error "No version tags found. Please create an initial version tag (e.g., 1.0.0)"
         exit 1
     }
-    $tagDate = git log -1 --format=%aI $latestTag
-    Write-Success "Latest tag: $latestTag"
-    Write-Host    "Tag date:   $tagDate"
+    $tagTimestamp = git log -1 --format=%aI $latestTag
+    Write-Success "Latest tag:    $latestTag"
+    Write-Host    "Tag timestamp: $tagTimestamp"
     
     # ===== EXTRACT VERSION FROM TAG =====
     Write-Header "Parsing version from tag"
@@ -107,10 +112,10 @@ try {
     Write-Header "Finding PRs merged after latest tag"
     
     # Get all PRs merged into main after the tag
-    $mergedPRs = gh pr list --search "base:main merged:>$tagDate" --state merged --json number,title,mergedAt --limit 100
+    $mergedPRs = gh pr list --search "base:main merged:>$tagTimestamp" --state merged --json number,title,mergedAt --limit 100
     
     if (-not $mergedPRs -or $mergedPRs -eq "[]") {
-        Write-Host "No PRs found merged after $latestTag (date: $tagDate)" -ForegroundColor Yellow
+        Write-Host "No PRs found merged after $latestTag" -ForegroundColor Yellow
         $prList = @()
     }
     else {
@@ -136,6 +141,78 @@ try {
     else {
         Write-Host "  (none)" -ForegroundColor Yellow
     }
+    Write-Host ""
+    
+    # ===== CONFIRMATION =====
+    Write-Header "Proceed with Release?"
+    $confirmation = Read-Host "Update template version to $newVersion and publish release to GitHub? (yes/no)"
+    
+    if ($confirmation -ne "yes") {
+        Write-Host "Release cancelled by user." -ForegroundColor Yellow
+        exit 0
+    }
+    
+    # ===== UPDATE AZURE.YAML TEMPLATE VERSION =====
+    Write-Header "Updating azure.yaml template version"
+    
+    $scriptDir = $PSScriptRoot
+    $azureYamlPath = Join-Path $scriptDir ".." "azure.yaml"
+    
+    if (Test-Path $azureYamlPath) {
+        $azureYamlContent = Get-Content $azureYamlPath -Raw
+        
+        # Match template line with name@version pattern and capture the template name
+        if ($azureYamlContent -match 'template:\s+(.+?)@[\d\.]+') {
+            $templateName = $matches[1]
+            $oldPattern = "template:\s+$([regex]::Escape($templateName))@[\d\.]+"
+            $newValue = "template: $templateName@$newVersion"
+            
+            $updatedContent = $azureYamlContent -replace $oldPattern, $newValue
+            Set-Content -Path $azureYamlPath -Value $updatedContent -NoNewline
+            
+            Write-Success "Updated template version to $newVersion in azure.yaml"
+            
+            # Commit the change
+            git add $azureYamlPath
+            git commit -m "Update template version to $newVersion"
+            Write-Success "Committed azure.yaml changes"
+        }
+        else {
+            Write-Host "No template version found in azure.yaml - skipping update" -ForegroundColor Yellow
+        }
+    }
+    else {
+        Write-Host "azure.yaml not found - skipping update" -ForegroundColor Yellow
+    }
+    
+    # ===== CREATE AND PUSH TAG =====
+    Write-Header "Creating and pushing tag"
+    git tag $newVersion
+    Write-Success "Tag $newVersion created"
+    exit 1
+    git push origin $newVersion
+    Write-Success "Tag $newVersion pushed to GitHub"
+    
+    # ===== CREATE RELEASE NOTES =====
+    Write-Header "Creating release"
+    $releaseNotes = "# Changes`n`n"
+    if ($prList.Count -gt 0) {
+        $prList | ForEach-Object {
+            $releaseNotes += "- $($_.title) #$($_.number)`n"
+        }
+    }
+    else {
+        $releaseNotes += "No changes`n"
+    }
+    
+    # ===== CREATE GITHUB RELEASE =====
+    gh release create $newVersion `
+        --title $newVersion `
+        --notes $releaseNotes `
+        --target main `
+        --latest
+    
+    Write-Success "Release $newVersion created successfully!"
     Write-Host ""
     
 }
