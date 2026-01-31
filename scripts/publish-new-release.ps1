@@ -122,8 +122,8 @@ try {
     $mergedPRs = gh pr list --search "base:main merged:>$tagTimestamp" --state merged --json number,title,mergedAt --limit 100
     
     if (-not $mergedPRs -or $mergedPRs -eq "[]") {
-        Write-Host "No PRs found merged after $latestTag" -ForegroundColor Yellow
-        $prList = @()
+        Write-Error "No PRs found merged after $latestTag" -ForegroundColor Yellow
+        exit 1
     }
     else {
         $prList = $mergedPRs | ConvertFrom-Json
