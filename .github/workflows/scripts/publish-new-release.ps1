@@ -34,8 +34,8 @@ try {
     Assert-HasChanges
     $newVersion = Get-NewVersion -VersionBump $VersionBump
     Update-AzureYamlVersion -NewVersion $newVersion
-    Set-ReleaseTag -Tag $newVersion
-    New-GitHubRelease -Tag $newVersion
+    # Set-ReleaseTag -Tag $newVersion
+    # New-GitHubRelease -Tag $newVersion
 }
 catch {
     Write-Error "Script execution failed: $_"
