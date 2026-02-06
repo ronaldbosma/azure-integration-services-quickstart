@@ -119,6 +119,9 @@ function Update-AzureYamlVersion {
             git add $azureYamlPath
             git commit -m "Update template version to $NewVersion"
             Write-Host "Committed azure.yaml changes"
+
+            Write-Host "Pushing changes to main branch"
+            git push origin main --force
             Write-Host ""
         }
         else {
