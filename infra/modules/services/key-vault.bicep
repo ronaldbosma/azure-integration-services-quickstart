@@ -25,7 +25,7 @@ param keyVaultName string
 
 // Key Vault (see also: https://learn.microsoft.com/en-us/azure/key-vault/secrets/quick-create-bicep?tabs=CLI)
 
-resource keyVault 'Microsoft.KeyVault/vaults@2024-11-01' = {
+resource keyVault 'Microsoft.KeyVault/vaults@2025-05-01' = {
   name: keyVaultName
   location: location
   tags: tags
@@ -42,3 +42,9 @@ resource keyVault 'Microsoft.KeyVault/vaults@2024-11-01' = {
     }
   }
 }
+
+//=============================================================================
+// Outputs
+//=============================================================================
+
+output vaultUri string = keyVault.properties.vaultUri

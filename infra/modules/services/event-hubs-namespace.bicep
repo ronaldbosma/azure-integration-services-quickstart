@@ -42,3 +42,9 @@ resource eventHubsNamespace 'Microsoft.EventHub/namespaces@2024-01-01' = {
     maximumThroughputUnits: 0
   }
 }
+
+//=============================================================================
+// Outputs
+//=============================================================================
+
+output serviceBusEndpoint string = eventHubsNamespace.properties.serviceBusEndpoint

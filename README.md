@@ -35,18 +35,11 @@ Before you can deploy this template, make sure you have the following tools inst
   - Installing `azd` also installs the following tools:  
     - [GitHub CLI](https://cli.github.com)  
     - [Bicep CLI](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/install)  
-- [.NET 9 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)  
+- [.NET 10 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)  
 - [npm CLI](https://nodejs.org/) _(This template uses a workaround to deploy the Logic App workflow, which requires the npm CLI.)_
 
 **Required Permissions:**
 - You need **Owner** permissions, or a combination of **Contributor** and **Role Based Access Control Administrator** permissions on an Azure Subscription to deploy this template.
-
-#### Optional Prerequisites
-
-This templates uses a hook to permanently delete the Log Analytics Workspace. If you do not have the following tools installed, remove the hook from [azure.yaml](azure.yaml). See [this section](#hooks) for more information.
-
-- [PowerShell](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell)
-- [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
 
 ### Deployment
 
@@ -64,12 +57,6 @@ Once the prerequisites are installed on your machine, you can deploy this templa
 
     ```cmd
     azd auth login
-    ```
-
-1. Run the `az login` command to authenticate to your Azure subscription using the **Azure CLI** _(if you haven't already)_. This is required for the [hooks](#hooks) to function properly. Make sure to log into the same tenant as the Azure Developer CLI.
-
-    ```cmd
-    az login
     ```
 
 1. Run the `azd up` command to provision the resources in your Azure subscription. This will deploy both the infrastructure and the sample application, and typically takes around 5 minutes to complete. _(Use `azd provision` to only deploy the infrastructure.)_
@@ -90,39 +77,15 @@ Once the prerequisites are installed on your machine, you can deploy this templa
 
 If you only deploy the Function App or Logic App, use `azd provision` to deploy the infrastructure and then use `azd deploy functionApp` or `azd deploy logicApp` to deploy the sample Azure Function or Logic App workflow, respectively.
 
-### Test
 
-The [tests.http](./tests/tests.http) file contains a set of HTTP requests that you can use to manually test the deployed resources. Note that you'll need to deploy the application infrastructure, API Management and Service Bus, and include the Function and/or Logic App.
+### Demo and Test
 
-> See the [Integration Tests](#integration-tests) section for automated tests to verify the complete message flow.
+The [Demo Guide](demos/demo-sample-application.md) provides a step-by-step walkthrough on how to test and demonstrate the deployed resources and sample application.
 
-Follow these steps to test the sample application using Visual Studio Code:
-
-1. Install the [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) extension in Visual Studio Code. 
-1. The API is protected and needs to be called with a subscription key. Either:
-   - Locate the `Built-in all-access` subscription in API Management and copy the primary key,
-   - Or locate the `apim-master-subscription-key` secret in Key Vault and copy the secret value.
-1. Add an environment to your Visual Studio Code user settings with the API Management hostname and subscription key. Use the following example and replace the values with your own:
-   ```
-   "rest-client.environmentVariables": {
-       "aisquick": {
-           "apimHostname": "apim-aisquick-sdc-5spzh.azure-api.net",
-           "apimSubscriptionKey": "1234567890abcdefghijklmnopqrstuv"
-       }
-   }
-   ```
-1. Open `tests.http` and at the bottom right of the editor, select the `aisquick` environment you just configured.
-1. Click on `Send Request` above the first request. This will send a message to the Service Bus topic.
-1. Click on `Send Request` above the second request to retrieve the message from the storage table. A `404 Not Found` response might be returned if the message hasn't been processed yet or if you haven't deployed the Azure Function.
-1. Click on `Send Request` above the third request to retrieve the message from the blob container. A `404 Not Found` response might be returned if the message hasn't been processed yet or if you haven't deployed the Logic App workflow.
-
-### Demo
-
-See the [Demo Guide](demos/demo-sample-application.md) for a step-by-step walkthrough on how to demonstrate the deployed resources and the sample application.
 
 ### Clean up
 
-Once you're done and want to clean up, run the `azd down` command. By including the `--purge` parameter, you ensure that the API Management service doesn't remain in a soft-deleted state, which could block future deployments of the same environment.
+Once you're done and want to clean up, run the `azd down` command. By including the `--purge` parameter, you ensure that the API Management service and Log Analytics workspace don't remain in a soft-deleted state, which could cause issues with future deployments of the same environment.
 
 ```cmd
 azd down --purge
@@ -179,7 +142,6 @@ The repository consists of the following files and directories:
 ├── .github                    
 │   └── workflows                  [ GitHub Actions workflow(s) ]
 ├── demos                          [ Demo guide(s) ]
-├── hooks                          [ AZD Hooks to execute at different stages of the deployment process ]
 ├── images                         [ Images used in the README ]
 ├── infra                          [ Infrastructure As Code files ]
 │   |── functions                  [ Bicep user-defined functions ]
@@ -222,7 +184,7 @@ When the `includeApiManagement` parameter or the corresponding `INCLUDE_API_MANA
 When the `includeFunctionApp` parameter or the corresponding `INCLUDE_FUNCTION_APP` environment variable is set to `true`, a Function App is deployed via the [function-app.bicep](./infra/modules/services/function-app.bicep) module:
 
 - The `Y1` (Consumption) pricing tier is used. 
-- The worker runtime is configured to .NET 9 isolated. 
+- The worker runtime is configured to .NET 10 isolated. 
 - Both a user-assigned managed identity and system-assigned managed identity are deployed to provide access to other services. See the [Role Assignments](#role-assignments) section for more information.
 
 The following app settings (environment variables) are configured to facilitate connections to other services.
@@ -247,7 +209,7 @@ The `StorageAccountConnection`, `EventHubConnection` or `ServiceBusConnection` c
 When the `includeLogicApp` parameter or the corresponding `INCLUDE_LOGIC_APP` environment variable is set to `true`, a Standard single-tenant Logic App is deployed via the [logic-app.bicep](./infra/modules/services/logic-app.bicep) module:
 
 - The `WS1` (Workflow Standard) pricing tier is used. 
-- The worker runtime is configured to .NET 9 to enable the use of [custom .NET code](https://learn.microsoft.com/en-us/azure/logic-apps/create-run-custom-code-functions). 
+- The worker runtime is configured to .NET 8 to enable the use of [custom .NET code](https://learn.microsoft.com/en-us/azure/logic-apps/create-run-custom-code-functions). 
 - Both a user-assigned managed identity and system-assigned managed identity are deployed to provide access to other services. See the [Role Assignments](#role-assignments) section for more information.
 
 The following app settings (environment variables) are configured to facilitate connections to other services. These are used in the [connections.json](./src/logicApp/Workflows/connections.json) file of the sample application.
@@ -340,16 +302,6 @@ The following image displays an example of the resources deployed with this temp
 ![Deployed Resources](images/deployed-resources.png)
 
 
-## Hooks
-
-This template has hooks that are executed at different stages of the deployment process. The following hooks are included:
-  
-- [predown-remove-law.ps1](hooks/predown-remove-law.ps1): 
-  This PowerShell script is executed before the resources are removed. 
-  It permanently deletes all Log Analytics workspaces in the resource group to prevent issues with future deployments.
-  Sometimes the requests and traces don't show up in Application Insights & Log Analytics when removing and deploying the template multiple times.
-
-
 ## Pipeline
 
 This template includes a GitHub Actions workflow that automates the build, deployment, test and cleanup process. The workflow is defined in [azure-dev.yml](.github/workflows/azure-dev.yml) and provides a complete CI/CD pipeline for this template using the Azure Developer CLI.
@@ -358,7 +310,7 @@ This template includes a GitHub Actions workflow that automates the build, deplo
 
 The pipeline consists of the following jobs:
 
-- **Build, Verify and Package**: This job sets up the build environment, performs Bicep linting and packages the Function App, Logic App and integration tests.
+- **Build, Verify and Package**: This job sets up the build environment, validates the Bicep template and packages the Function App, Logic App and integration tests.
 - **Deploy to Azure**: This job provisions the Azure infrastructure and deploys the packaged applications to the created resources.
 - **Execute Integration Tests**: This job runs automated [integration tests](#integration-tests) on the deployed resources to verify correct functionality. Tests are executed only when both API Management and the Application Infrastructure resources are included in the deployment, as these components are prerequisites for successful test execution.
 - **Clean Up Resources**: This job removes all deployed Azure resources.  
@@ -390,16 +342,9 @@ For detailed guidance, refer to:
 
 ## Integration Tests
 
-The project includes integration tests built with **.NET 9** that validate the complete message flow through the deployed Azure services. The test implements the same workflow described in the [Test](#test) section:
-
-1. Retrieves the API Management subscription key from Key Vault using [DefaultAzureCredential](https://learn.microsoft.com/en-us/dotnet/api/azure.identity.defaultazurecredential?view=azure-dotnet), which leverages your Azure CLI or Azure Developer CLI authentication context
-2. Publishes a message to the Service Bus topic via API Management
-3. Verifies message processing:
-   - **Function App** (if included): Checks if the message is stored in Table Storage
-   - **Logic App** (if included): Checks if the message is stored in Blob Storage
-
-The tests automatically locate your azd environment's `.env` file to retrieve necessary configuration.
+The project includes integration tests built with **.NET 10** that validate the complete message flow through the deployed Azure services. 
 The integration tests are located in [AISQuickSampleTests.cs](tests/AISQuick.IntegrationTests/AISQuickSampleTests.cs).
+See the [Demo Guide](demos/demo-sample-application.md) for more information on how to run the tests.
 
 
 ## Troubleshooting
@@ -493,44 +438,3 @@ If you already have a Workflow Standard WS1 tier (`SKU=WS1`) Logic App deployed 
 ```
 
 Use the `azd down --purge` command to delete the resources, then deploy the template in a different region.
-
-### Logging doesn't show in App Insights
-
-Sometimes the requests and traces don't show up in Application Insights & Log Analytics. I've had this happen when I'd taken down an environment and redeployed it with the same name. 
-
-To resolve this, first remove the environment using `azd down --purge`. Then, permanently delete the Log Analytics workspace using the [`az monitor log-analytics workspace delete`](https://learn.microsoft.com/en-us/cli/azure/monitor/log-analytics/workspace?view=azure-cli-latest#az-monitor-log-analytics-workspace-delete) command. Here's an example:
-
-```cmd
-az monitor log-analytics workspace delete --resource-group rg-aisquick-sdc-5spzh --workspace-name log-aisquick-sdc-5spzh --force
-```
-
-After that, redeploy the template. If logging still doesn't appear, deploy the template in a different region or using a different environment name.
-
-I've registered https://github.com/Azure/azure-dev/issues/5080 in the Azure Developer CLI repository to track this issue.
-
-### ERROR: prompting for value: default value of select must be an int or string
-
-You may see this error when running `azd up` or `azd provision` from Azure Cloud Shell:
-
-```
-ERROR: prompting for value: default value of select must be an int or string
-```
-
-This template uses optional boolean parameters to include or exclude resources, which doesn't seem to work in the Cloud Shell. 
-
-Workarounds:
-1. Run the command from another environment, like your local machine.
-1. Pre-set the environment variables so no interactive prompts are required, then run `azd up` or `azd provision` again.
-
-   For example, to deploy API Management and the Function App, but not the Logic App, Service Bus and Event Hubs namespace, execute the following commands:
-
-    ```cmd
-    azd env set INCLUDE_API_MANAGEMENT true
-    azd env set INCLUDE_APPLICATION_INFRA_RESOURCES false
-    azd env set INCLUDE_EVENT_HUBS_NAMESPACE false
-    azd env set INCLUDE_FUNCTION_APP true
-    azd env set INCLUDE_LOGIC_APP false
-    azd env set INCLUDE_SERVICE_BUS false
-    ```
-
-I've registered [this issue](https://github.com/Azure/azure-dev/issues/5944) in the Azure Developer CLI repository to track this problem.

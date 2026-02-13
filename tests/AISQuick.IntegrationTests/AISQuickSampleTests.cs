@@ -13,10 +13,10 @@ public sealed class AISQuickSampleTests
         // Arrange
         var config = TestConfiguration.Load();
 
-        var keyVaultClient = new KeyVaultClient(config.AzureKeyVaultName);
+        var keyVaultClient = new KeyVaultClient(config.AzureKeyVaultUri);
         var apimSubscriptionKey = await keyVaultClient.GetSecretValueAsync("apim-master-subscription-key");
 
-        using var apiClient = new SampleApiClient(config.AzureApiManagementName, apimSubscriptionKey);
+        using var apiClient = new SampleApiClient(config.AzureApiManagementGatewayUrl, apimSubscriptionKey);
 
         // Act & Assert
 

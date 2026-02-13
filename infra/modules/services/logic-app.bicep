@@ -46,31 +46,31 @@ param storageAccountName string
 
 // azd uses the 'azd-service-name' tag to identify the service when deploying the app source code from the src folder.
 // In this case the logic app workflow(s) and related assets.
-var serviceTags = union(tags, {
+var serviceTags { *: string } = union(tags, {
   'azd-service-name': 'logicApp'
 })
 
 // If API Management is deployed, add app settings to connect to it
-var apimAppSettings = apiManagementSettings == null ? {} : {
+var apimAppSettings object = apiManagementSettings == null ? {} : {
   ApiManagement_gatewayUrl: helpers.getApiManagementGatewayUrl(apiManagementSettings!.serviceName)
   ApiManagement_subscriptionKey: helpers.getKeyVaultSecretReference(keyVaultName, 'apim-master-subscription-key')
 }
 
 // If the Event Hubs namespace is deployed, add app settings to connect to it
-var eventHubAppSettings = eventHubSettings == null ? {} : {
+var eventHubAppSettings object = eventHubSettings == null ? {} : {
   EventHub_fullyQualifiedNamespace: helpers.getServiceBusFullyQualifiedNamespace(eventHubSettings!.namespaceName)
 }
 
 // If the Service Bus is deployed, add app settings to connect to it
-var serviceBusAppSettings = serviceBusSettings == null ? {} : {
+var serviceBusAppSettings object = serviceBusSettings == null ? {} : {
   ServiceBus_fullyQualifiedNamespace: helpers.getServiceBusFullyQualifiedNamespace(serviceBusSettings!.namespaceName)
 }
 
 // Construct the storage account connection string
 // NOTE: tried using a key vault secret but regularly got errors because the role assignment for the function app on the key vault was not yet effective
-var storageAccountConnectionString = 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount.listKeys().keys[0].value}'
+var storageAccountConnectionString string = 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount.listKeys().keys[0].value}'
 
-var appSettings = {
+var appSettings object = {
   APP_KIND: 'workflowApp'
   APPLICATIONINSIGHTS_CONNECTION_STRING: appInsights.properties.ConnectionString
   AzureFunctionsJobHost__extensionBundle__id: 'Microsoft.Azure.Functions.ExtensionBundle.Workflows'
@@ -80,7 +80,7 @@ var appSettings = {
   FUNCTIONS_WORKER_RUNTIME: 'dotnet'
   WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: storageAccountConnectionString
   WEBSITE_CONTENTSHARE: toLower(logicAppSettings.logicAppName)
-  WEBSITE_NODE_DEFAULT_VERSION: '~20'
+  WEBSITE_NODE_DEFAULT_VERSION: '~22'
 
   // Storage Account App Settings
   AzureBlob_blobStorageEndpoint: helpers.getBlobStorageEndpoint(storageAccountName)
@@ -102,7 +102,7 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
   name: appInsightsName
 }
 
-resource storageAccount 'Microsoft.Storage/storageAccounts@2024-01-01' existing = {
+resource storageAccount 'Microsoft.Storage/storageAccounts@2025-06-01' existing = {
   name: storageAccountName
 }
 
@@ -131,7 +131,7 @@ module assignRolesToLogicAppUserAssignedIdentity '../shared/assign-roles-to-prin
 
 // Create the App Service Plan for the Logic App
 
-resource hostingPlan 'Microsoft.Web/serverfarms@2024-04-01' = {
+resource hostingPlan 'Microsoft.Web/serverfarms@2025-03-01' = {
   name: logicAppSettings.appServicePlanName
   location: location
   tags: tags
@@ -148,7 +148,7 @@ resource hostingPlan 'Microsoft.Web/serverfarms@2024-04-01' = {
 
 // Create the Logic App
 
-resource logicApp 'Microsoft.Web/sites@2024-04-01' = {
+resource logicApp 'Microsoft.Web/sites@2025-03-01' = {
   name: logicAppSettings.logicAppName
   location: location
   tags: serviceTags
@@ -200,3 +200,9 @@ module setLogicAppSettings '../shared/merge-app-settings.bicep' = {
     assignRolesToLogicAppSystemAssignedIdentity // App settings might be dependent on the logic app having access to e.g. Key Vault
   ]
 }
+
+//=============================================================================
+// Outputs
+//=============================================================================
+
+output endpoint string = 'https://${logicApp.properties.defaultHostName}'

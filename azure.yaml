@@ -2,12 +2,7 @@
 
 name: azure-integration-services-quickstart
 metadata:
-  template: tdd-azure-integration-services-quickstart@1.7.0
-hooks:
-  predown:
-    - shell: pwsh
-      run: ./hooks/predown-remove-law.ps1
-      interactive: true
+  template: tdd-azure-integration-services-quickstart@1.14.0
 services:
   functionApp:
     project: ./src/functionApp
@@ -18,4 +13,4 @@ services:
     host: function
     language: js  # Logic Apps aren't natively supported by azd yet. By using js, the logic app will be zipped and deployed.
 requiredVersions: 
-  azd: ">= 1.17.0"  # azd version 1.17.0 or later is required because of the new bicep linter rule 'no-unused-imports'.
+  azd: ">= 1.19.0"  # azd version 1.19.0 or higher is required because older versions have issue in Azure Cloud Shell.
