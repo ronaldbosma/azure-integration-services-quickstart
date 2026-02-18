@@ -132,7 +132,7 @@ There are a couple of ways to change which Azure Integration Services are deploy
 
    The environment variables take precedence over the parameters in the `config.json` file. If both are present, the environment variables will be used.
 
-When disabling an already deployed service, it will not be removed when running `azd up` or `azd provision` again. You will need to manually remove the resources from the Azure portal or use `azd down` to remove the entire environment.
+When disabling an already deployed service, it will not be removed when running `azd up` or `azd provision` again. You will need to manually remove the resources from the Azure portal or use `azd down --purge` to remove the entire environment.
 
 ## Contents
 
@@ -438,3 +438,4 @@ If you already have a Workflow Standard WS1 tier (`SKU=WS1`) Logic App deployed 
 ```
 
 Use the `azd down --purge` command to delete the resources, then deploy the template in a different region.
+
