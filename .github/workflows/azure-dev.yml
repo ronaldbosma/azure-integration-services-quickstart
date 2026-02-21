@@ -229,11 +229,11 @@ jobs:
 
 
   # ------------------------------------------------------------
-  # Execute Integration Tests
+  # Verify Deployment
   # ------------------------------------------------------------
 
-  integration-tests:
-    name: Execute Integration Tests
+  verify-deployment:
+    name: Verify Deployment
     needs: deploy
     # It only makes sense to execute the integration tests if both API Management and the API is included in the deployment, else it will always fail
     if: ${{ vars.INCLUDE_API_MANAGEMENT == 'true' && vars.INCLUDE_APPLICATION_INFRA_RESOURCES == 'true' }}
@@ -286,16 +286,16 @@ jobs:
 
   cleanup:
     name: Clean Up Resources
-    needs: [deploy, integration-tests]
+    needs: [ deploy, verify-deployment ]
     # Execute the cleanup job if:
-    # - The workflow was not manually triggered, or the cleanup-resources input is true
-    # - AND either the integration tests succeeded or were skipped and deployment succeeded
+    # - The workflow was not manually triggered, OR the cleanup-resources input is true
+    # - AND either the deployment verification succeeded OR (was skipped AND deployment succeeded)
     if: |
       always() &&
       (github.event_name != 'workflow_dispatch' || github.event.inputs.cleanup-resources == 'true') &&
       (
-        needs.integration-tests.result == 'success' ||
-        (needs.integration-tests.result == 'skipped' && needs.deploy.result == 'success')
+        needs.verify-deployment.result == 'success' ||
+        (needs.verify-deployment.result == 'skipped' && needs.deploy.result == 'success')
       )
     runs-on: ubuntu-latest
     permissions:
