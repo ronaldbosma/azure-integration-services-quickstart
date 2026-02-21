@@ -119,6 +119,7 @@ module assignRolesToFunctionAppUserAssignedIdentity '../shared/assign-roles-to-p
   params: {
     principalId: functionAppIdentity.properties.principalId
     principalType: 'ServicePrincipal'
+    appInsightsName: appInsightsName
     eventHubSettings: eventHubSettings
     keyVaultName: keyVaultName
     serviceBusSettings: serviceBusSettings
@@ -173,6 +174,7 @@ module assignRolesToFunctionAppSystemAssignedIdentity '../shared/assign-roles-to
   params: {
     principalId: functionApp.identity.principalId
     principalType: 'ServicePrincipal'
+    appInsightsName: appInsightsName
     eventHubSettings: eventHubSettings
     keyVaultName: keyVaultName
     serviceBusSettings: serviceBusSettings

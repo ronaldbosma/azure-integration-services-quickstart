@@ -223,6 +223,7 @@ module assignRolesToDeployer 'modules/shared/assign-roles-to-principal.bicep' = 
   params: {
     principalId: deployer().objectId
     isAdmin: true
+    appInsightsName: appInsightsSettings.appInsightsName
     eventHubSettings: eventHubSettings
     keyVaultName: keyVaultName
     serviceBusSettings: serviceBusSettings
