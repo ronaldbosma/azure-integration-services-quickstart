@@ -1,6 +1,6 @@
 //=============================================================================
-// Assign roles to principal on Key Vault, Service Bus, Storage Account and
-// Event Hubs namespace
+// Assign roles to principal on Application Insights, Key Vault, Service Bus, 
+// Storage Account and Event Hubs namespace
 //=============================================================================
 
 //=============================================================================
