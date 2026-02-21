@@ -71,6 +71,7 @@ var serviceBusAppSettings object = serviceBusSettings == null ? {} : {
 var storageAccountConnectionString string = 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount.listKeys().keys[0].value}'
 
 var appSettings object = {
+  APPLICATIONINSIGHTS_AUTHENTICATION_STRING: 'Authorization=AAD'
   APPLICATIONINSIGHTS_CONNECTION_STRING: appInsights.properties.ConnectionString
   AzureWebJobsStorage: storageAccountConnectionString
   FUNCTIONS_EXTENSION_VERSION: '~4'

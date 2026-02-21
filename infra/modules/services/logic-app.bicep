@@ -72,6 +72,7 @@ var storageAccountConnectionString string = 'DefaultEndpointsProtocol=https;Acco
 
 var appSettings object = {
   APP_KIND: 'workflowApp'
+  APPLICATIONINSIGHTS_AUTHENTICATION_STRING: 'Authorization=AAD'
   APPLICATIONINSIGHTS_CONNECTION_STRING: appInsights.properties.ConnectionString
   AzureFunctionsJobHost__extensionBundle__id: 'Microsoft.Azure.Functions.ExtensionBundle.Workflows'
   AzureFunctionsJobHost__extensionBundle__version: '[1.*, 2.0.0)'

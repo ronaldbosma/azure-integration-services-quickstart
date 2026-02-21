@@ -171,6 +171,7 @@ resource apimAppInsightsLogger 'Microsoft.ApiManagement/service/loggers@2024-10-
       // If we would reference the connection string directly using appInsights.properties.ConnectionString,
       // a new named value is created every time we execute a deployment
       connectionString: '{{${appInsightsConnectionStringNamedValue.properties.displayName}}}'
+      identityClientId: 'SystemAssigned'
     }
     resourceId: appInsights.id
   }
