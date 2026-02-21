@@ -71,6 +71,7 @@ var serviceBusAppSettings object = serviceBusSettings == null ? {} : {
 var storageAccountConnectionString string = 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount.listKeys().keys[0].value}'
 
 var appSettings object = {
+  APPLICATIONINSIGHTS_AUTHENTICATION_STRING: 'Authorization=AAD'
   APPLICATIONINSIGHTS_CONNECTION_STRING: appInsights.properties.ConnectionString
   AzureWebJobsStorage: storageAccountConnectionString
   FUNCTIONS_EXTENSION_VERSION: '~4'
@@ -119,6 +120,7 @@ module assignRolesToFunctionAppUserAssignedIdentity '../shared/assign-roles-to-p
   params: {
     principalId: functionAppIdentity.properties.principalId
     principalType: 'ServicePrincipal'
+    appInsightsName: appInsightsName
     eventHubSettings: eventHubSettings
     keyVaultName: keyVaultName
     serviceBusSettings: serviceBusSettings
@@ -173,6 +175,7 @@ module assignRolesToFunctionAppSystemAssignedIdentity '../shared/assign-roles-to
   params: {
     principalId: functionApp.identity.principalId
     principalType: 'ServicePrincipal'
+    appInsightsName: appInsightsName
     eventHubSettings: eventHubSettings
     keyVaultName: keyVaultName
     serviceBusSettings: serviceBusSettings

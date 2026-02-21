@@ -100,6 +100,7 @@ module assignRolesToApimUserAssignedIdentity '../shared/assign-roles-to-principa
   params: {
     principalId: apimIdentity.properties.principalId
     principalType: 'ServicePrincipal'
+    appInsightsName: appInsightsName
     eventHubSettings: eventHubSettings
     keyVaultName: keyVaultName
     serviceBusSettings: serviceBusSettings
@@ -136,6 +137,7 @@ module assignRolesToApimSystemAssignedIdentity '../shared/assign-roles-to-princi
   params: {
     principalId: apiManagementService.identity.principalId
     principalType: 'ServicePrincipal'
+    appInsightsName: appInsightsName
     eventHubSettings: eventHubSettings
     keyVaultName: keyVaultName
     serviceBusSettings: serviceBusSettings
@@ -169,6 +171,7 @@ resource apimAppInsightsLogger 'Microsoft.ApiManagement/service/loggers@2024-10-
       // If we would reference the connection string directly using appInsights.properties.ConnectionString,
       // a new named value is created every time we execute a deployment
       connectionString: '{{${appInsightsConnectionStringNamedValue.properties.displayName}}}'
+      identityClientId: 'SystemAssigned'
     }
     resourceId: appInsights.id
   }

@@ -72,6 +72,7 @@ var storageAccountConnectionString string = 'DefaultEndpointsProtocol=https;Acco
 
 var appSettings object = {
   APP_KIND: 'workflowApp'
+  APPLICATIONINSIGHTS_AUTHENTICATION_STRING: 'Authorization=AAD'
   APPLICATIONINSIGHTS_CONNECTION_STRING: appInsights.properties.ConnectionString
   AzureFunctionsJobHost__extensionBundle__id: 'Microsoft.Azure.Functions.ExtensionBundle.Workflows'
   AzureFunctionsJobHost__extensionBundle__version: '[1.*, 2.0.0)'
@@ -122,6 +123,7 @@ module assignRolesToLogicAppUserAssignedIdentity '../shared/assign-roles-to-prin
   params: {
     principalId: logicAppIdentity.properties.principalId
     principalType: 'ServicePrincipal'
+    appInsightsName: appInsightsName
     eventHubSettings: eventHubSettings
     keyVaultName: keyVaultName
     serviceBusSettings: serviceBusSettings
@@ -178,6 +180,7 @@ module assignRolesToLogicAppSystemAssignedIdentity '../shared/assign-roles-to-pr
   params: {
     principalId: logicApp.identity.principalId
     principalType: 'ServicePrincipal'
+    appInsightsName: appInsightsName
     eventHubSettings: eventHubSettings
     keyVaultName: keyVaultName
     serviceBusSettings: serviceBusSettings

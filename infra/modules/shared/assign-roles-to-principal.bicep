@@ -1,6 +1,6 @@
 //=============================================================================
-// Assign roles to principal on Key Vault, Service Bus, Storage Account and
-// Event Hubs namespace
+// Assign roles to principal on Application Insights, Key Vault, Service Bus, 
+// Storage Account and Event Hubs namespace
 //=============================================================================
 
 //=============================================================================
@@ -21,6 +21,9 @@ param principalType string?
 
 @description('The flag to determine if the principal is an admin or not')
 param isAdmin bool = false
+
+@description('The name of the App Insights instance on which to assign roles')
+param appInsightsName string
 
 @description('The settings for the Event Hubs namespace on which to assign roles')
 param eventHubSettings eventHubSettingsType?
@@ -61,10 +64,15 @@ var storageAccountRoles string[] = [
   '0a9a7e1f-b9d0-4cc4-a60d-0319b160aaa3'      // Storage Table Data Contributor
 ]
 
+var monitoringMetricsPublisher string = '3913510d-42f4-4e42-8a64-420c390055eb' // Monitoring Metrics Publisher
 
 //=============================================================================
 // Existing Resources
 //=============================================================================
+
+resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
+  name: appInsightsName
+}
 
 resource eventHubsNamespace 'Microsoft.EventHub/namespaces@2024-01-01' existing = if (eventHubSettings != null) {
   name: eventHubSettings!.namespaceName
@@ -85,6 +93,18 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2025-06-01' existing 
 //=============================================================================
 // Resources
 //=============================================================================
+
+// Assign role Application Insights to the principal
+
+resource assignAppInsightRolesToPrincipal 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(principalId, appInsights.id, subscriptionResourceId('Microsoft.Authorization/roleDefinitions', monitoringMetricsPublisher))
+  scope: appInsights
+  properties: {
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', monitoringMetricsPublisher)
+    principalId: principalId
+    principalType: principalType
+  }
+}
 
 // Assign role on Event Hubs namespace to the principal (if Event Hubs namespace is included)
 
