@@ -1,0 +1,48 @@
+{
+    "name": "Azure Integration Services Quickstart",
+    "image": "mcr.microsoft.com/devcontainers/dotnet:dev-10.0",
+    "features": {
+        // See https://containers.dev/features for list of features
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+		"ghcr.io/devcontainers/features/azure-cli:latest": {
+			"version": "latest",
+			"installBicep": true
+		},
+        "ghcr.io/azure/azure-dev/azd:latest": {},
+        "ghcr.io/devcontainers/features/powershell:1": {
+            "version": "latest"
+        },
+        "ghcr.io/devcontainers/features/node:1": {}
+    },
+    "customizations": {
+        "vscode": {
+			"settings": {
+                // Set PowerShell as the default terminal profile for VS Code in the container
+				"terminal.integrated.defaultProfile.linux": "pwsh"
+			},
+            "extensions": [
+                "42crunch.vscode-openapi", // OpenAPI (Swagger) Editor
+                "GitHub.copilot",
+                "GitHub.vscode-github-actions",
+                "humao.rest-client",
+                "ms-azuretools.azure-dev",
+                "ms-azuretools.vscode-azure-github-copilot",
+                "ms-azuretools.vscode-azurefunctions",
+                "ms-azuretools.vscode-azurelogicapps",
+                "ms-azuretools.vscode-bicep",
+                //"ms-dotnettools.csdevkit", // Uncomment this line to include the C# Dev Kit extension
+				"ms-dotnettools.csharp",
+                "ms-vscode.powershell"
+            ]
+        }
+    },
+    "forwardPorts": [
+        // Forward ports if needed for local development
+    ],
+    "postCreateCommand": "",
+    "remoteUser": "vscode",
+    "hostRequirements": {
+        "memory": "8gb",
+        "cpus": 4
+    }
+}
