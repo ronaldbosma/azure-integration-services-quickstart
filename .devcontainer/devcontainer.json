@@ -1,5 +1,5 @@
 {
-    "name": "Track Availability in Application Insights",
+    "name": "Azure Integration Services Quickstart",
     "image": "mcr.microsoft.com/devcontainers/dotnet:dev-10.0",
     "features": {
         // See https://containers.dev/features for list of features
