@@ -56,7 +56,7 @@ var serviceBusRoles string[] = [
 ]
 
 var storageAccountRoles string[] = [
-  'ba92f5b4-2d11-453d-a403-e96b0029c9fe'      // Storage Blob Data Contributor
+  'b7e6dc6d-f1e8-4753-8033-0f276bb0955b'      // Storage Blob Data Owner (Contributor is insufficient when using managed identity for AzureWebJobsStorage in Function or Logic Apps)
   isAdmin 
     ? '69566ab7-960f-475b-8e7c-b3118f30c6bd'  // Storage File Data Privileged Contributor (is able to browse file shares in Azure Portal)
     : '0c867c2a-1d8c-454a-a3db-ab2ea1bdc8bb'  // Storage File Data SMB Share Contributor

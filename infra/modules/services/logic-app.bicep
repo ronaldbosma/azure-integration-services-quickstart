@@ -66,17 +66,13 @@ var serviceBusAppSettings object = serviceBusSettings == null ? {} : {
   ServiceBus_fullyQualifiedNamespace: helpers.getServiceBusFullyQualifiedNamespace(serviceBusSettings!.namespaceName)
 }
 
-// Construct the storage account connection string
-// NOTE: tried using a key vault secret but regularly got errors because the role assignment for the function app on the key vault was not yet effective
-var storageAccountConnectionString string = 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount.listKeys().keys[0].value}'
-
 var appSettings object = {
   APP_KIND: 'workflowApp'
   APPLICATIONINSIGHTS_AUTHENTICATION_STRING: 'Authorization=AAD'
   APPLICATIONINSIGHTS_CONNECTION_STRING: appInsights.properties.ConnectionString
   AzureFunctionsJobHost__extensionBundle__id: 'Microsoft.Azure.Functions.ExtensionBundle.Workflows'
   AzureFunctionsJobHost__extensionBundle__version: '[1.*, 2.0.0)'
-  AzureWebJobsStorage: storageAccountConnectionString
+  AzureWebJobsStorage__accountName: storageAccountName
   FUNCTIONS_EXTENSION_VERSION: '~4'
   FUNCTIONS_WORKER_RUNTIME: 'dotnet'
   WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: helpers.getKeyVaultSecretReference(keyVaultName, 'storage-account-connection-string')
@@ -101,10 +97,6 @@ var appSettings object = {
 
 resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
   name: appInsightsName
-}
-
-resource storageAccount 'Microsoft.Storage/storageAccounts@2025-06-01' existing = {
-  name: storageAccountName
 }
 
 //=============================================================================
