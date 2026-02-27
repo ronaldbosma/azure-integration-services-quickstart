@@ -124,6 +124,7 @@ module storageAccount 'modules/services/storage-account.bicep' = {
     location: location
     tags: tags
     storageAccountName: storageAccountName
+    keyVaultName: keyVaultName
   }
 }
 
