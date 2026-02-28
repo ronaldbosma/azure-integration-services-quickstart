@@ -10,10 +10,10 @@ This template deploys the following resources:
 
 This template is designed to simplify and accelerate the deployment of Azure Integration Services for:
 
-- Demos  
-- Testing configurations  
-- Quick setups for experimentation  
-- CI scenarios in your pipeline  
+- Demos
+- Testing configurations
+- Quick setups for experimentation
+- CI scenarios in your pipeline
 
 To minimize cost and reduce deployment time, the cheapest possible SKUs are used for each service. Virtual networks, application gateways and other security measures typically implemented in production scenarios are not included. Keep in mind that some resources may still incur costs, so it's a good idea to clean up when you're finished to avoid unexpected charges. The estimated costs are between $6 and $7 per day.
 
@@ -26,62 +26,62 @@ A sample application is included in the template to demonstrate how the services
 
 ## Getting Started
 
-### Prerequisites  
+### Prerequisites
 
-Before you can deploy this template, make sure you have the following tools installed and the necessary permissions. 
+Before you can deploy this template, make sure you have the following tools installed and the necessary permissions.
 
 **Required Tools:**
-- [Azure Developer CLI (azd)](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/install-azd)  
-  - Installing `azd` also installs the following tools:  
-    - [GitHub CLI](https://cli.github.com)  
-    - [Bicep CLI](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/install)  
-- [.NET 10 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)  
+
+- [Azure Developer CLI (azd)](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/install-azd)
+  - Installing `azd` also installs the following tools:
+    - [GitHub CLI](https://cli.github.com)
+    - [Bicep CLI](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/install)
+- [.NET 10 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
 - [npm CLI](https://nodejs.org/) _(This template uses a workaround to deploy the Logic App workflow, which requires the npm CLI.)_
 
 **Required Permissions:**
+
 - You need **Owner** permissions, or a combination of **Contributor** and **Role Based Access Control Administrator** permissions on an Azure Subscription to deploy this template.
 
 ### Deployment
 
 Once the prerequisites are installed on your machine, you can deploy this template using the following steps:
 
-1. Run the `azd init` command in an empty directory with the `--template` parameter to clone this template into the current directory.  
+1. Run the `azd init` command in an empty directory with the `--template` parameter to clone this template into the current directory.
 
-    ```cmd
-    azd init --template ronaldbosma/azure-integration-services-quickstart
-    ```
+   ```cmd
+   azd init --template ronaldbosma/azure-integration-services-quickstart
+   ```
 
-    When prompted, specify the name of the environment, for example, `aisquick`. The maximum length is 32 characters.
+   When prompted, specify the name of the environment, for example, `aisquick`. The maximum length is 32 characters.
 
 1. Run the `azd auth login` command to authenticate to your Azure subscription using the **Azure Developer CLI** _(if you haven't already)_.
 
-    ```cmd
-    azd auth login
-    ```
+   ```cmd
+   azd auth login
+   ```
 
 1. Run the `azd up` command to provision the resources in your Azure subscription. This will deploy both the infrastructure and the sample application, and typically takes around 5 minutes to complete. _(Use `azd provision` to only deploy the infrastructure.)_
 
-    ```cmd
-    azd up
-    ```
+   ```cmd
+   azd up
+   ```
 
-    You'll be prompted to select the Azure Integration Services to include in the deployment. For each service, use the arrow keys to select `True` to include it or `False` to skip it, then press `Enter` to continue.  
+   You'll be prompted to select the Azure Integration Services to include in the deployment. For each service, use the arrow keys to select `True` to include it or `False` to skip it, then press `Enter` to continue.
 
-    The `includeApplicationInfraResources` parameter specifies whether the application infrastructure resources defined in Bicep should be deployed. These resources are used by the sample application and include the Sample API in API Management, topics and subscriptions in Azure Service Bus, as well as tables and containers in Azure Storage.  
+   The `includeApplicationInfraResources` parameter specifies whether the application infrastructure resources defined in Bicep should be deployed. These resources are used by the sample application and include the Sample API in API Management, topics and subscriptions in Azure Service Bus, as well as tables and containers in Azure Storage.
 
-    ![Select resources to include during azd up](images/azd-up-select-resources-to-include.png)
+   ![Select resources to include during azd up](images/azd-up-select-resources-to-include.png)
 
-    See [Troubleshooting](#troubleshooting) if you encounter any issues during deployment.
+   See [Troubleshooting](#troubleshooting) if you encounter any issues during deployment.
 
 1. Once the deployment is complete, you can locally modify the application or infrastructure and run `azd up` again to update the resources in Azure.
 
 If you only deploy the Function App or Logic App, use `azd provision` to deploy the infrastructure and then use `azd deploy functionApp` or `azd deploy logicApp` to deploy the sample Azure Function or Logic App workflow, respectively.
 
-
 ### Demo and Test
 
 The [Demo Guide](demos/demo-sample-application.md) provides a step-by-step walkthrough on how to test and demonstrate the deployed resources and sample application.
-
 
 ### Clean up
 
@@ -139,13 +139,13 @@ When disabling an already deployed service, it will not be removed when running 
 The repository consists of the following files and directories:
 
 ```
-├── .github                    
+├── .github
 │   └── workflows                  [ GitHub Actions workflow(s) ]
 ├── demos                          [ Demo guide(s) ]
 ├── images                         [ Images used in the README ]
 ├── infra                          [ Infrastructure As Code files ]
 │   |── functions                  [ Bicep user-defined functions ]
-│   ├── modules                    
+│   ├── modules
 │   │   ├── application            [ Modules for application infrastructure resources ]
 │   │   ├── services               [ Modules for all Azure services ]
 │   │   └── shared                 [ Reusable modules ]
@@ -155,13 +155,12 @@ The repository consists of the following files and directories:
 ├── src                            [ Application code ]
 │   ├── functionApp                [ Azure Functions ]
 │   └── logicApp                   [ Logic App workflow]
-├── tests                      
+├── tests
 │   ├── AISQuick.IntegrationTests  [ Integration tests for the sample application ]
 │   └── tests.http                 [ HTTP requests to test the deployed resources ]
 ├── azure.yaml                     [ Describes the apps and types of Azure resources ]
 └── bicepconfig.json               [ Bicep configuration file ]
 ```
-
 
 ## Template Breakdown
 
@@ -178,27 +177,26 @@ When the `includeApiManagement` parameter or the corresponding `INCLUDE_API_MANA
 - The deployment also includes backends for the Service Bus (\*), various Storage Account endpoints and the Event Hubs namespace (\*).  
   _Note: The `*` indicates that the backend is only deployed if the corresponding service is included._
 
-
 #### Function App
 
 When the `includeFunctionApp` parameter or the corresponding `INCLUDE_FUNCTION_APP` environment variable is set to `true`, a Function App is deployed via the [function-app.bicep](./infra/modules/services/function-app.bicep) module:
 
-- The `Y1` (Consumption) pricing tier is used. 
-- The worker runtime is configured to .NET 10 isolated. 
+- The `Y1` (Consumption) pricing tier is used.
+- The worker runtime is configured to .NET 10 isolated.
 - Both a user-assigned managed identity and system-assigned managed identity are deployed to provide access to other services. See the [Role Assignments](#role-assignments) section for more information.
 
 The following app settings (environment variables) are configured to facilitate connections to other services.
 
-| Name                                              | Description                                                                                                                |
-|---------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------|
-| `ApiManagement_gatewayUrl` *                      | The base URL for API Management. For example: `https://apim-aisquick-sdc-5spzh.azure-api.net`.                             |
-| `ApiManagement_subscriptionKey` *                 | A Key Vault reference to the subscription key of the default `master` subscription in API Management.                      |
-| `StorageAccountConnection__blobServiceUri`        | The Blob Storage endpoint. For example: `https://staisquicksdc5spzh.blob.core.windows.net`.                                |
-| `StorageAccountConnection__fileServiceUri`        | The File Storage endpoint. For example: `https://staisquicksdc5spzh.file.core.windows.net`.                                |
-| `StorageAccountConnection__queueServiceUri`       | The Queue Storage endpoint. For example: `https://staisquicksdc5spzh.queue.core.windows.net`.                              |
-| `StorageAccountConnection__tableServiceUri`       | The Table Storage endpoint. For example: `https://staisquicksdc5spzh.table.core.windows.net`.                              |
-| `EventHubConnection__fullyQualifiedNamespace` *   | The fully qualified namespace of the Event Hubs namespace. For example: `evhns-aisquick-sdc-5spzh.servicebus.windows.net`. |
-| `ServiceBusConnection__fullyQualifiedNamespace` * | The fully qualified namespace of the Service Bus. For example: `sbns-aisquick-sdc-5spzh.servicebus.windows.net`.           |
+| Name                                               | Description                                                                                                                |
+| -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `ApiManagement_gatewayUrl` \*                      | The base URL for API Management. For example: `https://apim-aisquick-sdc-5spzh.azure-api.net`.                             |
+| `ApiManagement_subscriptionKey` \*                 | A Key Vault reference to the subscription key of the default `master` subscription in API Management.                      |
+| `StorageAccountConnection__blobServiceUri`         | The Blob Storage endpoint. For example: `https://staisquicksdc5spzh.blob.core.windows.net`.                                |
+| `StorageAccountConnection__fileServiceUri`         | The File Storage endpoint. For example: `https://staisquicksdc5spzh.file.core.windows.net`.                                |
+| `StorageAccountConnection__queueServiceUri`        | The Queue Storage endpoint. For example: `https://staisquicksdc5spzh.queue.core.windows.net`.                              |
+| `StorageAccountConnection__tableServiceUri`        | The Table Storage endpoint. For example: `https://staisquicksdc5spzh.table.core.windows.net`.                              |
+| `EventHubConnection__fullyQualifiedNamespace` \*   | The fully qualified namespace of the Event Hubs namespace. For example: `evhns-aisquick-sdc-5spzh.servicebus.windows.net`. |
+| `ServiceBusConnection__fullyQualifiedNamespace` \* | The fully qualified namespace of the Service Bus. For example: `sbns-aisquick-sdc-5spzh.servicebus.windows.net`.           |
 
 _Note: The `*` indicates that the setting is only deployed if the corresponding service is included._
 
@@ -208,22 +206,22 @@ The `StorageAccountConnection`, `EventHubConnection` or `ServiceBusConnection` c
 
 When the `includeLogicApp` parameter or the corresponding `INCLUDE_LOGIC_APP` environment variable is set to `true`, a Standard single-tenant Logic App is deployed via the [logic-app.bicep](./infra/modules/services/logic-app.bicep) module:
 
-- The `WS1` (Workflow Standard) pricing tier is used. 
-- The worker runtime is configured to .NET 8 to enable the use of [custom .NET code](https://learn.microsoft.com/en-us/azure/logic-apps/create-run-custom-code-functions). 
+- The `WS1` (Workflow Standard) pricing tier is used.
+- The worker runtime is configured to .NET 8 to enable the use of [custom .NET code](https://learn.microsoft.com/en-us/azure/logic-apps/create-run-custom-code-functions).
 - Both a user-assigned managed identity and system-assigned managed identity are deployed to provide access to other services. See the [Role Assignments](#role-assignments) section for more information.
 
 The following app settings (environment variables) are configured to facilitate connections to other services. These are used in the [connections.json](./src/logicApp/Workflows/connections.json) file of the sample application.
 
-| Name                                   | Description                                                                                                                |
-|----------------------------------------|----------------------------------------------------------------------------------------------------------------------------|
-| `ApiManagement_gatewayUrl` *           | The base URL for API Management. For example: `https://apim-aisquick-sdc-5spzh.azure-api.net`.                             |
-| `ApiManagement_subscriptionKey` *      | A Key Vault reference to the subscription key of the default `master` subscription in API Management.                      |
-| `AzureBlob_blobStorageEndpoint`        | The Blob Storage endpoint. For example: `https://staisquicksdc5spzh.blob.core.windows.net`.                                |
-| `AzureFile_storageAccountUri`          | The File Storage endpoint. For example: `https://staisquicksdc5spzh.file.core.windows.net`.                                |
-| `AzureQueues_queueServiceUri`          | The Queue Storage endpoint. For example: `https://staisquicksdc5spzh.queue.core.windows.net`.                              |
-| `AzureTables_tableStorageEndpoint`     | The Table Storage endpoint. For example: `https://staisquicksdc5spzh.table.core.windows.net`.                              |
-| `EventHub_fullyQualifiedNamespace` *   | The fully qualified namespace of the Event Hubs namespace. For example: `evhns-aisquick-sdc-5spzh.servicebus.windows.net`. |
-| `ServiceBus_fullyQualifiedNamespace` * | The fully qualified namespace of the Service Bus. For example: `sbns-aisquick-sdc-5spzh.servicebus.windows.net`.           |
+| Name                                    | Description                                                                                                                |
+| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `ApiManagement_gatewayUrl` \*           | The base URL for API Management. For example: `https://apim-aisquick-sdc-5spzh.azure-api.net`.                             |
+| `ApiManagement_subscriptionKey` \*      | A Key Vault reference to the subscription key of the default `master` subscription in API Management.                      |
+| `AzureBlob_blobStorageEndpoint`         | The Blob Storage endpoint. For example: `https://staisquicksdc5spzh.blob.core.windows.net`.                                |
+| `AzureFile_storageAccountUri`           | The File Storage endpoint. For example: `https://staisquicksdc5spzh.file.core.windows.net`.                                |
+| `AzureQueues_queueServiceUri`           | The Queue Storage endpoint. For example: `https://staisquicksdc5spzh.queue.core.windows.net`.                              |
+| `AzureTables_tableStorageEndpoint`      | The Table Storage endpoint. For example: `https://staisquicksdc5spzh.table.core.windows.net`.                              |
+| `EventHub_fullyQualifiedNamespace` \*   | The fully qualified namespace of the Event Hubs namespace. For example: `evhns-aisquick-sdc-5spzh.servicebus.windows.net`. |
+| `ServiceBus_fullyQualifiedNamespace` \* | The fully qualified namespace of the Service Bus. For example: `sbns-aisquick-sdc-5spzh.servicebus.windows.net`.           |
 
 _Note: The `*` indicates that the setting is only deployed if the corresponding service is included._
 
@@ -257,14 +255,13 @@ The [assign-roles-to-principal.bicep](./infra/modules/shared/assign-roles-to-pri
 
 These roles are assigned to the principals based on the resources that are included in the deployment.
 
-#### Supporting Resources  
+#### Supporting Resources
 
-In addition to the Azure Integration Services, the template deploys several supporting resources to enhance functionality and monitoring:  
+In addition to the Azure Integration Services, the template deploys several supporting resources to enhance functionality and monitoring:
 
-- Application Insights: Provides monitoring, logging and diagnostics.  
-- Key Vault: Securely stores secrets and keys, such as API Management subscription keys.  
-- Storage Account: Used to deploy Logic App and Function App code and stores data for the sample application.  
-
+- Application Insights: Provides monitoring, logging and diagnostics.
+- Key Vault: Securely stores secrets and keys, such as API Management subscription keys.
+- Storage Account: Used to deploy Logic App and Function App code and stores data for the sample application.
 
 ### Application
 
@@ -272,22 +269,21 @@ In addition to the Azure Integration Services, the template deploys several supp
 
 When the `includeApplicationInfraResources` parameter or the corresponding `INCLUDE_APPLICATION_INFRA_RESOURCES` environment variable is set to `true`, the sample application's infrastructure resources are deployed. These resources are defined in the [application.bicep](./infra/modules/application/application.bicep) module:
 
-- An API is deployed in API Management. It allows messages to be published to a Service Bus topic and retrieves data stored in the Storage Account.  
+- An API is deployed in API Management. It allows messages to be published to a Service Bus topic and retrieves data stored in the Storage Account.
 - A topic and subscriptions are created in the Service Bus namespace. Messages published to the topic trigger the Function App and Logic App.
-- A storage table and blob container are created in the Storage Account. These are used by the Function App and Logic App to store messages.  
+- A storage table and blob container are created in the Storage Account. These are used by the Function App and Logic App to store messages.
 
 Although these resources are part of the application, they are deployed as part of the infrastructure using `azd up` or `azd provision`. This is necessary because the Azure Developer CLI does not support deploying Bicep resources as part of the application with `azd deploy`.
 
-#### Azure Function  
+#### Azure Function
 
-The [functionApp](./src/functionApp) directory contains the code for the Azure Function deployed to the Function App. The function is triggered by messages sent to the Service Bus topic and stores the message in a table within the Storage Account.  
+The [functionApp](./src/functionApp) directory contains the code for the Azure Function deployed to the Function App. The function is triggered by messages sent to the Service Bus topic and stores the message in a table within the Storage Account.
 
-#### Logic App workflow  
+#### Logic App workflow
 
-The [logicApp](./src/logicApp) directory contains the Logic App workflow. The workflow is triggered by messages sent to the Service Bus topic and stores the message in a blob container within the Storage Account.  
+The [logicApp](./src/logicApp) directory contains the Logic App workflow. The workflow is triggered by messages sent to the Service Bus topic and stores the message in a blob container within the Storage Account.
 
-The sample [connections.json](./src/logicApp/Workflows/connections.json) file includes connections to the various Storage Account services, the Service Bus and the Event Hubs namespace.  
-
+The sample [connections.json](./src/logicApp/Workflows/connections.json) file includes connections to the various Storage Account services, the Service Bus and the Event Hubs namespace.
 
 ## Naming Convention
 
@@ -301,7 +297,6 @@ The following image displays an example of the resources deployed with this temp
 
 ![Deployed Resources](images/deployed-resources.png)
 
-
 ## Pipeline
 
 This template includes a GitHub Actions workflow that automates the build, deployment, test and cleanup process. The workflow is defined in [azure-dev.yml](.github/workflows/azure-dev.yml) and provides a complete CI/CD pipeline for this template using the Azure Developer CLI.
@@ -313,7 +308,7 @@ The pipeline consists of the following jobs:
 - **Build, Verify and Package**: This job sets up the build environment, validates the Bicep template and packages the Function App, Logic App and integration tests.
 - **Deploy to Azure**: This job provisions the Azure infrastructure and deploys the packaged applications to the created resources.
 - **Verify Deployment**: This job runs automated [integration tests](#integration-tests) on the deployed resources to verify correct functionality. Tests are executed only when both API Management and the Application Infrastructure resources are included in the deployment, as these components are prerequisites for successful test execution.
-- **Clean Up Resources**: This job removes all deployed Azure resources.  
+- **Clean Up Resources**: This job removes all deployed Azure resources.
 
   By default, cleanup runs automatically after deployment. This can be disabled via an input parameter when the workflow is triggered manually.
 
@@ -330,6 +325,7 @@ azd pipeline config
 Follow the instructions and choose either **Federated User Managed Identity (MSI + OIDC)** or **Federated Service Principal (SP + OIDC)**, as OpenID Connect (OIDC) is the authentication method used by the pipeline.
 
 For detailed guidance, refer to:
+
 - [Explore Azure Developer CLI support for CI/CD pipelines](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/configure-devops-pipeline)
 - [Create a GitHub Actions CI/CD pipeline using the Azure Developer CLI](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/pipeline-github-actions)
 
@@ -339,13 +335,11 @@ For detailed guidance, refer to:
 > [!NOTE]
 > The environment name in the `AZURE_ENV_NAME` variable is suffixed with `-pr{id}` for pull requests. This prevents conflicts when multiple PRs are open and avoids accidental removal of environments, because the environment name tag is used when removing resources.
 
-
 ## Integration Tests
 
-The project includes integration tests built with **.NET 10** that validate the complete message flow through the deployed Azure services. 
+The project includes integration tests built with **.NET 10** that validate the complete message flow through the deployed Azure services.
 The integration tests are located in [AISQuickSampleTests.cs](tests/AISQuick.IntegrationTests/AISQuickSampleTests.cs).
 See the [Demo Guide](demos/demo-sample-application.md) for more information on how to run the tests.
-
 
 ## Troubleshooting
 
@@ -371,15 +365,15 @@ If you've previously deployed this template and deleted the resources, you may e
 
 ```json
 {
-    "code": "DeploymentFailed",
-    "target": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-aisquick-sdc-5spzh/providers/Microsoft.Resources/deployments/apiManagement",
-    "message": "At least one resource deployment operation failed. Please list deployment operations for details. Please see https://aka.ms/arm-deployment-operations for usage details.",
-    "details": [
-        {
-            "code": "ServiceAlreadyExistsInSoftDeletedState",
-            "message": "Api service apim-aisquick-sdc-5spzh was soft-deleted. In order to create the new service with the same name, you have to either undelete the service or purge it. See https://aka.ms/apimsoftdelete."
-        }
-    ]
+  "code": "DeploymentFailed",
+  "target": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-aisquick-sdc-5spzh/providers/Microsoft.Resources/deployments/apiManagement",
+  "message": "At least one resource deployment operation failed. Please list deployment operations for details. Please see https://aka.ms/arm-deployment-operations for usage details.",
+  "details": [
+    {
+      "code": "ServiceAlreadyExistsInSoftDeletedState",
+      "message": "Api service apim-aisquick-sdc-5spzh was soft-deleted. In order to create the new service with the same name, you have to either undelete the service or purge it. See https://aka.ms/apimsoftdelete."
+    }
+  ]
 }
 ```
 
@@ -438,4 +432,3 @@ If you already have a Workflow Standard WS1 tier (`SKU=WS1`) Logic App deployed 
 ```
 
 Use the `azd down --purge` command to delete the resources, then deploy the template in a different region.
-
