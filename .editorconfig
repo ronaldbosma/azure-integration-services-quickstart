@@ -17,10 +17,24 @@ trim_trailing_whitespace = false
 # PowerShell - 4 spaces (industry standard)
 [*.{ps1,psm1,psd1}]
 indent_size = 4
+tab_width = 4
 
-# XML - 4 spaces (the default for Azure API Management policies)
-[*.xml]
+# XML and Razor files - 4 spaces (the default for Azure API Management policies)
+[*.{xml,cshtml}]
 indent_size = 4
+tab_width = 4
+
+# C# files
+[*.cs]
+
+#### Core EditorConfig Options ####
+
+# Indentation and spacing
+indent_size = 4
+tab_width = 4
+
+# New line preferences
+insert_final_newline = false
 
 #### .NET Coding Conventions ####
 [*.{cs,vb}]
