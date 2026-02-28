@@ -11,7 +11,7 @@ param siteName string
 
 @secure()
 @description('The current app settings of the site')
-param currentAppSettings object 
+param currentAppSettings object
 
 @secure()
 @description('The new app settings for the site')

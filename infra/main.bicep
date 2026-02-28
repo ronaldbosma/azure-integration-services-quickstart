@@ -10,7 +10,14 @@ targetScope = 'subscription'
 //=============================================================================
 
 import { getResourceName, generateInstanceId } from './functions/naming-conventions.bicep'
-import { apiManagementSettingsType, appInsightsSettingsType, eventHubSettingsType, functionAppSettingsType, logicAppSettingsType, serviceBusSettingsType } from './types/settings.bicep'
+import {
+  apiManagementSettingsType
+  appInsightsSettingsType
+  eventHubSettingsType
+  functionAppSettingsType
+  logicAppSettingsType
+  serviceBusSettingsType
+} from './types/settings.bicep'
 
 //=============================================================================
 // Parameters
@@ -52,11 +59,13 @@ var instanceId string = generateInstanceId(environmentName, location)
 
 var resourceGroupName string = getResourceName('resourceGroup', environmentName, location, instanceId)
 
-var apiManagementSettings apiManagementSettingsType? = !includeApiManagement ? null : {
-  serviceName: getResourceName('apiManagement', environmentName, location, instanceId)
-  identityName: getResourceName('managedIdentity', environmentName, location, 'apim-${instanceId}')
-  sku: 'Consumption'
-}
+var apiManagementSettings apiManagementSettingsType? = !includeApiManagement
+  ? null
+  : {
+      serviceName: getResourceName('apiManagement', environmentName, location, instanceId)
+      identityName: getResourceName('managedIdentity', environmentName, location, 'apim-${instanceId}')
+      sku: 'Consumption'
+    }
 
 var appInsightsSettings appInsightsSettingsType = {
   appInsightsName: getResourceName('applicationInsights', environmentName, location, instanceId)
@@ -64,36 +73,44 @@ var appInsightsSettings appInsightsSettingsType = {
   retentionInDays: 30
 }
 
-var eventHubSettings eventHubSettingsType? = !includeEventHubsNamespace ? null : {
-  namespaceName: getResourceName('eventHubsNamespace', environmentName, location, instanceId)
-}
+var eventHubSettings eventHubSettingsType? = !includeEventHubsNamespace
+  ? null
+  : {
+      namespaceName: getResourceName('eventHubsNamespace', environmentName, location, instanceId)
+    }
 
-var functionAppSettings functionAppSettingsType? = !includeFunctionApp ? null : {
-  functionAppName: getResourceName('functionApp', environmentName, location, instanceId)
-  identityName: getResourceName('managedIdentity', environmentName, location, 'functionapp-${instanceId}')
-  appServicePlanName: getResourceName('appServicePlan', environmentName, location, 'functionapp-${instanceId}')
-  netFrameworkVersion: 'v10.0'
-}
+var functionAppSettings functionAppSettingsType? = !includeFunctionApp
+  ? null
+  : {
+      functionAppName: getResourceName('functionApp', environmentName, location, instanceId)
+      identityName: getResourceName('managedIdentity', environmentName, location, 'functionapp-${instanceId}')
+      appServicePlanName: getResourceName('appServicePlan', environmentName, location, 'functionapp-${instanceId}')
+      netFrameworkVersion: 'v10.0'
+    }
 
-var logicAppSettings logicAppSettingsType? = !includeLogicApp ? null : {
-  logicAppName: getResourceName('logicApp', environmentName, location, instanceId)
-  identityName: getResourceName('managedIdentity', environmentName, location, 'logicapp-${instanceId}')
-  appServicePlanName: getResourceName('appServicePlan', environmentName, location, 'logicapp-${instanceId}')
-  netFrameworkVersion: 'v8.0'
-}
+var logicAppSettings logicAppSettingsType? = !includeLogicApp
+  ? null
+  : {
+      logicAppName: getResourceName('logicApp', environmentName, location, instanceId)
+      identityName: getResourceName('managedIdentity', environmentName, location, 'logicapp-${instanceId}')
+      appServicePlanName: getResourceName('appServicePlan', environmentName, location, 'logicapp-${instanceId}')
+      netFrameworkVersion: 'v8.0'
+    }
 
 var keyVaultName string = getResourceName('keyVault', environmentName, location, instanceId)
 
-var serviceBusSettings serviceBusSettingsType? = !includeServiceBus ? null : {
-  namespaceName: getResourceName('serviceBusNamespace', environmentName, location, instanceId)
-}
+var serviceBusSettings serviceBusSettingsType? = !includeServiceBus
+  ? null
+  : {
+      namespaceName: getResourceName('serviceBusNamespace', environmentName, location, instanceId)
+    }
 
 var storageAccountName string = getResourceName('storageAccount', environmentName, location, instanceId)
 
 var tags { *: string } = {
   'azd-env-name': environmentName
   'azd-template': 'ronaldbosma/azure-integration-services-quickstart'
-  
+
   // The SecurityControl tag is added to Trainer Demo Deploy projects so resources can run in MTT managed subscriptions without being blocked by default security policies.
   // DO NOT USE this tag in production or customer subscriptions.
   SecurityControl: 'Ignore'
@@ -238,7 +255,6 @@ module assignRolesToDeployer 'modules/shared/assign-roles-to-principal.bicep' = 
   ]
 }
 
-
 //=============================================================================
 // Application Resources
 //=============================================================================
@@ -258,7 +274,6 @@ module applicationResources 'modules/application/application.bicep' = if (includ
     storageAccount
   ]
 }
-
 
 //=============================================================================
 // Outputs

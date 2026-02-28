@@ -42,7 +42,6 @@ resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2025-07
   }
 }
 
-
 // Application Insights
 
 resource appInsights 'Microsoft.Insights/components@2020-02-02' = {

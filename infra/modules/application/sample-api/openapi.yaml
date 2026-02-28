@@ -2,7 +2,7 @@ openapi: 3.0.1
 info:
   title: AISQuick Sample
   description: AISQuick Sample API
-  version: '1.0'
+  version: "1.0"
 paths:
   /messages:
     post:
@@ -13,19 +13,19 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/publishMessageRequest'
+              $ref: "#/components/schemas/publishMessageRequest"
             example:
               message: Hello world!
       responses:
-        '201':
+        "201":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/publishMessageResponse'
+                $ref: "#/components/schemas/publishMessageResponse"
               example:
                 id: 8599d9e6-24cf-4d65-a79a-9ccb085987df
-  '/blobs/{id}':
+  "/blobs/{id}":
     get:
       summary: Get Blob
       description: Get Blob
@@ -39,16 +39,16 @@ paths:
             type: string
             format: uuid
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/getBlobResponse'
+                $ref: "#/components/schemas/getBlobResponse"
               example:
                 id: 8599d9e6-24cf-4d65-a79a-9ccb085987df
                 message: Hello world!
-  '/table-entities/{id}':
+  "/table-entities/{id}":
     get:
       summary: Get Table Entity
       description: Get Table Entity
@@ -61,12 +61,12 @@ paths:
             type: string
             format: uuid
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/getTableEntityResponse'
+                $ref: "#/components/schemas/getTableEntityResponse"
               example:
                 PartitionKey: aisquick-sample
                 RowKey: 8599d9e6-24cf-4d65-a79a-9ccb085987df

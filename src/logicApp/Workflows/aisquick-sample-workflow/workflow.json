@@ -38,9 +38,7 @@
                     }
                 },
                 "runAfter": {
-                    "Parse_JSON": [
-                        "SUCCEEDED"
-                    ]
+                    "Parse_JSON": ["SUCCEEDED"]
                 }
             }
         },

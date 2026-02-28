@@ -145,7 +145,6 @@ module assignRolesToApimSystemAssignedIdentity '../shared/assign-roles-to-princi
   }
 }
 
-
 // Store the app insights connection string in a named value
 
 resource appInsightsConnectionStringNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-10-01-preview' = {
@@ -156,7 +155,6 @@ resource appInsightsConnectionStringNamedValue 'Microsoft.ApiManagement/service/
     value: appInsights.properties.ConnectionString
   }
 }
-
 
 // Configure API Management to log to App Insights
 // - we need a logger that is connected to the App Insights instance
@@ -187,7 +185,6 @@ resource apimInsightsDiagnostics 'Microsoft.ApiManagement/service/diagnostics@20
   }
 }
 
-
 // Store master subscription key in Key Vault
 
 resource apimMasterSubscriptionKeySecret 'Microsoft.KeyVault/vaults/secrets@2025-05-01' = {
@@ -197,7 +194,6 @@ resource apimMasterSubscriptionKeySecret 'Microsoft.KeyVault/vaults/secrets@2025
     value: masterSubscription.listSecrets(apiManagementService.apiVersion).primaryKey
   }
 }
-
 
 // Add backends for the various services
 
