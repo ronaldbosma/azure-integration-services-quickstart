@@ -139,6 +139,7 @@ When disabling an already deployed service, it will not be removed when running 
 The repository consists of the following files and directories:
 
 ```
+├── .devcontainer                  [ Development container configuration files ]
 ├── .github
 │   └── workflows                  [ GitHub Actions workflow(s) ]
 ├── .vscode                        [ Visual Studio Code configuration files ]
