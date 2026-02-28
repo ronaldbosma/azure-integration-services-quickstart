@@ -1,8 +1,10 @@
-using AISQuick.IntegrationTests.Clients.Handlers;
-using AISQuick.IntegrationTests.Models;
-using Polly;
 using System.Diagnostics;
 using System.Net.Http.Json;
+
+using AISQuick.IntegrationTests.Clients.Handlers;
+using AISQuick.IntegrationTests.Models;
+
+using Polly;
 
 namespace AISQuick.IntegrationTests.Clients;
 
@@ -39,7 +41,7 @@ public class SampleApiClient : IDisposable
 
         var response = await _httpClient.PostAsJsonAsync("/aisquick-sample/messages", request);
         response.EnsureSuccessStatusCode();
-        
+
         var result = await response.Content.ReadFromJsonAsync<PublishMessageResponse>();
         return result ?? throw new InvalidOperationException("Failed to deserialize publish message response");
     }
@@ -49,15 +51,15 @@ public class SampleApiClient : IDisposable
         Trace.WriteLine($"Retrieve table entity for message id: {messageId}");
 
         using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(60));
-        
+
         var response = await _retryPolicy.ExecuteAsync(async () =>
         {
             var httpResponse = await _httpClient.GetAsync($"/aisquick-sample/table-entities/{messageId}", cts.Token);
             return httpResponse;
         });
-        
+
         response.EnsureSuccessStatusCode();
-        
+
         var result = await response.Content.ReadFromJsonAsync<TableEntityResponse>();
         return result ?? throw new InvalidOperationException("Failed to deserialize table entity response");
     }
@@ -67,15 +69,15 @@ public class SampleApiClient : IDisposable
         Trace.WriteLine($"Retrieve blob for message id: {messageId}");
 
         using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(60));
-        
+
         var response = await _retryPolicy.ExecuteAsync(async () =>
         {
             var httpResponse = await _httpClient.GetAsync($"/aisquick-sample/blobs/{messageId}", cts.Token);
             return httpResponse;
         });
-        
+
         response.EnsureSuccessStatusCode();
-        
+
         var result = await response.Content.ReadFromJsonAsync<BlobResponse>();
         return result ?? throw new InvalidOperationException("Failed to deserialize blob response");
     }

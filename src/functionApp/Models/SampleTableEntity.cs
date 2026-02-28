@@ -1,4 +1,4 @@
-﻿using Azure;
+using Azure;
 using Azure.Data.Tables;
 
 namespace AISQuick.FunctionApp.Models
@@ -17,7 +17,7 @@ namespace AISQuick.FunctionApp.Models
         }
 
         public string PartitionKey { get; set; }
-        
+
         public string RowKey { get; set; }
 
         public string Message { get; set; }
@@ -25,7 +25,7 @@ namespace AISQuick.FunctionApp.Models
         public string Via { get; set; }
 
         public DateTimeOffset? Timestamp { get; set; }
-        
+
         public ETag ETag { get; set; }
     }
 }

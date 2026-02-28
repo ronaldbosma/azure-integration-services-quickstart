@@ -1,4 +1,4 @@
-﻿namespace AISQuick.FunctionApp.Models
+namespace AISQuick.FunctionApp.Models
 {
     /// <summary>
     /// Sample message that is received by the function.

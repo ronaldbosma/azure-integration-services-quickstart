@@ -1,4 +1,5 @@
 using AISQuick.FunctionApp.Models;
+
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 

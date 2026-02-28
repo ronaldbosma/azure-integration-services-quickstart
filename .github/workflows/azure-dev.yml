@@ -4,20 +4,20 @@ on:
   workflow_dispatch:
     inputs:
       cleanup-resources:
-        description: 'Clean up resources after deployment'
+        description: "Clean up resources after deployment"
         required: false
         default: true
         type: boolean
   pull_request:
-    branches: 
+    branches:
       - main
     paths:
-      - '.github/workflows/azure-dev.yml'
-      - 'infra/**'
-      - 'src/**'
-      - 'tests/AISQuick.IntegrationTests/**'
-      - 'azure.yaml'
-      - 'bicepconfig.json'
+      - ".github/workflows/azure-dev.yml"
+      - "infra/**"
+      - "src/**"
+      - "tests/AISQuick.IntegrationTests/**"
+      - "azure.yaml"
+      - "bicepconfig.json"
 
 defaults:
   run:
@@ -28,7 +28,7 @@ env:
   AZURE_ENV_NAME: ${{ github.event.pull_request.number && format('{0}-pr{1}', vars.AZURE_ENV_NAME, github.event.pull_request.number) || vars.AZURE_ENV_NAME }}
   AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
   AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID || vars.AZURE_SUBSCRIPTION_ID }}
-  
+
   # Individual resource inclusion flags
   INCLUDE_API_MANAGEMENT: ${{ vars.INCLUDE_API_MANAGEMENT }}
   INCLUDE_EVENT_HUBS_NAMESPACE: ${{ vars.INCLUDE_EVENT_HUBS_NAMESPACE }}
@@ -38,7 +38,6 @@ env:
   INCLUDE_APPLICATION_INFRA_RESOURCES: ${{ vars.INCLUDE_APPLICATION_INFRA_RESOURCES }}
 
 jobs:
-
   # ------------------------------------------------------------
   # Build, Verify and Package
   # ------------------------------------------------------------
@@ -48,114 +47,113 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       id-token: write # Required to fetch an OIDC token for Azure authentication
-      contents: read  # Required to checkout code if needed
+      contents: read # Required to checkout code if needed
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v6
+      - name: Checkout code
+        uses: actions/checkout@v6
 
-    - name: Setup azd
-      uses: Azure/setup-azd@v2
+      - name: Setup azd
+        uses: Azure/setup-azd@v2
 
-    - name: Setup .NET 10
-      if: env.INCLUDE_FUNCTION_APP == 'true'
-      uses: actions/setup-dotnet@v5
-      with:
-        dotnet-version: '10.0.x'
+      - name: Setup .NET 10
+        if: env.INCLUDE_FUNCTION_APP == 'true'
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "10.0.x"
 
-    # This template uses a workaround to deploy the Logic App workflow, which requires the npm CLI.
-    - name: Setup Node.js
-      if: env.INCLUDE_LOGIC_APP == 'true'
-      uses: actions/setup-node@v6
-      with:
-        node-version: 'latest'
+      # This template uses a workaround to deploy the Logic App workflow, which requires the npm CLI.
+      - name: Setup Node.js
+        if: env.INCLUDE_LOGIC_APP == 'true'
+        uses: actions/setup-node@v6
+        with:
+          node-version: "latest"
 
-    - name: Print Tool Versions
-      run: |
-        az version
-        az bicep version
-        azd version
-        Write-Host ".NET SDK Version: $(dotnet --version)"
-        Write-Host "Node.js Version: $(node --version)"
-        Write-Host "npm Version: $(npm --version)"
+      - name: Print Tool Versions
+        run: |
+          az version
+          az bicep version
+          azd version
+          Write-Host ".NET SDK Version: $(dotnet --version)"
+          Write-Host "Node.js Version: $(node --version)"
+          Write-Host "npm Version: $(npm --version)"
 
-    # Use Azure CLI authentication with azd commands so credentials are shared between azd commands and az (Azure CLI) commands used in hooks.
-    - name: Configure azd to use Azure CLI Authentication
-      run: |
-        azd config set auth.useAzCliAuth "true"
+      # Use Azure CLI authentication with azd commands so credentials are shared between azd commands and az (Azure CLI) commands used in hooks.
+      - name: Configure azd to use Azure CLI Authentication
+        run: |
+          azd config set auth.useAzCliAuth "true"
 
-    # Login to the Azure CLI with OpenID Connect (OIDC) using federated identity credentials.
-    - name: Azure CLI Login
-      uses: azure/login@v2
-      with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID || vars.AZURE_CLIENT_ID }}
-        tenant-id: ${{ secrets.AZURE_TENANT_ID || vars.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID || vars.AZURE_SUBSCRIPTION_ID }}
+      # Login to the Azure CLI with OpenID Connect (OIDC) using federated identity credentials.
+      - name: Azure CLI Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID || vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID || vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID || vars.AZURE_SUBSCRIPTION_ID }}
 
-    - name: Bicep Lint
-      run: |
-        az bicep lint --file ./infra/main.bicep
+      - name: Bicep Lint
+        run: |
+          az bicep lint --file ./infra/main.bicep
 
-    - name: Validate Template
-      run: |
-        az deployment sub validate `
-          --template-file './infra/main.bicep' `
-          --location $env:AZURE_LOCATION `
-          --parameters location=$env:AZURE_LOCATION `
-                       environmentName=$env:AZURE_ENV_NAME `
-                       includeApiManagement=$env:INCLUDE_API_MANAGEMENT `
-                       includeEventHubsNamespace=$env:INCLUDE_EVENT_HUBS_NAMESPACE `
-                       includeFunctionApp=$env:INCLUDE_FUNCTION_APP `
-                       includeLogicApp=$env:INCLUDE_LOGIC_APP `
-                       includeServiceBus=$env:INCLUDE_SERVICE_BUS `
-                       includeApplicationInfraResources=$env:INCLUDE_APPLICATION_INFRA_RESOURCES
+      - name: Validate Template
+        run: |
+          az deployment sub validate `
+            --template-file './infra/main.bicep' `
+            --location $env:AZURE_LOCATION `
+            --parameters location=$env:AZURE_LOCATION `
+                         environmentName=$env:AZURE_ENV_NAME `
+                         includeApiManagement=$env:INCLUDE_API_MANAGEMENT `
+                         includeEventHubsNamespace=$env:INCLUDE_EVENT_HUBS_NAMESPACE `
+                         includeFunctionApp=$env:INCLUDE_FUNCTION_APP `
+                         includeLogicApp=$env:INCLUDE_LOGIC_APP `
+                         includeServiceBus=$env:INCLUDE_SERVICE_BUS `
+                         includeApplicationInfraResources=$env:INCLUDE_APPLICATION_INFRA_RESOURCES
 
-    - name: Create artifacts folder
-      if: env.INCLUDE_FUNCTION_APP == 'true' || env.INCLUDE_LOGIC_APP == 'true'
-      run: |
-        mkdir -p ./artifacts
+      - name: Create artifacts folder
+        if: env.INCLUDE_FUNCTION_APP == 'true' || env.INCLUDE_LOGIC_APP == 'true'
+        run: |
+          mkdir -p ./artifacts
 
-    - name: Package Function App
-      if: env.INCLUDE_FUNCTION_APP == 'true'
-      run: |
-        azd package functionApp --output-path ./artifacts/functionapp-package.zip --no-prompt
+      - name: Package Function App
+        if: env.INCLUDE_FUNCTION_APP == 'true'
+        run: |
+          azd package functionApp --output-path ./artifacts/functionapp-package.zip --no-prompt
 
-    - name: Package Logic App
-      if: env.INCLUDE_LOGIC_APP == 'true'
-      run: |
-        azd package logicApp --output-path ./artifacts/logicapp-package.zip --no-prompt
+      - name: Package Logic App
+        if: env.INCLUDE_LOGIC_APP == 'true'
+        run: |
+          azd package logicApp --output-path ./artifacts/logicapp-package.zip --no-prompt
 
-    - name: Build Integration Tests
-      # It only makes sense to execute the integration tests if both API Management and the API is included in the deployment, else it will always fail
-      if: env.INCLUDE_API_MANAGEMENT == 'true' && env.INCLUDE_APPLICATION_INFRA_RESOURCES == 'true'
-      run: |
-        dotnet build ./tests/AISQuick.IntegrationTests/AISQuick.IntegrationTests.csproj --configuration Release --output ./artifacts/integration-tests
+      - name: Build Integration Tests
+        # It only makes sense to execute the integration tests if both API Management and the API is included in the deployment, else it will always fail
+        if: env.INCLUDE_API_MANAGEMENT == 'true' && env.INCLUDE_APPLICATION_INFRA_RESOURCES == 'true'
+        run: |
+          dotnet build ./tests/AISQuick.IntegrationTests/AISQuick.IntegrationTests.csproj --configuration Release --output ./artifacts/integration-tests
 
-    - name: Upload Function App Package
-      if: env.INCLUDE_FUNCTION_APP == 'true'
-      uses: actions/upload-artifact@v6
-      with:
-        name: functionapp-package
-        path: ./artifacts/functionapp-package.zip
-        retention-days: 1
+      - name: Upload Function App Package
+        if: env.INCLUDE_FUNCTION_APP == 'true'
+        uses: actions/upload-artifact@v6
+        with:
+          name: functionapp-package
+          path: ./artifacts/functionapp-package.zip
+          retention-days: 1
 
-    - name: Upload Logic App Package
-      if: env.INCLUDE_LOGIC_APP == 'true'
-      uses: actions/upload-artifact@v6
-      with:
-        name: logicapp-package
-        path: ./artifacts/logicapp-package.zip
-        retention-days: 1
+      - name: Upload Logic App Package
+        if: env.INCLUDE_LOGIC_APP == 'true'
+        uses: actions/upload-artifact@v6
+        with:
+          name: logicapp-package
+          path: ./artifacts/logicapp-package.zip
+          retention-days: 1
 
-    - name: Upload Integration Tests Package
-      # It only makes sense to execute the integration tests if both API Management and the API is included in the deployment, else it will always fail
-      if: env.INCLUDE_API_MANAGEMENT == 'true' && env.INCLUDE_APPLICATION_INFRA_RESOURCES == 'true'
-      uses: actions/upload-artifact@v6
-      with:
-        name: integration-tests-package
-        path: ./artifacts/integration-tests/
-        retention-days: 1
-
+      - name: Upload Integration Tests Package
+        # It only makes sense to execute the integration tests if both API Management and the API is included in the deployment, else it will always fail
+        if: env.INCLUDE_API_MANAGEMENT == 'true' && env.INCLUDE_APPLICATION_INFRA_RESOURCES == 'true'
+        uses: actions/upload-artifact@v6
+        with:
+          name: integration-tests-package
+          path: ./artifacts/integration-tests/
+          retention-days: 1
 
   # ------------------------------------------------------------
   # Deploy to Azure
@@ -167,66 +165,65 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       id-token: write # Required to fetch an OIDC token for Azure authentication
-      contents: read  # Required to checkout code if needed
-    
+      contents: read # Required to checkout code if needed
+
     outputs:
       AZURE_API_MANAGEMENT_GATEWAY_URL: ${{ steps.get-outputs.outputs.AZURE_API_MANAGEMENT_GATEWAY_URL }}
       AZURE_KEY_VAULT_URI: ${{ steps.get-outputs.outputs.AZURE_KEY_VAULT_URI }}
-    
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v6
+      - name: Checkout code
+        uses: actions/checkout@v6
 
-    - name: Setup azd
-      uses: Azure/setup-azd@v2
+      - name: Setup azd
+        uses: Azure/setup-azd@v2
 
-    # Use Azure CLI authentication with azd commands so credentials are shared between azd commands and az (Azure CLI) commands used in hooks.
-    - name: Configure azd to use Azure CLI Authentication
-      run: |
-        azd config set auth.useAzCliAuth "true"
+      # Use Azure CLI authentication with azd commands so credentials are shared between azd commands and az (Azure CLI) commands used in hooks.
+      - name: Configure azd to use Azure CLI Authentication
+        run: |
+          azd config set auth.useAzCliAuth "true"
 
-    # Login to the Azure CLI with OpenID Connect (OIDC) using federated identity credentials.
-    - name: Azure CLI Login
-      uses: azure/login@v2
-      with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID || vars.AZURE_CLIENT_ID }}
-        tenant-id: ${{ secrets.AZURE_TENANT_ID || vars.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID || vars.AZURE_SUBSCRIPTION_ID }}
+      # Login to the Azure CLI with OpenID Connect (OIDC) using federated identity credentials.
+      - name: Azure CLI Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID || vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID || vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID || vars.AZURE_SUBSCRIPTION_ID }}
 
-    - name: Provision Infrastructure
-      run: |
-        azd provision --no-prompt
+      - name: Provision Infrastructure
+        run: |
+          azd provision --no-prompt
 
-    - name: Download Function App Package
-      if: env.INCLUDE_FUNCTION_APP == 'true'
-      uses: actions/download-artifact@v7
-      with:
-        name: functionapp-package
-        path: ./artifacts
+      - name: Download Function App Package
+        if: env.INCLUDE_FUNCTION_APP == 'true'
+        uses: actions/download-artifact@v7
+        with:
+          name: functionapp-package
+          path: ./artifacts
 
-    - name: Deploy Function App
-      if: env.INCLUDE_FUNCTION_APP == 'true'
-      run: |
-        azd deploy functionApp --from-package ./artifacts/functionapp-package.zip --no-prompt
+      - name: Deploy Function App
+        if: env.INCLUDE_FUNCTION_APP == 'true'
+        run: |
+          azd deploy functionApp --from-package ./artifacts/functionapp-package.zip --no-prompt
 
-    - name: Download Logic App Package
-      if: env.INCLUDE_LOGIC_APP == 'true'
-      uses: actions/download-artifact@v7
-      with:
-        name: logicapp-package
-        path: ./artifacts
+      - name: Download Logic App Package
+        if: env.INCLUDE_LOGIC_APP == 'true'
+        uses: actions/download-artifact@v7
+        with:
+          name: logicapp-package
+          path: ./artifacts
 
-    - name: Deploy Logic App
-      if: env.INCLUDE_LOGIC_APP == 'true'
-      run: |
-        azd deploy logicApp --from-package ./artifacts/logicapp-package.zip --no-prompt
+      - name: Deploy Logic App
+        if: env.INCLUDE_LOGIC_APP == 'true'
+        run: |
+          azd deploy logicApp --from-package ./artifacts/logicapp-package.zip --no-prompt
 
-    # Extract relevant azd environment variables and make them available as job outputs for subsequent jobs.
-    - name: Get Output Variables
-      id: get-outputs
-      run: |
-        .\.github\workflows\scripts\export-azd-env-variables.ps1 -VariableNames @("AZURE_API_MANAGEMENT_GATEWAY_URL", "AZURE_KEY_VAULT_URI")
-
+      # Extract relevant azd environment variables and make them available as job outputs for subsequent jobs.
+      - name: Get Output Variables
+        id: get-outputs
+        run: |
+          .\.github\workflows\scripts\export-azd-env-variables.ps1 -VariableNames @("AZURE_API_MANAGEMENT_GATEWAY_URL", "AZURE_KEY_VAULT_URI")
 
   # ------------------------------------------------------------
   # Verify Deployment
@@ -240,45 +237,44 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       id-token: write # Required to fetch an OIDC token for Azure authentication
-    
+
     steps:
-    - name: Setup .NET 10
-      uses: actions/setup-dotnet@v5
-      with:
-        dotnet-version: '10.0.x'
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "10.0.x"
 
-    - name: Download Integration Tests Package
-      uses: actions/download-artifact@v7
-      with:
-        name: integration-tests-package
-        path: ./artifacts/integration-tests
+      - name: Download Integration Tests Package
+        uses: actions/download-artifact@v7
+        with:
+          name: integration-tests-package
+          path: ./artifacts/integration-tests
 
-    # Login to the Azure CLI with OpenID Connect (OIDC) using federated identity credentials.
-    # This is necessary for the integration test to retrieve the APIM subscription key from Key Vault.
-    - name: Azure CLI Login
-      uses: azure/login@v2
-      with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID || vars.AZURE_CLIENT_ID }}
-        tenant-id: ${{ secrets.AZURE_TENANT_ID || vars.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID || vars.AZURE_SUBSCRIPTION_ID }}
+      # Login to the Azure CLI with OpenID Connect (OIDC) using federated identity credentials.
+      # This is necessary for the integration test to retrieve the APIM subscription key from Key Vault.
+      - name: Azure CLI Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID || vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID || vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID || vars.AZURE_SUBSCRIPTION_ID }}
 
-    - name: Run Integration Tests
-      run: |
-        dotnet ./artifacts/integration-tests/AISQuick.IntegrationTests.dll --report-trx --results-directory ./artifacts/integration-tests/TestResults
-      working-directory: ./
-      env:
-        # Pass the necessary deployed resource properties as environment variables so the integration tests can access them.
-        AZURE_API_MANAGEMENT_GATEWAY_URL: ${{ needs.deploy.outputs.AZURE_API_MANAGEMENT_GATEWAY_URL }}
-        AZURE_KEY_VAULT_URI: ${{ needs.deploy.outputs.AZURE_KEY_VAULT_URI }}
+      - name: Run Integration Tests
+        run: |
+          dotnet ./artifacts/integration-tests/AISQuick.IntegrationTests.dll --report-trx --results-directory ./artifacts/integration-tests/TestResults
+        working-directory: ./
+        env:
+          # Pass the necessary deployed resource properties as environment variables so the integration tests can access them.
+          AZURE_API_MANAGEMENT_GATEWAY_URL: ${{ needs.deploy.outputs.AZURE_API_MANAGEMENT_GATEWAY_URL }}
+          AZURE_KEY_VAULT_URI: ${{ needs.deploy.outputs.AZURE_KEY_VAULT_URI }}
 
-    - name: Upload Test Results
-      if: always()
-      uses: actions/upload-artifact@v6
-      with:
-        name: integration-test-results
-        path: ./artifacts/integration-tests/TestResults/
-        retention-days: 1
-
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: integration-test-results
+          path: ./artifacts/integration-tests/TestResults/
+          retention-days: 1
 
   # ------------------------------------------------------------
   # Clean Up Resources
@@ -286,7 +282,7 @@ jobs:
 
   cleanup:
     name: Clean Up Resources
-    needs: [ deploy, verify-deployment ]
+    needs: [deploy, verify-deployment]
     # Execute the cleanup job if:
     # - The workflow was not manually triggered, OR the cleanup-resources input is true
     # - AND either the deployment verification succeeded OR (was skipped AND deployment succeeded)
@@ -300,29 +296,29 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       id-token: write # Required to fetch an OIDC token for Azure authentication
-      contents: read  # Required to checkout code if needed
-    
+      contents: read # Required to checkout code if needed
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v6
+      - name: Checkout code
+        uses: actions/checkout@v6
 
-    - name: Setup azd
-      uses: Azure/setup-azd@v2
+      - name: Setup azd
+        uses: Azure/setup-azd@v2
 
-    # Use Azure CLI authentication with azd commands so credentials are shared between azd commands and az (Azure CLI) commands used in hooks.
-    - name: Configure azd to use Azure CLI Authentication
-      run: |
-        azd config set auth.useAzCliAuth "true"
+      # Use Azure CLI authentication with azd commands so credentials are shared between azd commands and az (Azure CLI) commands used in hooks.
+      - name: Configure azd to use Azure CLI Authentication
+        run: |
+          azd config set auth.useAzCliAuth "true"
 
-    # Login to the Azure CLI with OpenID Connect (OIDC) using federated identity credentials.
-    - name: Azure CLI Login
-      uses: azure/login@v2
-      with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID || vars.AZURE_CLIENT_ID }}
-        tenant-id: ${{ secrets.AZURE_TENANT_ID || vars.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID || vars.AZURE_SUBSCRIPTION_ID }}
+      # Login to the Azure CLI with OpenID Connect (OIDC) using federated identity credentials.
+      - name: Azure CLI Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID || vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID || vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID || vars.AZURE_SUBSCRIPTION_ID }}
 
-    # Clean up using the --purge flag to ensure all resources are permanently deleted, like API Management.
-    - name: Cleanup Resources
-      run: |
-        azd down --purge --force --no-prompt
+      # Clean up using the --purge flag to ensure all resources are permanently deleted, like API Management.
+      - name: Cleanup Resources
+        run: |
+          azd down --purge --force --no-prompt

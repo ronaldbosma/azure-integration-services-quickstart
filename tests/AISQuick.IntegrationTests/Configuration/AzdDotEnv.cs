@@ -1,6 +1,7 @@
-﻿using dotenv.net;
 using System.Diagnostics;
 using System.Text.Json;
+
+using dotenv.net;
 
 namespace AISQuick.IntegrationTests.Configuration;
 

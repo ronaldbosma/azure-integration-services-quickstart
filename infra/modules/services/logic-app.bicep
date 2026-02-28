@@ -51,20 +51,26 @@ var serviceTags { *: string } = union(tags, {
 })
 
 // If API Management is deployed, add app settings to connect to it
-var apimAppSettings object = apiManagementSettings == null ? {} : {
-  ApiManagement_gatewayUrl: helpers.getApiManagementGatewayUrl(apiManagementSettings!.serviceName)
-  ApiManagement_subscriptionKey: helpers.getKeyVaultSecretReference(keyVaultName, 'apim-master-subscription-key')
-}
+var apimAppSettings object = apiManagementSettings == null
+  ? {}
+  : {
+      ApiManagement_gatewayUrl: helpers.getApiManagementGatewayUrl(apiManagementSettings!.serviceName)
+      ApiManagement_subscriptionKey: helpers.getKeyVaultSecretReference(keyVaultName, 'apim-master-subscription-key')
+    }
 
 // If the Event Hubs namespace is deployed, add app settings to connect to it
-var eventHubAppSettings object = eventHubSettings == null ? {} : {
-  EventHub_fullyQualifiedNamespace: helpers.getServiceBusFullyQualifiedNamespace(eventHubSettings!.namespaceName)
-}
+var eventHubAppSettings object = eventHubSettings == null
+  ? {}
+  : {
+      EventHub_fullyQualifiedNamespace: helpers.getServiceBusFullyQualifiedNamespace(eventHubSettings!.namespaceName)
+    }
 
 // If the Service Bus is deployed, add app settings to connect to it
-var serviceBusAppSettings object = serviceBusSettings == null ? {} : {
-  ServiceBus_fullyQualifiedNamespace: helpers.getServiceBusFullyQualifiedNamespace(serviceBusSettings!.namespaceName)
-}
+var serviceBusAppSettings object = serviceBusSettings == null
+  ? {}
+  : {
+      ServiceBus_fullyQualifiedNamespace: helpers.getServiceBusFullyQualifiedNamespace(serviceBusSettings!.namespaceName)
+    }
 
 // Construct the storage account connection string
 // NOTE: tried using a key vault secret but regularly got errors because the role assignment for the function app on the key vault was not yet effective
@@ -147,7 +153,6 @@ resource hostingPlan 'Microsoft.Web/serverfarms@2025-03-01' = {
   }
 }
 
-
 // Create the Logic App
 
 resource logicApp 'Microsoft.Web/sites@2025-03-01' = {
@@ -173,7 +178,6 @@ resource logicApp 'Microsoft.Web/sites@2025-03-01' = {
   }
 }
 
-
 // Assign roles to system-assigned identity of Logic App
 
 module assignRolesToLogicAppSystemAssignedIdentity '../shared/assign-roles-to-principal.bicep' = {
@@ -187,7 +191,6 @@ module assignRolesToLogicAppSystemAssignedIdentity '../shared/assign-roles-to-pr
     storageAccountName: storageAccountName
   }
 }
-
 
 // Set standard App Settings
 //  NOTE: this is done in a separate module that merges the app settings with the existing ones 
