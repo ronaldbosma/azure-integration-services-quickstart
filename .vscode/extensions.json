@@ -1,0 +1,16 @@
+{
+  "recommendations": [
+    "42crunch.vscode-openapi",
+    "editorconfig.editorconfig",
+    "GitHub.copilot",
+    "GitHub.vscode-github-actions",
+    "humao.rest-client",
+    "ms-azuretools.azure-dev",
+    "ms-azuretools.vscode-azure-github-copilot",
+    "ms-azuretools.vscode-azurefunctions",
+    "ms-azuretools.vscode-azurelogicapps",
+    "ms-azuretools.vscode-bicep",
+    "ms-dotnettools.csharp",
+    "ms-vscode.powershell"
+  ]
+}
