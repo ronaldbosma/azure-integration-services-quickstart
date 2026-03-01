@@ -9,7 +9,7 @@
       "installBicep": true
     },
     "ghcr.io/azure/azure-dev/azd:latest": {},
-    "ghcr.io/devcontainers/features/powershell:1": {
+    "ghcr.io/devcontainers/features/powershell:2": {
       "version": "latest"
     },
     "ghcr.io/devcontainers/features/node:1": {}
