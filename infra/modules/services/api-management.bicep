@@ -79,7 +79,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2025-05-01' existing = {
   name: keyVaultName
 }
 
-resource masterSubscription 'Microsoft.ApiManagement/service/subscriptions@2024-10-01-preview' existing = {
+resource masterSubscription 'Microsoft.ApiManagement/service/subscriptions@2025-03-01-preview' existing = {
   name: 'master'
   parent: apiManagementService
 }
@@ -110,7 +110,7 @@ module assignRolesToApimUserAssignedIdentity '../shared/assign-roles-to-principa
 
 // API Management
 
-resource apiManagementService 'Microsoft.ApiManagement/service@2024-10-01-preview' = {
+resource apiManagementService 'Microsoft.ApiManagement/service@2025-03-01-preview' = {
   name: apiManagementSettings.serviceName
   location: location
   tags: serviceTags
@@ -147,7 +147,7 @@ module assignRolesToApimSystemAssignedIdentity '../shared/assign-roles-to-princi
 
 // Store the app insights connection string in a named value
 
-resource appInsightsConnectionStringNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-10-01-preview' = {
+resource appInsightsConnectionStringNamedValue 'Microsoft.ApiManagement/service/namedValues@2025-03-01-preview' = {
   name: 'appinsights-connection-string'
   parent: apiManagementService
   properties: {
@@ -160,7 +160,7 @@ resource appInsightsConnectionStringNamedValue 'Microsoft.ApiManagement/service/
 // - we need a logger that is connected to the App Insights instance
 // - we need diagnostics settings that specify what to log to the logger
 
-resource apimAppInsightsLogger 'Microsoft.ApiManagement/service/loggers@2024-10-01-preview' = {
+resource apimAppInsightsLogger 'Microsoft.ApiManagement/service/loggers@2025-03-01-preview' = {
   name: appInsightsName
   parent: apiManagementService
   properties: {
@@ -175,7 +175,7 @@ resource apimAppInsightsLogger 'Microsoft.ApiManagement/service/loggers@2024-10-
   }
 }
 
-resource apimInsightsDiagnostics 'Microsoft.ApiManagement/service/diagnostics@2024-10-01-preview' = {
+resource apimInsightsDiagnostics 'Microsoft.ApiManagement/service/diagnostics@2025-03-01-preview' = {
   name: 'applicationinsights' // The name of the diagnostics resource has to be applicationinsights, because that's the logger type we chose
   parent: apiManagementService
   properties: {
@@ -197,7 +197,7 @@ resource apimMasterSubscriptionKeySecret 'Microsoft.KeyVault/vaults/secrets@2025
 
 // Add backends for the various services
 
-resource eventHubsNamespaceBackend 'Microsoft.ApiManagement/service/backends@2024-10-01-preview' = if (eventHubSettings != null) {
+resource eventHubsNamespaceBackend 'Microsoft.ApiManagement/service/backends@2025-03-01-preview' = if (eventHubSettings != null) {
   parent: apiManagementService
   name: 'event-hubs-namespace'
   properties: {
@@ -211,7 +211,7 @@ resource eventHubsNamespaceBackend 'Microsoft.ApiManagement/service/backends@202
   }
 }
 
-resource serviceBusBackend 'Microsoft.ApiManagement/service/backends@2024-10-01-preview' = if (serviceBusSettings != null) {
+resource serviceBusBackend 'Microsoft.ApiManagement/service/backends@2025-03-01-preview' = if (serviceBusSettings != null) {
   parent: apiManagementService
   name: 'service-bus'
   properties: {
@@ -225,7 +225,7 @@ resource serviceBusBackend 'Microsoft.ApiManagement/service/backends@2024-10-01-
   }
 }
 
-resource blobStorageBackend 'Microsoft.ApiManagement/service/backends@2024-10-01-preview' = {
+resource blobStorageBackend 'Microsoft.ApiManagement/service/backends@2025-03-01-preview' = {
   parent: apiManagementService
   name: 'blob-storage'
   properties: {
@@ -239,7 +239,7 @@ resource blobStorageBackend 'Microsoft.ApiManagement/service/backends@2024-10-01
   }
 }
 
-resource queueStorageBackend 'Microsoft.ApiManagement/service/backends@2024-10-01-preview' = {
+resource queueStorageBackend 'Microsoft.ApiManagement/service/backends@2025-03-01-preview' = {
   parent: apiManagementService
   name: 'queue-storage'
   properties: {
@@ -253,7 +253,7 @@ resource queueStorageBackend 'Microsoft.ApiManagement/service/backends@2024-10-0
   }
 }
 
-resource tableStorageBackend 'Microsoft.ApiManagement/service/backends@2024-10-01-preview' = {
+resource tableStorageBackend 'Microsoft.ApiManagement/service/backends@2025-03-01-preview' = {
   parent: apiManagementService
   name: 'table-storage'
   properties: {
