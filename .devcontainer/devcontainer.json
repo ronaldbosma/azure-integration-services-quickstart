@@ -23,7 +23,7 @@
       "extensions": [
         "42crunch.vscode-openapi", // OpenAPI (Swagger) Editor
         "editorconfig.editorconfig",
-        "GitHub.copilot",
+        "GitHub.copilot-chat",
         "GitHub.vscode-github-actions",
         "humao.rest-client",
         "ms-azuretools.azure-dev",
