@@ -22,7 +22,7 @@ param serviceBusSettings serviceBusSettingsType?
 // Existing resources
 //=============================================================================
 
-resource apiManagementService 'Microsoft.ApiManagement/service@2024-10-01-preview' existing = {
+resource apiManagementService 'Microsoft.ApiManagement/service@2025-03-01-preview' existing = {
   name: apiManagementServiceName
 }
 
@@ -30,7 +30,7 @@ resource apiManagementService 'Microsoft.ApiManagement/service@2024-10-01-previe
 // Resources
 //=============================================================================
 
-resource sampleApi 'Microsoft.ApiManagement/service/apis@2024-10-01-preview' = {
+resource sampleApi 'Microsoft.ApiManagement/service/apis@2025-03-01-preview' = {
   name: 'aisquick-sample'
   parent: apiManagementService
   properties: {
@@ -43,7 +43,7 @@ resource sampleApi 'Microsoft.ApiManagement/service/apis@2024-10-01-preview' = {
     ]
     subscriptionRequired: true
   }
-  
+
   resource policies 'policies' = {
     name: 'policy'
     properties: {
@@ -53,7 +53,7 @@ resource sampleApi 'Microsoft.ApiManagement/service/apis@2024-10-01-preview' = {
   }
 }
 
-resource getBlobOperation 'Microsoft.ApiManagement/service/apis/operations@2024-10-01-preview' existing = {
+resource getBlobOperation 'Microsoft.ApiManagement/service/apis/operations@2025-03-01-preview' existing = {
   name: 'get-blob'
   parent: sampleApi
 
@@ -61,12 +61,12 @@ resource getBlobOperation 'Microsoft.ApiManagement/service/apis/operations@2024-
     name: 'policy'
     properties: {
       format: 'rawxml'
-      value: loadTextContent('operations/get-blob.xml') 
+      value: loadTextContent('operations/get-blob.xml')
     }
   }
 }
 
-resource getTableEntityOperation 'Microsoft.ApiManagement/service/apis/operations@2024-10-01-preview' existing = {
+resource getTableEntityOperation 'Microsoft.ApiManagement/service/apis/operations@2025-03-01-preview' existing = {
   name: 'get-table-entity'
   parent: sampleApi
 
@@ -74,13 +74,13 @@ resource getTableEntityOperation 'Microsoft.ApiManagement/service/apis/operation
     name: 'policy'
     properties: {
       format: 'rawxml'
-      value: loadTextContent('operations/get-table-entity.xml') 
+      value: loadTextContent('operations/get-table-entity.xml')
     }
   }
 }
 
 // Only set policy on publish message operation if the Service Bus has been deployed, otherwise it will fail
-resource publishMessageOperation 'Microsoft.ApiManagement/service/apis/operations@2024-10-01-preview' existing = if (serviceBusSettings != null) {
+resource publishMessageOperation 'Microsoft.ApiManagement/service/apis/operations@2025-03-01-preview' existing = if (serviceBusSettings != null) {
   name: 'publish-message'
   parent: sampleApi
 
@@ -88,7 +88,7 @@ resource publishMessageOperation 'Microsoft.ApiManagement/service/apis/operation
     name: 'policy'
     properties: {
       format: 'rawxml'
-      value: loadTextContent('operations/publish-message.xml') 
+      value: loadTextContent('operations/publish-message.xml')
     }
   }
 }

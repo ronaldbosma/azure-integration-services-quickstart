@@ -48,23 +48,32 @@ param storageAccountName string
 // In this case the logic app workflow(s) and related assets.
 var serviceTags { *: string } = union(tags, {
   'azd-service-name': 'logicApp'
+
+  // Associate the Logic App with the App Insights instance in order for the Run tab under "Monitoring > Insights" to work properly in the Azure Portal.
+  'hidden-link: /app-insights-resource-id': appInsights.id
 })
 
 // If API Management is deployed, add app settings to connect to it
-var apimAppSettings object = apiManagementSettings == null ? {} : {
-  ApiManagement_gatewayUrl: helpers.getApiManagementGatewayUrl(apiManagementSettings!.serviceName)
-  ApiManagement_subscriptionKey: helpers.getKeyVaultSecretReference(keyVaultName, 'apim-master-subscription-key')
-}
+var apimAppSettings object = apiManagementSettings == null
+  ? {}
+  : {
+      ApiManagement_gatewayUrl: helpers.getApiManagementGatewayUrl(apiManagementSettings!.serviceName)
+      ApiManagement_subscriptionKey: helpers.getKeyVaultSecretReference(keyVaultName, 'apim-master-subscription-key')
+    }
 
 // If the Event Hubs namespace is deployed, add app settings to connect to it
-var eventHubAppSettings object = eventHubSettings == null ? {} : {
-  EventHub_fullyQualifiedNamespace: helpers.getServiceBusFullyQualifiedNamespace(eventHubSettings!.namespaceName)
-}
+var eventHubAppSettings object = eventHubSettings == null
+  ? {}
+  : {
+      EventHub_fullyQualifiedNamespace: helpers.getServiceBusFullyQualifiedNamespace(eventHubSettings!.namespaceName)
+    }
 
 // If the Service Bus is deployed, add app settings to connect to it
-var serviceBusAppSettings object = serviceBusSettings == null ? {} : {
-  ServiceBus_fullyQualifiedNamespace: helpers.getServiceBusFullyQualifiedNamespace(serviceBusSettings!.namespaceName)
-}
+var serviceBusAppSettings object = serviceBusSettings == null
+  ? {}
+  : {
+      ServiceBus_fullyQualifiedNamespace: helpers.getServiceBusFullyQualifiedNamespace(serviceBusSettings!.namespaceName)
+    }
 
 // Construct the storage account connection string
 // NOTE: tried using a key vault secret but regularly got errors because the role assignment for the function app on the key vault was not yet effective
@@ -72,6 +81,7 @@ var storageAccountConnectionString string = 'DefaultEndpointsProtocol=https;Acco
 
 var appSettings object = {
   APP_KIND: 'workflowApp'
+  APPLICATIONINSIGHTS_AUTHENTICATION_STRING: 'Authorization=AAD'
   APPLICATIONINSIGHTS_CONNECTION_STRING: appInsights.properties.ConnectionString
   AzureFunctionsJobHost__extensionBundle__id: 'Microsoft.Azure.Functions.ExtensionBundle.Workflows'
   AzureFunctionsJobHost__extensionBundle__version: '[1.*, 2.0.0)'
@@ -122,6 +132,7 @@ module assignRolesToLogicAppUserAssignedIdentity '../shared/assign-roles-to-prin
   params: {
     principalId: logicAppIdentity.properties.principalId
     principalType: 'ServicePrincipal'
+    appInsightsName: appInsightsName
     eventHubSettings: eventHubSettings
     keyVaultName: keyVaultName
     serviceBusSettings: serviceBusSettings
@@ -144,7 +155,6 @@ resource hostingPlan 'Microsoft.Web/serverfarms@2025-03-01' = {
     elasticScaleEnabled: false
   }
 }
-
 
 // Create the Logic App
 
@@ -171,13 +181,13 @@ resource logicApp 'Microsoft.Web/sites@2025-03-01' = {
   }
 }
 
-
 // Assign roles to system-assigned identity of Logic App
 
 module assignRolesToLogicAppSystemAssignedIdentity '../shared/assign-roles-to-principal.bicep' = {
   params: {
     principalId: logicApp.identity.principalId
     principalType: 'ServicePrincipal'
+    appInsightsName: appInsightsName
     eventHubSettings: eventHubSettings
     keyVaultName: keyVaultName
     serviceBusSettings: serviceBusSettings
@@ -185,9 +195,8 @@ module assignRolesToLogicAppSystemAssignedIdentity '../shared/assign-roles-to-pr
   }
 }
 
-
 // Set standard App Settings
-//  NOTE: this is done in a separate module that merges the app settings with the existing ones 
+//  NOTE: this is done in a separate module that merges the app settings with the existing ones
 //        to prevent other (manually) created app settings from being removed.
 
 module setLogicAppSettings '../shared/merge-app-settings.bicep' = {

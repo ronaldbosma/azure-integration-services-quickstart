@@ -16,7 +16,6 @@ type apiManagementSettingsType = {
   sku: apimSkuType
 }
 
-
 // Application Insights
 
 @description('Retention options for Application Insights')
@@ -35,7 +34,6 @@ type appInsightsSettingsType = {
   retentionInDays: appInsightsRetentionInDaysType
 }
 
-
 // Event Hub
 
 @description('The settings for the Event Hub')
@@ -44,7 +42,6 @@ type eventHubSettingsType = {
   @description('The name of the Event Hubs namespace')
   namespaceName: string
 }
-
 
 // Function App
 
@@ -64,7 +61,6 @@ type functionAppSettingsType = {
   netFrameworkVersion: string
 }
 
-
 // Logic App
 
 @description('The settings for the Logic App')
@@ -82,7 +78,6 @@ type logicAppSettingsType = {
   @description('The .NET Framework version for the Logic App')
   netFrameworkVersion: string
 }
-
 
 // Service Bus
 

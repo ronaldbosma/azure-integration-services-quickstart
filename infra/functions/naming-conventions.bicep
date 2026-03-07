@@ -5,14 +5,13 @@
 // Get resource name based on the convention: <resourceType>-<environment>-<region>-<instance>
 // Functions based on: https://ronaldbosma.github.io/blog/2024/06/05/apply-azure-naming-convention-using-bicep-functions/
 @export()
-func getResourceName(resourceType string, environment string, region string, instance string) string => 
-  shouldBeShortened(resourceType) 
+func getResourceName(resourceType string, environment string, region string, instance string) string =>
+  shouldBeShortened(resourceType)
     ? getShortenedResourceName(resourceType, environment, region, instance)
     : getResourceNameByConvention(resourceType, environment, region, instance)
 
-func getResourceNameByConvention(resourceType string, environment string, region string, instance string) string => 
+func getResourceNameByConvention(resourceType string, environment string, region string, instance string) string =>
   sanitizeResourceName('${getPrefix(resourceType)}-${environment}-${abbreviateRegion(region)}-${instance}')
-
 
 // Get the instance ID based on the provided instance name or generate a new one using the subscription, environment and location.
 @export()
@@ -23,7 +22,6 @@ func getInstanceId(environment string, region string, instance string) string =>
 func generateInstanceId(environment string, region string) string =>
   substring(uniqueString(subscription().subscriptionId, environment, region), 0, 5)
 
-
 //=============================================================================
 // Shorten Names
 //=============================================================================
@@ -32,9 +30,9 @@ func shouldBeShortened(resourceType string) bool => contains(getResourcesTypesTo
 
 // This is a list of resources that should be shortened.
 func getResourcesTypesToShorten() array => [
-  'keyVault'        // Has max length of 24
-  'storageAccount'  // Has max length of 24 and only allows letters and numbers
-  'virtualMachine'  // Has max length of 15 for Windows
+  'keyVault' // Has max length of 24
+  'storageAccount' // Has max length of 24 and only allows letters and numbers
+  'virtualMachine' // Has max length of 15 for Windows
 ]
 
 func getShortenedResourceName(resourceType string, environment string, region string, instance string) string =>
@@ -47,28 +45,29 @@ func getVirtualMachineName(environment string, region string, instance string) s
   'vm${substring(uniqueString(environment, region), 0, 13-length(shortenString(instance)))}${shortenString(instance)}'
 
 // Shorten the environment name to max 12 characters.
-func shortenEnvironmentName(value string) string => substring(shortenString(value), 0, min(12, length(shortenString(value))))
+func shortenEnvironmentName(value string) string =>
+  substring(shortenString(value), 0, min(12, length(shortenString(value))))
 
 // Shorten the string by removing hyphens and sanitizing the resource name.
 func shortenString(value string) string => removeHyphens(sanitizeResourceName(value))
 func removeHyphens(value string) string => replace(value, '-', '')
-
 
 //=============================================================================
 // Sanitize
 //=============================================================================
 
 // Sanitize the resource name by removing illegal characters and converting it to lower case.
-func sanitizeResourceName(value string) string => toLower(removeTrailingHyphen(removeColons(removeCommas(removeDots(removeSemicolons(removeUnderscores(removeWhiteSpaces(value))))))))
+func sanitizeResourceName(value string) string =>
+  toLower(removeTrailingHyphen(removeColons(removeCommas(removeDots(removeSemicolons(removeUnderscores(removeWhiteSpaces(value))))))))
 
-func removeTrailingHyphen(value string) string => endsWith(value, '-') ? substring(value, 0, max(0, length(value)-1)) : value
+func removeTrailingHyphen(value string) string =>
+  endsWith(value, '-') ? substring(value, 0, max(0, length(value) - 1)) : value
 func removeColons(value string) string => replace(value, ':', '')
 func removeCommas(value string) string => replace(value, ',', '')
 func removeDots(value string) string => replace(value, '.', '')
 func removeSemicolons(value string) string => replace(value, ';', '')
 func removeUnderscores(value string) string => replace(value, '_', '')
 func removeWhiteSpaces(value string) string => replace(value, ' ', '')
-
 
 //=============================================================================
 // Prefixes
@@ -119,15 +118,14 @@ func getPrefixMap() object => {
   synapseWorkspace: 'syn'
   virtualMachine: 'vm'
   virtualNetwork: 'vnet'
-  webApp: 'app' 
-  
+  webApp: 'app'
+
   // Custom prefixes not specified on the Microsoft site
   appRegistration: 'appreg'
   azdEnvironment: 'azd'
   client: 'client'
   webtest: 'webtest'
 }
-
 
 //=============================================================================
 // Regions

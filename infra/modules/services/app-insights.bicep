@@ -36,9 +36,11 @@ resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2025-07
     sku: {
       name: 'PerGB2018'
     }
+    features: {
+      disableLocalAuth: true // Disable Non-EntraID based Auth
+    }
   }
 }
-
 
 // Application Insights
 
@@ -53,5 +55,6 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
     publicNetworkAccessForQuery: 'Enabled'
     WorkspaceResourceId: logAnalyticsWorkspace.id
     RetentionInDays: appInsightsSettings.retentionInDays
+    DisableLocalAuth: true // Disable Non-EntraID based Auth
   }
 }

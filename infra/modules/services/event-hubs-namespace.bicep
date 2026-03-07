@@ -30,7 +30,7 @@ resource eventHubsNamespace 'Microsoft.EventHub/namespaces@2024-01-01' = {
   location: location
   tags: tags
   sku: {
-    name: 'Standard'  // Standard is the minimum version that supports multiple consumer groups on an event hub
+    name: 'Standard' // Standard is the minimum version that supports multiple consumer groups on an event hub
     tier: 'Standard'
     capacity: 1
   }

@@ -2,15 +2,16 @@
 
 name: azure-integration-services-quickstart
 metadata:
-  template: tdd-azure-integration-services-quickstart@1.14.0
+  template: tdd-azure-integration-services-quickstart@1.17.0
 services:
   functionApp:
     project: ./src/functionApp
     host: function
     language: csharp
   logicApp:
-    project: ./src/logicApp/Workflows
+    project: ./src/logicApp
+    dist: Workflows
     host: function
-    language: js  # Logic Apps aren't natively supported by azd yet. By using js, the logic app will be zipped and deployed.
-requiredVersions: 
-  azd: ">= 1.19.0"  # azd version 1.19.0 or higher is required because older versions have issue in Azure Cloud Shell.
+    language: js # Logic Apps aren't natively supported by azd yet. By using js, the logic app will be zipped and deployed.
+requiredVersions:
+  azd: ">= 1.19.0" # azd version 1.19.0 or higher is required because older versions have issue in Azure Cloud Shell.

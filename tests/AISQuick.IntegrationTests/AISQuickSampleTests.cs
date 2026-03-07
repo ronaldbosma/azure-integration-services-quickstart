@@ -1,4 +1,4 @@
-﻿using AISQuick.IntegrationTests.Clients;
+using AISQuick.IntegrationTests.Clients;
 using AISQuick.IntegrationTests.Configuration;
 using AISQuick.IntegrationTests.Models;
 

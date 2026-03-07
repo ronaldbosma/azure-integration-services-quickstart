@@ -51,26 +51,33 @@ var serviceTags { *: string } = union(tags, {
 })
 
 // If API Management is deployed, add app settings to connect to it
-var apimAppSettings object = apiManagementSettings == null ? {} : {
-  ApiManagement_gatewayUrl: helpers.getApiManagementGatewayUrl(apiManagementSettings!.serviceName)
-  ApiManagement_subscriptionKey: helpers.getKeyVaultSecretReference(keyVaultName, 'apim-master-subscription-key')
-}
+var apimAppSettings object = apiManagementSettings == null
+  ? {}
+  : {
+      ApiManagement_gatewayUrl: helpers.getApiManagementGatewayUrl(apiManagementSettings!.serviceName)
+      ApiManagement_subscriptionKey: helpers.getKeyVaultSecretReference(keyVaultName, 'apim-master-subscription-key')
+    }
 
 // If the Event Hubs namespace is deployed, add app settings to connect to it
-var eventHubAppSettings object = eventHubSettings == null ? {} : {
-  EventHubConnection__fullyQualifiedNamespace: helpers.getServiceBusFullyQualifiedNamespace(eventHubSettings!.namespaceName)
-}
+var eventHubAppSettings object = eventHubSettings == null
+  ? {}
+  : {
+      EventHubConnection__fullyQualifiedNamespace: helpers.getServiceBusFullyQualifiedNamespace(eventHubSettings!.namespaceName)
+    }
 
 // If the Service Bus is deployed, add app settings to connect to it
-var serviceBusAppSettings object = serviceBusSettings == null ? {} : {
-  ServiceBusConnection__fullyQualifiedNamespace: helpers.getServiceBusFullyQualifiedNamespace(serviceBusSettings!.namespaceName)
-}
+var serviceBusAppSettings object = serviceBusSettings == null
+  ? {}
+  : {
+      ServiceBusConnection__fullyQualifiedNamespace: helpers.getServiceBusFullyQualifiedNamespace(serviceBusSettings!.namespaceName)
+    }
 
 // Construct the storage account connection string
 // NOTE: tried using a key vault secret but regularly got errors because the role assignment for the function app on the key vault was not yet effective
 var storageAccountConnectionString string = 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount.listKeys().keys[0].value}'
 
 var appSettings object = {
+  APPLICATIONINSIGHTS_AUTHENTICATION_STRING: 'Authorization=AAD'
   APPLICATIONINSIGHTS_CONNECTION_STRING: appInsights.properties.ConnectionString
   AzureWebJobsStorage: storageAccountConnectionString
   FUNCTIONS_EXTENSION_VERSION: '~4'
@@ -119,6 +126,7 @@ module assignRolesToFunctionAppUserAssignedIdentity '../shared/assign-roles-to-p
   params: {
     principalId: functionAppIdentity.properties.principalId
     principalType: 'ServicePrincipal'
+    appInsightsName: appInsightsName
     eventHubSettings: eventHubSettings
     keyVaultName: keyVaultName
     serviceBusSettings: serviceBusSettings
@@ -139,7 +147,6 @@ resource hostingPlan 'Microsoft.Web/serverfarms@2025-03-01' = {
   }
   properties: {}
 }
-
 
 // Create the Function App
 
@@ -166,20 +173,19 @@ resource functionApp 'Microsoft.Web/sites@2025-03-01' = {
   }
 }
 
-
 // Assign roles to system-assigned identity of Function App
 
 module assignRolesToFunctionAppSystemAssignedIdentity '../shared/assign-roles-to-principal.bicep' = {
   params: {
     principalId: functionApp.identity.principalId
     principalType: 'ServicePrincipal'
+    appInsightsName: appInsightsName
     eventHubSettings: eventHubSettings
     keyVaultName: keyVaultName
     serviceBusSettings: serviceBusSettings
     storageAccountName: storageAccountName
   }
 }
-
 
 // Set standard App Settings
 //  NOTE: this is done in a separate module that merges the app settings with the existing ones 
