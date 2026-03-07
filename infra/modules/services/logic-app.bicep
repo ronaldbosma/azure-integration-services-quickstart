@@ -48,6 +48,9 @@ param storageAccountName string
 // In this case the logic app workflow(s) and related assets.
 var serviceTags { *: string } = union(tags, {
   'azd-service-name': 'logicApp'
+
+  // Associate the Logic App with the App Insights instance in order for the Run tab under "Monitoring > Insights" to work properly in the Azure Portal.
+  'hidden-link: /app-insights-resource-id': appInsights.id
 })
 
 // If API Management is deployed, add app settings to connect to it
@@ -193,7 +196,7 @@ module assignRolesToLogicAppSystemAssignedIdentity '../shared/assign-roles-to-pr
 }
 
 // Set standard App Settings
-//  NOTE: this is done in a separate module that merges the app settings with the existing ones 
+//  NOTE: this is done in a separate module that merges the app settings with the existing ones
 //        to prevent other (manually) created app settings from being removed.
 
 module setLogicAppSettings '../shared/merge-app-settings.bicep' = {
