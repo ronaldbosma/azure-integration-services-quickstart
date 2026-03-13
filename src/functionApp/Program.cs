@@ -1,41 +1,43 @@
-using System.Reflection;
+using Azure.Identity;
+using Azure.Monitor.OpenTelemetry.Exporter;
 
-using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Builder;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Azure.Functions.Worker.OpenTelemetry;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+
+using OpenTelemetry.Trace;
 
 var builder = FunctionsApplication.CreateBuilder(args);
 
 builder.ConfigureFunctionsWebApplication();
 
-// Load log levels and categories from appsettings.json. Based on: https://github.com/Azure/azure-functions-dotnet-worker/issues/2531
-builder.Configuration.AddConfiguration(
-    new ConfigurationBuilder()
-        .SetBasePath(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!) // Required on Linux
-        .AddJsonFile("appsettings.json") // First read configuration file
-        .AddEnvironmentVariables() // Then override using app settings
-        .Build()
-        .GetSection("Logging")
-    );
+builder.Logging.AddOpenTelemetry(logging =>
+{
+    logging.IncludeFormattedMessage = true;
+    logging.IncludeScopes = true;
+});
 
-builder.Services
-    .AddApplicationInsightsTelemetryWorkerService()
-    .ConfigureFunctionsApplicationInsights()
-    .Configure<LoggerFilterOptions>(options =>
+builder.Services.AddOpenTelemetry()
+    .WithTracing(tracing =>
     {
-        // The Application Insights SDK adds a default logging filter that instructs ILogger to capture only Warning and more severe logs.
-        // Application Insights requires an explicit override. Log levels can also be configured using appsettings.json.
-        // For more information, see https://learn.microsoft.com/en-us/azure/azure-functions/dotnet-isolated-process-guide?tabs=hostbuilder%2Cwindows#managing-log-levels
-        var toRemove = options.Rules.FirstOrDefault(rule => rule.ProviderName
-            == "Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider");
-
-        if (toRemove is not null)
-        {
-            options.Rules.Remove(toRemove);
-        }
+        tracing
+            // Enables HttpClient instrumentation.
+            .AddHttpClientInstrumentation()
+            // Enable instrumentation for Azure SDK clients.
+            .AddSource("Azure.*");
     });
+
+builder.Services.AddOpenTelemetry().UseAzureMonitorExporter(options =>
+{
+    // Set the Azure Monitor credential to the DefaultAzureCredential.
+    // This credential will use the Azure identity of the current user or
+    // the service principal that the application is running as to authenticate
+    // to Azure Monitor.
+    options.Credential = new DefaultAzureCredential();
+});
+
+builder.Services.AddOpenTelemetry().UseFunctionsWorkerDefaults();
 
 builder.Build().Run();
