@@ -254,7 +254,9 @@ The [assign-roles-to-principal.bicep](./infra/modules/shared/assign-roles-to-pri
   - Storage File Data SMB Share Contributor _(this role is assigned to the managed identities)_
   - Storage Queue Data Contributor
   - Storage Table Data Contributor
-
+- Application Insights roles:
+  - Monitoring Metrics Publisher
+  
 These roles are assigned to the principals based on the resources that are included in the deployment.
 
 #### Supporting Resources
