@@ -129,7 +129,7 @@ Show the source code.
 
 1. Open [SampleFunction.cs](https://github.com/ronaldbosma/azure-integration-services-quickstart/blob/main/src/functionApp/SampleFunction.cs).
 1. Show the `ServiceBusTrigger` attribute, which is configured with the Service Bus topic and subscription, and uses the `ServiceBusConnection` connection.
-1. Show the `TableOutput` output binding, which uses the `StorageAccountConnection` connection to store the return value in table storage.
+1. Show how `TableServiceClient` is injected and uses the `StorageAccountConnection__tableServiceUri` setting to write the entity to Azure Table Storage via the Azure Tables SDK.
 
 Show the deployed function.
 
