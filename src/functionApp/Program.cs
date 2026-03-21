@@ -1,3 +1,4 @@
+using Azure.Data.Tables;
 using Azure.Identity;
 using Azure.Monitor.OpenTelemetry.Exporter;
 
@@ -33,5 +34,9 @@ builder.Services.AddOpenTelemetry().UseAzureMonitorExporter(options =>
 });
 
 builder.Services.AddOpenTelemetry().UseFunctionsWorkerDefaults();
+
+var tableServiceUri = builder.Configuration["StorageAccountConnection:tableServiceUri"]
+    ?? throw new InvalidOperationException("Configuration setting 'StorageAccountConnection:tableServiceUri' is missing.");
+builder.Services.AddSingleton(new TableServiceClient(new Uri(tableServiceUri), new DefaultAzureCredential()));
 
 builder.Build().Run();
