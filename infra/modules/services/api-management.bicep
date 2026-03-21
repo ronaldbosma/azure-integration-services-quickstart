@@ -7,7 +7,7 @@
 //=============================================================================
 
 import * as helpers from '../../functions/helpers.bicep'
-import { apiManagementSettingsType, eventHubSettingsType, serviceBusSettingsType } from '../../types/settings.bicep'
+import { apiManagementSettingsType, eventHubSettingsType, functionAppSettingsType, serviceBusSettingsType } from '../../types/settings.bicep'
 
 //=============================================================================
 // Parameters
@@ -27,6 +27,9 @@ param appInsightsName string
 
 @description('The settings for the Event Hubs namespace')
 param eventHubSettings eventHubSettingsType?
+
+@description('The settings for the Function App')
+param functionAppSettings functionAppSettingsType?
 
 @description('The name of the Key Vault that will contain the secrets')
 param keyVaultName string
@@ -73,6 +76,10 @@ var customProperties resourceInput<'Microsoft.ApiManagement/service@2024-05-01'>
 
 resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
   name: appInsightsName
+}
+
+resource functionApp 'Microsoft.Web/sites@2025-03-01' existing = if (functionAppSettings != null) {
+  name: functionAppSettings!.functionAppName
 }
 
 resource keyVault 'Microsoft.KeyVault/vaults@2025-05-01' existing = {
@@ -265,6 +272,40 @@ resource tableStorageBackend 'Microsoft.ApiManagement/service/backends@2025-03-0
       validateCertificateName: true
     }
   }
+}
+
+resource functionAppApiKeyNamedValue 'Microsoft.ApiManagement/service/namedValues@2025-03-01-preview' = if (functionAppSettings != null) {
+  parent: apiManagementService
+  name: 'function-app-api-key'
+  properties: {
+    displayName: 'function-app-api-key'
+    keyVault: {
+      secretIdentifier: helpers.getKeyVaultSecretUri(keyVaultName, 'function-app-api-key')
+    }
+    secret: true
+  }
+}
+
+resource functionAppBackend 'Microsoft.ApiManagement/service/backends@2025-03-01-preview' = if (functionAppSettings != null) {
+  parent: apiManagementService
+  name: 'function-app'
+  properties: {
+    description: 'The backend for the Function App'
+    url: 'https://${functionApp!.properties.defaultHostName}'
+    protocol: 'http'
+    credentials: {
+      header: {
+        'x-functions-key': ['{{function-app-api-key}}']
+      }
+    }
+    tls: {
+      validateCertificateChain: true
+      validateCertificateName: true
+    }
+  }
+  dependsOn: [
+    functionAppApiKeyNamedValue
+  ]
 }
 
 //=============================================================================

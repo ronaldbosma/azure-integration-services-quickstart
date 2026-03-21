@@ -179,6 +179,7 @@ module apiManagement 'modules/services/api-management.bicep' = if (apiManagement
     apiManagementSettings: apiManagementSettings!
     appInsightsName: appInsightsSettings.appInsightsName
     eventHubSettings: eventHubSettings
+    functionAppSettings: functionAppSettings
     keyVaultName: keyVaultName
     serviceBusSettings: serviceBusSettings
     storageAccountName: storageAccountName
@@ -186,6 +187,7 @@ module apiManagement 'modules/services/api-management.bicep' = if (apiManagement
   dependsOn: [
     appInsights
     eventHubsNamespace
+    functionApp
     keyVault
     serviceBus
   ]

@@ -106,6 +106,10 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
   name: appInsightsName
 }
 
+resource keyVault 'Microsoft.KeyVault/vaults@2025-05-01' existing = {
+  name: keyVaultName
+}
+
 resource storageAccount 'Microsoft.Storage/storageAccounts@2025-06-01' existing = {
   name: storageAccountName
 }
@@ -188,7 +192,7 @@ module assignRolesToFunctionAppSystemAssignedIdentity '../shared/assign-roles-to
 }
 
 // Set standard App Settings
-//  NOTE: this is done in a separate module that merges the app settings with the existing ones 
+//  NOTE: this is done in a separate module that merges the app settings with the existing ones
 //        to prevent other (manually) created app settings from being removed.
 
 module setFunctionAppSettings '../shared/merge-app-settings.bicep' = {
@@ -200,6 +204,16 @@ module setFunctionAppSettings '../shared/merge-app-settings.bicep' = {
   dependsOn: [
     assignRolesToFunctionAppSystemAssignedIdentity // App settings might be dependent on the function app having access to e.g. Key Vault
   ]
+}
+
+// Store Function App API key in Key Vault
+
+resource functionAppApiKeySecret 'Microsoft.KeyVault/vaults/secrets@2025-05-01' = {
+  name: 'function-app-api-key'
+  parent: keyVault
+  properties: {
+    value: listKeys('${functionApp.id}/host/default', functionApp.apiVersion).functionKeys.default
+  }
 }
 
 //=============================================================================
