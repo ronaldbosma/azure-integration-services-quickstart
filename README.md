@@ -176,7 +176,7 @@ When the `includeApiManagement` parameter or the corresponding `INCLUDE_API_MANA
 
 - Both a user-assigned managed identity and system-assigned managed identity are deployed to provide access to other services. See the [Role Assignments](#role-assignments) section for more information.
 - The primary key of the default `master` subscription is stored in a Key Vault secret called `apim-master-subscription-key`. This key can be used, for example, by the Function App to access APIs hosted on API Management.
-- The deployment also includes backends for the Service Bus (\*), various Storage Account endpoints, Function App (\*) and the Event Hubs namespace (\*).  
+- The deployment also includes backends for the Service Bus (\*), various Storage Account endpoints, the Function App (\*) and the Event Hubs namespace (\*).  
   _Note: The `*` indicates that the backend is only deployed if the corresponding service is included._
 
 #### Function App
