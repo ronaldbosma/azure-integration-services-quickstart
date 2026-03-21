@@ -274,6 +274,22 @@ resource tableStorageBackend 'Microsoft.ApiManagement/service/backends@2025-03-0
   }
 }
 
+// Add Function App backend
+// - Store Function App API key in Key Vault
+// - Add a named value that references the Key Vault secret
+// - Configure the backend to use the named value for authentication
+
+resource functionAppApiKeySecret 'Microsoft.KeyVault/vaults/secrets@2025-05-01' = if (functionAppSettings != null) {
+  name: 'function-app-api-key'
+  parent: keyVault
+  properties: {
+    value: listKeys('${functionApp.id}/host/default', functionApp.apiVersion).functionKeys.default
+  }
+  dependsOn: [
+    apiManagementService // Depend on APIM before storing the function key, to ensure that enough time has passed for the Function App to be up and running, and has its keys available
+  ]
+}
+
 resource functionAppApiKeyNamedValue 'Microsoft.ApiManagement/service/namedValues@2025-03-01-preview' = if (functionAppSettings != null) {
   parent: apiManagementService
   name: 'function-app-api-key'
