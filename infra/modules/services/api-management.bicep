@@ -296,7 +296,7 @@ resource functionAppApiKeyNamedValue 'Microsoft.ApiManagement/service/namedValue
   properties: {
     displayName: 'function-app-api-key'
     keyVault: {
-      secretIdentifier: helpers.getKeyVaultSecretUri(keyVaultName, 'function-app-api-key')
+      secretIdentifier: functionAppApiKeySecret!.properties.secretUri
     }
     secret: true
   }
