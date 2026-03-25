@@ -16,6 +16,8 @@ internal class KeyVaultClient
     /// <param name="keyVaultUri">The URI of the Azure Key Vault instance.</param>
     public KeyVaultClient(Uri keyVaultUri)
     {
+        // Use a more specific credential in production scenarios. For best practices, see
+        // https://learn.microsoft.com/en-us/dotnet/azure/sdk/authentication/best-practices?tabs=aspdotnet
         _secretClient = new SecretClient(keyVaultUri, new DefaultAzureCredential());
     }
 
