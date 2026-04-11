@@ -9,6 +9,8 @@ on:
         default: true
         type: boolean
   pull_request:
+    # Also trigger on ready_for_review to catch the transition from draft to ready state.
+    types: [opened, synchronize, reopened, ready_for_review]
     branches:
       - main
     paths:
@@ -162,6 +164,8 @@ jobs:
   deploy:
     name: Deploy to Azure
     needs: build-verify-package
+    # Only deploy if it's not a pull request or if the pull request is ready for review (not a draft) to avoid deploying from work-in-progress branches.
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     permissions:
       id-token: write # Required to fetch an OIDC token for Azure authentication
