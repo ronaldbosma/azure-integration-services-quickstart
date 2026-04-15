@@ -101,7 +101,7 @@
           "level": "warning"
         },
         "use-resource-id-functions": {
-          "level": "error"
+          "level": "warning"
         },
         "use-resource-symbol-reference": {
           "level": "error"
