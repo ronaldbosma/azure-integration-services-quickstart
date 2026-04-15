@@ -95,7 +95,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2025-08-01' existing 
 // Assign role Application Insights to the principal
 
 resource assignAppInsightRolesToPrincipal 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(principalId, appInsights.id, monitoringMetricsPublisher)
+  name: guid(principalId, appInsights.id, roleDefinitions(monitoringMetricsPublisher).id)
   scope: appInsights
   properties: {
     #disable-next-line use-resource-id-functions
@@ -109,7 +109,7 @@ resource assignAppInsightRolesToPrincipal 'Microsoft.Authorization/roleAssignmen
 
 resource assignRolesOnEventHubNamespaceToPrincipal 'Microsoft.Authorization/roleAssignments@2022-04-01' = [
   for role in eventHubRoles: if (eventHubSettings != null) {
-    name: guid(principalId, eventHubsNamespace.id, role)
+    name: guid(principalId, eventHubsNamespace.id, roleDefinitions(role).id)
     scope: eventHubsNamespace
     properties: {
       #disable-next-line use-resource-id-functions
@@ -123,7 +123,7 @@ resource assignRolesOnEventHubNamespaceToPrincipal 'Microsoft.Authorization/role
 // Assign role on Key Vault to the principal
 
 resource assignRolesOnKeyVaultToPrincipal 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(principalId, keyVault.id, keyVaultRole)
+  name: guid(principalId, keyVault.id, roleDefinitions(keyVaultRole).id)
   scope: keyVault
   properties: {
     #disable-next-line use-resource-id-functions
@@ -137,7 +137,7 @@ resource assignRolesOnKeyVaultToPrincipal 'Microsoft.Authorization/roleAssignmen
 
 resource assignRolesOnServiceBusToPrincipal 'Microsoft.Authorization/roleAssignments@2022-04-01' = [
   for role in serviceBusRoles: if (serviceBusSettings != null) {
-    name: guid(principalId, serviceBusNamespace.id, role)
+    name: guid(principalId, serviceBusNamespace.id, roleDefinitions(role).id)
     scope: serviceBusNamespace
     properties: {
       #disable-next-line use-resource-id-functions
@@ -152,7 +152,7 @@ resource assignRolesOnServiceBusToPrincipal 'Microsoft.Authorization/roleAssignm
 
 resource assignRolesOnStorageAccountToPrincipal 'Microsoft.Authorization/roleAssignments@2022-04-01' = [
   for role in storageAccountRoles: {
-    name: guid(principalId, storageAccount.id, role)
+    name: guid(principalId, storageAccount.id, roleDefinitions(role).id)
     scope: storageAccount
     properties: {
       #disable-next-line use-resource-id-functions
