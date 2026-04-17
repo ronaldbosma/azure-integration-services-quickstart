@@ -41,19 +41,19 @@ param storageAccountName string
 // Variables
 //=============================================================================
 
-var eventHubRoles string[] = [
+var eventHubRoleNames string[] = [
   'Azure Event Hubs Data Receiver'
   'Azure Event Hubs Data Sender'
 ]
 
-var keyVaultRole string = isAdmin ? 'Key Vault Administrator' : 'Key Vault Secrets User'
+var keyVaultRoleName string = isAdmin ? 'Key Vault Administrator' : 'Key Vault Secrets User'
 
-var serviceBusRoles string[] = [
+var serviceBusRoleNames string[] = [
   'Azure Service Bus Data Receiver'
   'Azure Service Bus Data Sender'
 ]
 
-var storageAccountRoles string[] = [
+var storageAccountRoleNames string[] = [
   'Storage Blob Data Contributor'
   isAdmin
     ? 'Storage File Data Privileged Contributor' // is able to browse file shares in Azure Portal
@@ -62,7 +62,7 @@ var storageAccountRoles string[] = [
   'Storage Table Data Contributor'
 ]
 
-var monitoringMetricsPublisher string = 'Monitoring Metrics Publisher'
+var monitoringMetricsPublisherRoleName string = 'Monitoring Metrics Publisher'
 
 //=============================================================================
 // Existing Resources
@@ -95,11 +95,11 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2025-08-01' existing 
 // Assign role Application Insights to the principal
 
 resource assignAppInsightRolesToPrincipal 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(principalId, appInsights.id, roleDefinitions(monitoringMetricsPublisher).id)
+  name: guid(principalId, appInsights.id, roleDefinitions(monitoringMetricsPublisherRoleName).id)
   scope: appInsights
   properties: {
     #disable-next-line use-resource-id-functions
-    roleDefinitionId: roleDefinitions(monitoringMetricsPublisher).id
+    roleDefinitionId: roleDefinitions(monitoringMetricsPublisherRoleName).id
     principalId: principalId
     principalType: principalType
   }
@@ -108,7 +108,7 @@ resource assignAppInsightRolesToPrincipal 'Microsoft.Authorization/roleAssignmen
 // Assign role on Event Hubs namespace to the principal (if Event Hubs namespace is included)
 
 resource assignRolesOnEventHubNamespaceToPrincipal 'Microsoft.Authorization/roleAssignments@2022-04-01' = [
-  for role in eventHubRoles: if (eventHubSettings != null) {
+  for role in eventHubRoleNames: if (eventHubSettings != null) {
     name: guid(principalId, eventHubsNamespace.id, roleDefinitions(role).id)
     scope: eventHubsNamespace
     properties: {
@@ -123,11 +123,11 @@ resource assignRolesOnEventHubNamespaceToPrincipal 'Microsoft.Authorization/role
 // Assign role on Key Vault to the principal
 
 resource assignRolesOnKeyVaultToPrincipal 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(principalId, keyVault.id, roleDefinitions(keyVaultRole).id)
+  name: guid(principalId, keyVault.id, roleDefinitions(keyVaultRoleName).id)
   scope: keyVault
   properties: {
     #disable-next-line use-resource-id-functions
-    roleDefinitionId: roleDefinitions(keyVaultRole).id
+    roleDefinitionId: roleDefinitions(keyVaultRoleName).id
     principalId: principalId
     principalType: principalType
   }
@@ -136,7 +136,7 @@ resource assignRolesOnKeyVaultToPrincipal 'Microsoft.Authorization/roleAssignmen
 // Assign roles on Service Bus to the principal (if Service Bus is included)
 
 resource assignRolesOnServiceBusToPrincipal 'Microsoft.Authorization/roleAssignments@2022-04-01' = [
-  for role in serviceBusRoles: if (serviceBusSettings != null) {
+  for role in serviceBusRoleNames: if (serviceBusSettings != null) {
     name: guid(principalId, serviceBusNamespace.id, roleDefinitions(role).id)
     scope: serviceBusNamespace
     properties: {
@@ -151,7 +151,7 @@ resource assignRolesOnServiceBusToPrincipal 'Microsoft.Authorization/roleAssignm
 // Assign roles on Storage Account to the principal
 
 resource assignRolesOnStorageAccountToPrincipal 'Microsoft.Authorization/roleAssignments@2022-04-01' = [
-  for role in storageAccountRoles: {
+  for role in storageAccountRoleNames: {
     name: guid(principalId, storageAccount.id, roleDefinitions(role).id)
     scope: storageAccount
     properties: {
