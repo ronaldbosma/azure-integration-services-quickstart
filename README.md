@@ -320,6 +320,8 @@ The pipeline consists of the following jobs:
 
 For draft PRs, only the 'Build, Verify and Package' job is executed to avoid deploying from work-in-progress branches. When the PR is marked ready for review, the workflow will trigger and execute all jobs.
 
+See [GitHub Actions Workflow for Azure Developer CLI (azd) Templates](https://ronaldbosma.github.io/blog/2026/03/02/github-actions-workflow-for-azure-developer-cli-azd-templates/) for a detailed explanation of the workflow.
+
 ### Setting Up the Pipeline
 
 To set up the pipeline in your own repository, run the following command:
