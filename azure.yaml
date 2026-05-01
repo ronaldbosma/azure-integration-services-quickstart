@@ -2,7 +2,7 @@
 
 name: azure-integration-services-quickstart
 metadata:
-  template: tdd-azure-integration-services-quickstart@1.18.2
+  template: tdd-azure-integration-services-quickstart@1.18.3
 services:
   functionApp:
     project: ./src/functionApp
