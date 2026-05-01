@@ -39,6 +39,9 @@
         "no-deployments-resources": {
           "level": "error"
         },
+        "no-explicit-any": {
+          "level": "error"
+        },
         "no-hardcoded-env-urls": {
           "level": "error"
         },
