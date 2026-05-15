@@ -103,6 +103,9 @@
         "use-recent-module-versions": {
           "level": "warning"
         },
+        "use-recognized-resource-type": {
+          "level": "error"
+        },
         "use-resource-id-functions": {
           "level": "error"
         },
