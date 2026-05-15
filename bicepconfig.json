@@ -51,6 +51,9 @@
         "no-loc-expr-outside-params": {
           "level": "error"
         },
+        "no-module-name": {
+          "level": "error"
+        },
         "no-unnecessary-dependson": {
           "level": "error"
         },
