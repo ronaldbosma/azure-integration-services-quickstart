@@ -39,6 +39,9 @@
         "no-deployments-resources": {
           "level": "error"
         },
+        "no-explicit-any": {
+          "level": "error"
+        },
         "no-hardcoded-env-urls": {
           "level": "error"
         },
@@ -46,6 +49,9 @@
           "level": "error"
         },
         "no-loc-expr-outside-params": {
+          "level": "error"
+        },
+        "no-module-name": {
           "level": "error"
         },
         "no-unnecessary-dependson": {
@@ -99,6 +105,9 @@
         },
         "use-recent-module-versions": {
           "level": "warning"
+        },
+        "use-recognized-resource-type": {
+          "level": "error"
         },
         "use-resource-id-functions": {
           "level": "error"

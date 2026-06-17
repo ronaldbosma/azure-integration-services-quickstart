@@ -2,23 +2,23 @@
     <inbound>
         <base />
         <!-- Validate that the body complies to the schema -->
-        <validate-content unspecified-content-type-action="prevent" max-size="102400" size-exceeded-action="prevent">
+        <validate-content unspecified-content-type-action="prevent" max-size="102400"
+            size-exceeded-action="prevent">
             <content type="application/json" validate-as="json" action="prevent" />
         </validate-content>
 
         <!-- Add message ID to body -->
         <set-variable name="message-id" value="@(Guid.NewGuid().ToString())" />
-        <send-service-bus-message topic-name="aisquick-sample" namespace="sbns-aisquick-sdc-5spzh.servicebus.windows.net">
-            <payload>@{
-                var body = context.Request.Body.As<JObject>();
-                body["id"] = context.Variables.GetValueOrDefault<string>("message-id");
-                body["via"] = "send-service-bus-message";
-                return body.ToString();
-            }</payload>
+        <send-service-bus-message topic-name="aisquick-sample"
+            namespace="sbns-aisquick-sdc-5spzh.servicebus.windows.net">
+            <payload>@{ var body = context.Request.Body.As<JObject>(); body["id"] =
+                context.Variables.GetValueOrDefault<string>("message-id"); body["via"] =
+                "send-service-bus-message"; return body.ToString(); }</payload>
         </send-service-bus-message>
     </inbound>
 
-    <!-- Skip base policy. The send-service-bus-message policy already send the message to service bus and we don't want to forward the request to another backend. -->
+    <!-- Skip base policy. The send-service-bus-message policy already send the message to service
+    bus and we don't want to forward the request to another backend. -->
     <backend />
 
     <outbound>
@@ -30,9 +30,9 @@
                     <value>application/json</value>
                 </set-header>
                 <set-body template="liquid">
-                {
+                    {
                     "id": "{{context.Variables["message-id"]}}"
-                }
+                    }
                 </set-body>
             </when>
         </choose>
