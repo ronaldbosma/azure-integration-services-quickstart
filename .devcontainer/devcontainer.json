@@ -3,7 +3,7 @@
   "image": "mcr.microsoft.com/devcontainers/dotnet:dev-10.0",
   "features": {
     // See https://containers.dev/features for list of features
-    "ghcr.io/devcontainers/features/docker-in-docker:3": {},
+    "ghcr.io/devcontainers/features/docker-in-docker:4": {},
     "ghcr.io/devcontainers/features/azure-cli:latest": {
       "version": "latest",
       "installBicep": true
