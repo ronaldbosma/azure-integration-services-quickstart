@@ -25,7 +25,7 @@ param logicAppSettings logicAppSettingsType?
 // Existing Resources
 //=============================================================================
 
-resource serviceBusNamespace 'Microsoft.ServiceBus/namespaces@2024-01-01' existing = {
+resource serviceBusNamespace 'Microsoft.ServiceBus/namespaces@2026-01-01' existing = {
   name: serviceBusSettings.namespaceName
 }
 
@@ -33,17 +33,17 @@ resource serviceBusNamespace 'Microsoft.ServiceBus/namespaces@2024-01-01' existi
 // Resources
 //=============================================================================
 
-resource sampleTopic 'Microsoft.ServiceBus/namespaces/topics@2024-01-01' = {
+resource sampleTopic 'Microsoft.ServiceBus/namespaces/topics@2026-01-01' = {
   name: 'aisquick-sample'
   parent: serviceBusNamespace
 }
 
-resource functionAppSubscriptionOnSampleTopic 'Microsoft.ServiceBus/namespaces/topics/subscriptions@2024-01-01' = if (functionAppSettings != null) {
+resource functionAppSubscriptionOnSampleTopic 'Microsoft.ServiceBus/namespaces/topics/subscriptions@2026-01-01' = if (functionAppSettings != null) {
   name: 'function-app'
   parent: sampleTopic
 }
 
-resource logicAppSubscriptionOnSampleTopic 'Microsoft.ServiceBus/namespaces/topics/subscriptions@2024-01-01' = if (logicAppSettings != null) {
+resource logicAppSubscriptionOnSampleTopic 'Microsoft.ServiceBus/namespaces/topics/subscriptions@2026-01-01' = if (logicAppSettings != null) {
   name: 'logic-app'
   parent: sampleTopic
 }
