@@ -72,7 +72,7 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
   name: appInsightsName
 }
 
-resource eventHubsNamespace 'Microsoft.EventHub/namespaces@2024-01-01' existing = if (eventHubSettings != null) {
+resource eventHubsNamespace 'Microsoft.EventHub/namespaces@2026-01-01' existing = if (eventHubSettings != null) {
   name: eventHubSettings!.namespaceName
 }
 
@@ -80,7 +80,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2025-05-01' existing = {
   name: keyVaultName
 }
 
-resource serviceBusNamespace 'Microsoft.ServiceBus/namespaces@2024-01-01' existing = if (serviceBusSettings != null) {
+resource serviceBusNamespace 'Microsoft.ServiceBus/namespaces@2026-01-01' existing = if (serviceBusSettings != null) {
   name: serviceBusSettings!.namespaceName
 }
 

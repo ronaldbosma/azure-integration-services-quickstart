@@ -25,7 +25,7 @@ param eventHubSettings eventHubSettingsType
 // Resources
 //=============================================================================
 
-resource eventHubsNamespace 'Microsoft.EventHub/namespaces@2024-01-01' = {
+resource eventHubsNamespace 'Microsoft.EventHub/namespaces@2026-01-01' = {
   name: eventHubSettings.namespaceName
   location: location
   tags: tags
