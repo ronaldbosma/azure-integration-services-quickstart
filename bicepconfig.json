@@ -48,6 +48,9 @@
         "no-hardcoded-location": {
           "level": "error"
         },
+        "no-hardcoded-outputs": {
+          "level": "error"
+        },
         "no-loc-expr-outside-params": {
           "level": "error"
         },
@@ -87,6 +90,9 @@
         "secure-params-in-nested-deploy": {
           "level": "error"
         },
+        "secure-params-in-parameters-file": {
+          "level": "error"
+        },
         "secure-secrets-in-params": {
           "level": "error"
         },
@@ -101,7 +107,8 @@
         },
         "use-recent-api-versions": {
           "level": "warning",
-          "maxAllowedAgeInDays": 730
+          "maxAgeInDays": 730,
+          "gracePeriodInDays": 90
         },
         "use-recent-module-versions": {
           "level": "warning"
@@ -126,6 +133,9 @@
         },
         "use-stable-vm-image": {
           "level": "error"
+        },
+        "use-user-defined-types": {
+          "level": "off"
         },
         "what-if-short-circuiting": {
           "level": "off"
