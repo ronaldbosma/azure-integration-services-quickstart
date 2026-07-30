@@ -14,4 +14,4 @@ services:
     host: function
     language: js # Logic Apps aren't natively supported by azd yet. By using js, the logic app will be zipped and deployed.
 requiredVersions:
-  azd: ">= 1.23.15" # azd version 1.23.15 or higher is required because we're using features from Bicep 0.42.1.
+  azd: ">= 1.28.1" # azd version 1.28.1 or higher is required because we're using features from Bicep v0.45.6.
