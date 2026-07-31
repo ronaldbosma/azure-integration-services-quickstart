@@ -10,6 +10,7 @@ targetScope = 'subscription'
 //=============================================================================
 
 import { getResourceName, generateInstanceId } from './functions/naming-conventions.bicep'
+import { tagsType } from './types/shared-types.bicep'
 import {
   apiManagementSettingsType
   appInsightsSettingsType
@@ -107,7 +108,7 @@ var serviceBusSettings serviceBusSettingsType? = !includeServiceBus
 
 var storageAccountName string = getResourceName('storageAccount', environmentName, location, instanceId)
 
-var tags { *: string } = {
+var tags tagsType = {
   'azd-env-name': environmentName
   'azd-template': 'ronaldbosma/azure-integration-services-quickstart'
 

@@ -7,6 +7,7 @@
 //=============================================================================
 
 import { serviceBusSettingsType } from '../../types/settings.bicep'
+import { tagsType } from '../../types/shared-types.bicep'
 
 //=============================================================================
 // Parameters
@@ -16,7 +17,7 @@ import { serviceBusSettingsType } from '../../types/settings.bicep'
 param location string
 
 @description('The tags to associate with the resource')
-param tags object
+param tags tagsType
 
 @description('The settings for the Service Bus namespace')
 param serviceBusSettings serviceBusSettingsType

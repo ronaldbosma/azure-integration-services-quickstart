@@ -3,6 +3,12 @@
 //=============================================================================
 
 //=============================================================================
+// Imports
+//=============================================================================
+
+import { tagsType } from '../../types/shared-types.bicep'
+
+//=============================================================================
 // Parameters
 //=============================================================================
 
@@ -13,7 +19,7 @@ param tenantId string = subscription().tenantId
 param location string
 
 @description('The tags to associate with the resource')
-param tags object
+param tags tagsType
 
 @description('The name of the Key Vault that will contain the secrets')
 @maxLength(24)

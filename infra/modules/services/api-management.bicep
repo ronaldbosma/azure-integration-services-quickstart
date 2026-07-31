@@ -8,6 +8,7 @@
 
 import * as helpers from '../../functions/helpers.bicep'
 import { apiManagementSettingsType, eventHubSettingsType, serviceBusSettingsType } from '../../types/settings.bicep'
+import { tagsType } from '../../types/shared-types.bicep'
 
 //=============================================================================
 // Parameters
@@ -17,7 +18,7 @@ import { apiManagementSettingsType, eventHubSettingsType, serviceBusSettingsType
 param location string
 
 @description('The tags to associate with the resource')
-param tags object
+param tags tagsType
 
 @description('The settings for the API Management Service that will be created')
 param apiManagementSettings apiManagementSettingsType

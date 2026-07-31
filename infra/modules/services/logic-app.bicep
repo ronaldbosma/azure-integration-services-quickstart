@@ -8,6 +8,7 @@
 
 import * as helpers from '../../functions/helpers.bicep'
 import { apiManagementSettingsType, eventHubSettingsType, logicAppSettingsType, serviceBusSettingsType } from '../../types/settings.bicep'
+import { tagsType } from '../../types/shared-types.bicep'
 
 //=============================================================================
 // Parameters
@@ -17,7 +18,7 @@ import { apiManagementSettingsType, eventHubSettingsType, logicAppSettingsType, 
 param location string
 
 @description('The tags to associate with the resource')
-param tags object
+param tags tagsType
 
 @description('The settings for the Logic App that will be created')
 param logicAppSettings logicAppSettingsType
