@@ -29,7 +29,7 @@ func generateInstanceId(environment string, region string) string =>
 func shouldBeShortened(resourceType string) bool => contains(getResourcesTypesToShorten(), resourceType)
 
 // This is a list of resources that should be shortened.
-func getResourcesTypesToShorten() array => [
+func getResourcesTypesToShorten() string[] => [
   'keyVault' // Has max length of 24
   'storageAccount' // Has max length of 24 and only allows letters and numbers
   'virtualMachine' // Has max length of 15 for Windows
@@ -77,7 +77,7 @@ func getPrefix(resourceType string) string => getPrefixMap()[resourceType]
 
 // Prefixes for commonly used resources.
 // Source for abbreviations: https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-abbreviations
-func getPrefixMap() object => {
+func getPrefixMap() { *: string } => {
   actionGroup: 'ag'
   alert: 'al'
   apiManagement: 'apim'
@@ -134,7 +134,7 @@ func getPrefixMap() object => {
 func abbreviateRegion(region string) string => getRegionMap()[region]
 
 // Map Azure region name to Short Name (CAF) abbreviation taken from: https://www.jlaundry.nz/2022/azure_region_abbreviations/
-func getRegionMap() object => {
+func getRegionMap() { *: string } => {
   australiacentral: 'acl'
   australiacentral2: 'acl2'
   australiaeast: 'ae'
