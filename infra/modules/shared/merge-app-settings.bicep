@@ -11,11 +11,11 @@ param siteName string
 
 @secure()
 @description('The current app settings of the site')
-param currentAppSettings object
+param currentAppSettings resourceInput<'Microsoft.Web/sites/config@2025-03-01'>.properties
 
 @secure()
 @description('The new app settings for the site')
-param newAppSettings object
+param newAppSettings resourceInput<'Microsoft.Web/sites/config@2025-03-01'>.properties
 
 //=============================================================================
 // Existing resources

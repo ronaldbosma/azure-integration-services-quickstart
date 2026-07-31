@@ -8,6 +8,7 @@
 
 import * as helpers from '../../functions/helpers.bicep'
 import { apiManagementSettingsType, eventHubSettingsType, functionAppSettingsType, serviceBusSettingsType } from '../../types/settings.bicep'
+import { tagsType } from '../../types/shared-types.bicep'
 
 //=============================================================================
 // Parameters
@@ -17,7 +18,7 @@ import { apiManagementSettingsType, eventHubSettingsType, functionAppSettingsTyp
 param location string
 
 @description('The tags to associate with the resource')
-param tags object
+param tags tagsType
 
 @description('The settings for the Function App that will be created')
 param functionAppSettings functionAppSettingsType
@@ -51,7 +52,7 @@ var serviceTags { *: string } = union(tags, {
 })
 
 // If API Management is deployed, add app settings to connect to it
-var apimAppSettings object = apiManagementSettings == null
+var apimAppSettings resourceInput<'Microsoft.Web/sites/config@2025-03-01'>.properties = apiManagementSettings == null
   ? {}
   : {
       ApiManagement_gatewayUrl: helpers.getApiManagementGatewayUrl(apiManagementSettings!.serviceName)
@@ -59,14 +60,14 @@ var apimAppSettings object = apiManagementSettings == null
     }
 
 // If the Event Hubs namespace is deployed, add app settings to connect to it
-var eventHubAppSettings object = eventHubSettings == null
+var eventHubAppSettings resourceInput<'Microsoft.Web/sites/config@2025-03-01'>.properties = eventHubSettings == null
   ? {}
   : {
       EventHubConnection__fullyQualifiedNamespace: helpers.getServiceBusFullyQualifiedNamespace(eventHubSettings!.namespaceName)
     }
 
 // If the Service Bus is deployed, add app settings to connect to it
-var serviceBusAppSettings object = serviceBusSettings == null
+var serviceBusAppSettings resourceInput<'Microsoft.Web/sites/config@2025-03-01'>.properties = serviceBusSettings == null
   ? {}
   : {
       ServiceBusConnection__fullyQualifiedNamespace: helpers.getServiceBusFullyQualifiedNamespace(serviceBusSettings!.namespaceName)
@@ -76,7 +77,7 @@ var serviceBusAppSettings object = serviceBusSettings == null
 // NOTE: tried using a key vault secret but regularly got errors because the role assignment for the function app on the key vault was not yet effective
 var storageAccountConnectionString string = 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount.listKeys().keys[0].value}'
 
-var appSettings object = {
+var appSettings resourceInput<'Microsoft.Web/sites/config@2025-03-01'>.properties = {
   APPLICATIONINSIGHTS_AUTHENTICATION_STRING: 'Authorization=AAD'
   APPLICATIONINSIGHTS_CONNECTION_STRING: appInsights.properties.ConnectionString
   AzureWebJobsStorage: storageAccountConnectionString
@@ -188,7 +189,7 @@ module assignRolesToFunctionAppSystemAssignedIdentity '../shared/assign-roles-to
 }
 
 // Set standard App Settings
-//  NOTE: this is done in a separate module that merges the app settings with the existing ones 
+//  NOTE: this is done in a separate module that merges the app settings with the existing ones
 //        to prevent other (manually) created app settings from being removed.
 
 module setFunctionAppSettings '../shared/merge-app-settings.bicep' = {

@@ -135,7 +135,7 @@
           "level": "error"
         },
         "use-user-defined-types": {
-          "level": "off"
+          "level": "error"
         },
         "what-if-short-circuiting": {
           "level": "off"
