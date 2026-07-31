@@ -80,6 +80,7 @@ func getPrefix(resourceType string) string => getPrefixMap()[resourceType]
 func getPrefixMap() { *: string } => {
   actionGroup: 'ag'
   alert: 'al'
+  alertProcessingRule: 'apr'
   apiManagement: 'apim'
   appConfigurationStore: 'appcs'
   applicationGateway: 'agw'
@@ -124,6 +125,7 @@ func getPrefixMap() { *: string } => {
   appRegistration: 'appreg'
   azdEnvironment: 'azd'
   client: 'client'
+  webApplicationFirewallPolicy: 'waf'
   webtest: 'webtest'
 }
 
