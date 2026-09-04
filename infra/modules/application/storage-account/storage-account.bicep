@@ -6,7 +6,7 @@
 // Parameters
 //=============================================================================
 
-@description('Name of the storage account that will be used by the Function App')
+@description('Name of the storage account')
 param storageAccountName string
 
 //=============================================================================
