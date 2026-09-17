@@ -16,4 +16,4 @@ services:
 requiredVersions:
   azd: ">= 1.28.1" # azd version 1.28.1 or higher is required because we're using features from Bicep v0.45.6.
   extensions:
-    azure.logicappsstandard: "0.1.0"
+    azure.logicappsstandard: ">= 0.1.0"
