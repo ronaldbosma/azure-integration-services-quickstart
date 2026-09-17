@@ -3,4 +3,3 @@
 [comment]: <> (don't add any other information, as this is rendered as part of a prereqs element on the webpage)
 
 - [.NET 10 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
-- [npm CLI](https://nodejs.org/)

@@ -37,7 +37,6 @@ Before you can deploy this template, make sure you have the following tools inst
     - [GitHub CLI](https://cli.github.com)
     - [Bicep CLI](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/install)
 - [.NET 10 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
-- [npm CLI](https://nodejs.org/) _(This template uses a workaround to deploy the Logic App workflow, which requires the npm CLI.)_
 
 **Required Permissions:**
 
