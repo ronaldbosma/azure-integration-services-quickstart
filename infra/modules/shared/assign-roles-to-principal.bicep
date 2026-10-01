@@ -84,7 +84,7 @@ resource serviceBusNamespace 'Microsoft.ServiceBus/namespaces@2026-01-01' existi
   name: serviceBusSettings!.namespaceName
 }
 
-resource storageAccount 'Microsoft.Storage/storageAccounts@2025-08-01' existing = {
+resource storageAccount 'Microsoft.Storage/storageAccounts@2026-04-01' existing = {
   name: storageAccountName
 }
 

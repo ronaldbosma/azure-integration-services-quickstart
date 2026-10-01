@@ -26,7 +26,7 @@ param storageAccountName string
 // Resources
 //=============================================================================
 
-resource storageAccount 'Microsoft.Storage/storageAccounts@2025-08-01' = {
+resource storageAccount 'Microsoft.Storage/storageAccounts@2026-04-01' = {
   name: storageAccountName
   location: location
   tags: tags
