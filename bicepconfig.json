@@ -69,6 +69,9 @@
         "no-unused-params": {
           "level": "error"
         },
+        "no-unused-types": {
+          "level": "error"
+        },
         "no-unused-vars": {
           "level": "error"
         },
@@ -101,6 +104,21 @@
         },
         "simplify-json-null": {
           "level": "error"
+        },
+        "use-description-outputs": {
+          "level": "off"
+        },
+        "use-description-params": {
+          "level": "error"
+        },
+        "use-description-type-properties": {
+          "level": "error"
+        },
+        "use-description-types": {
+          "level": "error"
+        },
+        "use-description-vars": {
+          "level": "off"
         },
         "use-parent-property": {
           "level": "error"
