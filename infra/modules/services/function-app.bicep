@@ -102,6 +102,15 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
   name: appInsightsName
 }
 
+resource storageAccount 'Microsoft.Storage/storageAccounts@2026-09-01'existing = {
+  name: storageAccountName
+}
+
+resource storageAccountBlobServices 'Microsoft.Storage/storageAccounts/blobServices@2026-09-01' existing = {
+  parent: storageAccount
+  name: 'default'
+}
+
 //=============================================================================
 // Resources
 //=============================================================================
@@ -124,6 +133,13 @@ module assignRolesToFunctionAppUserAssignedIdentity '../shared/assign-roles-to-p
     serviceBusSettings: serviceBusSettings
     storageAccountName: storageAccountName
   }
+}
+
+// Create the storage container for the Function App package
+
+resource appPackageStorageContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2026-09-01' = {
+  parent: storageAccountBlobServices
+  name: 'app-package-${functionAppSettings.functionAppName}'
 }
 
 // Create the App Service Plan for the Function App
@@ -166,7 +182,7 @@ resource functionApp 'Microsoft.Web/sites@2025-03-01' = {
       deployment: {
         storage: {
           type: 'blobContainer'
-          value: '${helpers.getBlobStorageEndpoint(storageAccountName)}/app-package-${functionAppSettings.functionAppName}'
+          value: '${helpers.getBlobStorageEndpoint(storageAccountName)}/${appPackageStorageContainer.name}'
           authentication: {
             type: 'SystemAssignedIdentity'
           }
