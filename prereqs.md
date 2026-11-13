@@ -2,5 +2,5 @@
 [comment]: <> (typical use case could be a specific Dev Language SDK like .NET 6)
 [comment]: <> (don't add any other information, as this is rendered as part of a prereqs element on the webpage)
 
-- [.NET 10 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
+- [.NET 11 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/11.0)
 - [npm CLI](https://nodejs.org/)
