@@ -19,6 +19,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="11.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="11.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="11.0.0" />
+    <PackageReference Include="Microsoft.Testing.Extensions.GitHubActionsReport" Version="2.5.3" />
     <PackageReference Include="Polly" Version="8.9.1" />
   </ItemGroup>
 
