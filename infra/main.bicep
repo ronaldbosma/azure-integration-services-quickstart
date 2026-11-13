@@ -86,7 +86,7 @@ var functionAppSettings functionAppSettingsType? = !includeFunctionApp
       functionAppName: getResourceName('functionApp', environmentName, location, instanceId)
       identityName: getResourceName('managedIdentity', environmentName, location, 'functionapp-${instanceId}')
       appServicePlanName: getResourceName('appServicePlan', environmentName, location, 'functionapp-${instanceId}')
-      netFrameworkVersion: 'v11.0'
+      runtimeVersion: '11.0'
     }
 
 var logicAppSettings logicAppSettingsType? = !includeLogicApp
