@@ -7,12 +7,7 @@ namespace AISQuick.IntegrationTests.Configuration;
 /// </summary>
 internal class TestConfiguration
 {
-    public required Uri AzureApiManagementGatewayUrl { get; init; }
-    public required Uri AzureKeyVaultUri { get; init; }
-    public required bool IncludeFunctionApp { get; init; }
-    public required bool IncludeLogicApp { get; init; }
-
-    public static TestConfiguration Load()
+    private static readonly Lazy<TestConfiguration> Instance = new(() =>
     {
         AzdDotEnv.Load(optional: true); // Loads Azure Developer CLI environment variables; optional since .env file might be missing in CI/CD pipelines
 
@@ -27,5 +22,12 @@ internal class TestConfiguration
             IncludeFunctionApp = configuration.GetRequiredBool("INCLUDE_FUNCTION_APP"),
             IncludeLogicApp = configuration.GetRequiredBool("INCLUDE_LOGIC_APP")
         };
-    }
+    });
+
+    public required Uri AzureApiManagementGatewayUrl { get; init; }
+    public required Uri AzureKeyVaultUri { get; init; }
+    public required bool IncludeFunctionApp { get; init; }
+    public required bool IncludeLogicApp { get; init; }
+
+    public static TestConfiguration Load() => Instance.Value;
 }
