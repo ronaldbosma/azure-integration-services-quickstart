@@ -36,7 +36,7 @@ Before you can deploy this template, make sure you have the following tools inst
   - Installing `azd` also installs the following tools:
     - [GitHub CLI](https://cli.github.com)
     - [Bicep CLI](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/install)
-- [.NET 10 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
+- [.NET 11 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/11.0)
 - [npm CLI](https://nodejs.org/) _(This template uses a workaround to deploy the Logic App workflow, which requires the npm CLI.)_
 
 **Required Permissions:**
@@ -184,7 +184,8 @@ When the `includeApiManagement` parameter or the corresponding `INCLUDE_API_MANA
 When the `includeFunctionApp` parameter or the corresponding `INCLUDE_FUNCTION_APP` environment variable is set to `true`, a Function App is deployed via the [function-app.bicep](./infra/modules/services/function-app.bicep) module:
 
 - The `Y1` (Consumption) pricing tier is used.
-- The worker runtime is configured to .NET 10 isolated.
+- The worker runtime is configured to .NET 11 isolated.
+- The worker process is configured as 64-bit, as required by the enabled [isolated-worker placeholders](https://learn.microsoft.com/en-us/azure/azure-functions/dotnet-isolated-process-guide#placeholders).
 - Both a user-assigned managed identity and system-assigned managed identity are deployed to provide access to other services. See the [Role Assignments](#role-assignments) section for more information.
 
 The following app settings (environment variables) are configured to facilitate connections to other services.
@@ -345,7 +346,7 @@ For detailed guidance, refer to:
 
 ## Integration Tests
 
-The project includes integration tests built with **.NET 10** that validate the complete message flow through the deployed Azure services.
+The project includes integration tests built with **.NET 11** that validate the complete message flow through the deployed Azure services.
 The integration tests are located in [AISQuickSampleTests.cs](tests/AISQuick.IntegrationTests/AISQuickSampleTests.cs).
 See the [Demo Guide](demos/demo-sample-application.md) for more information on how to run the tests.
 

@@ -3,7 +3,6 @@ using AISQuick.FunctionApp.Models;
 using Azure.Data.Tables;
 
 using Microsoft.Azure.Functions.Worker;
-using Microsoft.Extensions.Logging;
 
 namespace AISQuick.FunctionApp;
 
