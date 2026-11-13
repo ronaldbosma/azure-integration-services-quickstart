@@ -143,8 +143,11 @@ resource hostingPlan 'Microsoft.Web/serverfarms@2025-03-01' = {
   tags: tags
   kind: 'functionapp'
   sku: {
-    name: 'Y1'
-    tier: 'Dynamic'
+    name: 'FC1'
+    tier: 'FlexConsumption'
+    // size: 'FC1'
+    // family: 'FC'
+    // capacity: 0
   }
   properties: {}
 }
@@ -155,7 +158,7 @@ resource functionApp 'Microsoft.Web/sites@2025-03-01' = {
   name: functionAppSettings.functionAppName
   location: location
   tags: serviceTags
-  kind: 'functionapp'
+  kind: 'functionapp,linux'
   identity: {
     type: 'SystemAssigned, UserAssigned'
     userAssignedIdentities: {
@@ -169,6 +172,7 @@ resource functionApp 'Microsoft.Web/sites@2025-03-01' = {
       ftpsState: 'FtpsOnly'
       minTlsVersion: '1.2'
       netFrameworkVersion: functionAppSettings.netFrameworkVersion
+      linuxFxVersion: functionAppSettings.linuxFxVersion
     }
     httpsOnly: true
   }

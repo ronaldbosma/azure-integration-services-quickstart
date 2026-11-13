@@ -59,6 +59,9 @@ type functionAppSettingsType = {
 
   @description('The .NET Framework version for the Function App')
   netFrameworkVersion: string
+
+  @description('Indicates the language and version for the language-specific worker process. E.g. DOTNET-ISOLATED|10.0')
+  linuxFxVersion: string
 }
 
 // Logic App
