@@ -73,21 +73,16 @@ var serviceBusAppSettings resourceInput<'Microsoft.Web/sites/config@2025-03-01'>
       ServiceBusConnection__fullyQualifiedNamespace: helpers.getServiceBusFullyQualifiedNamespace(serviceBusSettings!.namespaceName)
     }
 
-// Construct the storage account connection string
-// NOTE: tried using a key vault secret but regularly got errors because the role assignment for the function app on the key vault was not yet effective
-var storageAccountConnectionString string = 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount.listKeys().keys[0].value}'
-
 var appSettings resourceInput<'Microsoft.Web/sites/config@2025-03-01'>.properties = {
   APPLICATIONINSIGHTS_AUTHENTICATION_STRING: 'Authorization=AAD'
   APPLICATIONINSIGHTS_CONNECTION_STRING: appInsights.properties.ConnectionString
-  AzureWebJobsStorage: storageAccountConnectionString
-  FUNCTIONS_EXTENSION_VERSION: '~4'
-  FUNCTIONS_WORKER_RUNTIME: 'dotnet-isolated'
-  WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: storageAccountConnectionString
-  WEBSITE_CONTENTSHARE: toLower(functionAppSettings.functionAppName)
-  WEBSITE_USE_PLACEHOLDER_DOTNETISOLATED: '1'
+  AzureWebJobsStorage__blobServiceUri: helpers.getBlobStorageEndpoint(storageAccountName)
+  AzureWebJobsStorage__credential: 'managedidentity'
+  AzureWebJobsStorage__queueServiceUri: helpers.getQueueStorageEndpoint(storageAccountName)
+  AzureWebJobsStorage__tableServiceUri: helpers.getTableStorageEndpoint(storageAccountName)
 
-  // Storage Account App Settings
+
+  // App Settings for Storage Account connection
   StorageAccountConnection__blobServiceUri: helpers.getBlobStorageEndpoint(storageAccountName)
   StorageAccountConnection__fileServiceUri: helpers.getFileStorageEndpoint(storageAccountName)
   StorageAccountConnection__queueServiceUri: helpers.getQueueStorageEndpoint(storageAccountName)
@@ -105,10 +100,6 @@ var appSettings resourceInput<'Microsoft.Web/sites/config@2025-03-01'>.propertie
 
 resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
   name: appInsightsName
-}
-
-resource storageAccount 'Microsoft.Storage/storageAccounts@2026-09-01' existing = {
-  name: storageAccountName
 }
 
 //=============================================================================
@@ -172,9 +163,22 @@ resource functionApp 'Microsoft.Web/sites@2025-03-01' = {
       minTlsVersion: '1.2'
     }
     functionAppConfig: {
+      deployment: {
+        storage: {
+          type: 'blobContainer'
+          value: '${helpers.getBlobStorageEndpoint(storageAccountName)}/app-package-${functionAppSettings.functionAppName}'
+          authentication: {
+            type: 'SystemAssignedIdentity'
+          }
+        }
+      }
       runtime: {
         name: 'dotnet-isolated'
         version: functionAppSettings.runtimeVersion
+      }
+      scaleAndConcurrency: {
+        maximumInstanceCount: 100
+        instanceMemoryMB: 2048
       }
     }
     httpsOnly: true
