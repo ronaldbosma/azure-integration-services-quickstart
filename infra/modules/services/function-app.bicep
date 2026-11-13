@@ -145,11 +145,10 @@ resource hostingPlan 'Microsoft.Web/serverfarms@2025-03-01' = {
   sku: {
     name: 'FC1'
     tier: 'FlexConsumption'
-    // size: 'FC1'
-    // family: 'FC'
-    // capacity: 0
   }
-  properties: {}
+  properties: {
+    reserved: true
+  }
 }
 
 // Create the Function App
@@ -171,8 +170,12 @@ resource functionApp 'Microsoft.Web/sites@2025-03-01' = {
       // NOTE: the app settings will be set separately
       ftpsState: 'FtpsOnly'
       minTlsVersion: '1.2'
-      netFrameworkVersion: functionAppSettings.netFrameworkVersion
-      linuxFxVersion: functionAppSettings.linuxFxVersion
+    }
+    functionAppConfig: {
+      runtime: {
+        name: 'dotnet-isolated'
+        version: functionAppSettings.runtimeVersion
+      }
     }
     httpsOnly: true
   }
