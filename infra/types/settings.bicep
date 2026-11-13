@@ -54,11 +54,11 @@ type functionAppSettingsType = {
   @description('The name of the user-assigned managed identity for the Function App')
   identityName: string
 
-  @description('The name of the App Service for the Function App')
+  @description('The name of the App Service Plan for the Function App')
   appServicePlanName: string
 
-  @description('The .NET Framework version for the Function App')
-  netFrameworkVersion: string
+  @description('The runtime version for the Function App')
+  runtimeVersion: string
 }
 
 // Logic App
@@ -72,7 +72,7 @@ type logicAppSettingsType = {
   @description('The name of the user-assigned managed identity for the Logic App')
   identityName: string
 
-  @description('The name of the App Service for the Logic App')
+  @description('The name of the App Service Plan for the Logic App')
   appServicePlanName: string
 
   @description('The .NET Framework version for the Logic App')
