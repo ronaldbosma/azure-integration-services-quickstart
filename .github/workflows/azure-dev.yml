@@ -265,20 +265,12 @@ jobs:
 
       - name: Run Integration Tests
         run: |
-          dotnet ./artifacts/integration-tests/AISQuick.IntegrationTests.dll --report-trx --results-directory ./artifacts/integration-tests/TestResults
+          dotnet ./artifacts/integration-tests/AISQuick.IntegrationTests.dll --report-gh
         working-directory: ./
         env:
           # Pass the necessary deployed resource properties as environment variables so the integration tests can access them.
           AZURE_API_MANAGEMENT_GATEWAY_URL: ${{ needs.deploy.outputs.AZURE_API_MANAGEMENT_GATEWAY_URL }}
           AZURE_KEY_VAULT_URI: ${{ needs.deploy.outputs.AZURE_KEY_VAULT_URI }}
-
-      - name: Upload Test Results
-        if: always()
-        uses: actions/upload-artifact@v7
-        with:
-          name: integration-test-results
-          path: ./artifacts/integration-tests/TestResults/
-          retention-days: 1
 
   # ------------------------------------------------------------
   # Clean Up Resources
