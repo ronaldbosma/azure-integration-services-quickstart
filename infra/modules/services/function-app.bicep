@@ -76,11 +76,11 @@ var serviceBusAppSettings resourceInput<'Microsoft.Web/sites/config@2025-03-01'>
 var appSettings resourceInput<'Microsoft.Web/sites/config@2025-03-01'>.properties = {
   APPLICATIONINSIGHTS_AUTHENTICATION_STRING: 'Authorization=AAD'
   APPLICATIONINSIGHTS_CONNECTION_STRING: appInsights.properties.ConnectionString
-  AzureWebJobsStorage__blobServiceUri: helpers.getBlobStorageEndpoint(storageAccountName)
+
   AzureWebJobsStorage__credential: 'managedidentity'
+  AzureWebJobsStorage__blobServiceUri: helpers.getBlobStorageEndpoint(storageAccountName)
   AzureWebJobsStorage__queueServiceUri: helpers.getQueueStorageEndpoint(storageAccountName)
   AzureWebJobsStorage__tableServiceUri: helpers.getTableStorageEndpoint(storageAccountName)
-
 
   // App Settings for Storage Account connection
   StorageAccountConnection__blobServiceUri: helpers.getBlobStorageEndpoint(storageAccountName)
