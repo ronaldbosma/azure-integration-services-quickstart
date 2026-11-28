@@ -58,27 +58,24 @@ jobs:
       - name: Setup azd
         uses: Azure/setup-azd@v2
 
+      - name: Setup Azure Logic Apps Standard azd extension
+        run: |
+          azd ext install azure.logicappsstandard
+
       - name: Setup .NET 11
         if: env.INCLUDE_FUNCTION_APP == 'true'
         uses: actions/setup-dotnet@v6
         with:
           dotnet-version: "11.0.x"
 
-      # This template uses a workaround to deploy the Logic App workflow, which requires the npm CLI.
-      - name: Setup Node.js
-        if: env.INCLUDE_LOGIC_APP == 'true'
-        uses: actions/setup-node@v7
-        with:
-          node-version: "latest"
-
       - name: Print Tool Versions
         run: |
           az version
           az bicep version
           azd version
+          Write-Host "azd extensions:"
+          azd ext list
           Write-Host ".NET SDK Version: $(dotnet --version)"
-          Write-Host "Node.js Version: $(node --version)"
-          Write-Host "npm Version: $(npm --version)"
 
       # Use Azure CLI authentication with azd commands so credentials are shared between azd commands and az (Azure CLI) commands used in hooks.
       - name: Configure azd to use Azure CLI Authentication
@@ -181,6 +178,10 @@ jobs:
 
       - name: Setup azd
         uses: Azure/setup-azd@v2
+
+      - name: Setup Azure Logic Apps Standard azd extension
+        run: |
+          azd ext install azure.logicappsstandard
 
       # Use Azure CLI authentication with azd commands so credentials are shared between azd commands and az (Azure CLI) commands used in hooks.
       - name: Configure azd to use Azure CLI Authentication
@@ -300,6 +301,10 @@ jobs:
 
       - name: Setup azd
         uses: Azure/setup-azd@v2
+
+      - name: Setup Azure Logic Apps Standard azd extension
+        run: |
+          azd ext install azure.logicappsstandard
 
       # Use Azure CLI authentication with azd commands so credentials are shared between azd commands and az (Azure CLI) commands used in hooks.
       - name: Configure azd to use Azure CLI Authentication

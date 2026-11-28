@@ -8,11 +8,12 @@
       "version": "latest",
       "installBicep": true
     },
-    "ghcr.io/azure/azure-dev/azd:latest": {},
+    "ghcr.io/azure/azure-dev/azd:latest": {
+        "extensions": "azure.logicappsstandard"
+    },
     "ghcr.io/devcontainers/features/powershell:2": {
       "version": "latest"
-    },
-    "ghcr.io/devcontainers/features/node:2": {}
+    }
   },
   "customizations": {
     "vscode": {
