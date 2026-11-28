@@ -116,6 +116,7 @@ jobs:
       - name: Package Function App
         if: env.INCLUDE_FUNCTION_APP == 'true'
         run: |
+          dotnet restore ./src/AISQuick.FunctionApp/AISQuick.FunctionApp.csproj --locked-mode
           azd package functionApp --output-path ./artifacts/functionapp-package.zip --no-prompt
 
       - name: Package Logic App
@@ -127,7 +128,8 @@ jobs:
         # It only makes sense to execute the integration tests if both API Management and the API is included in the deployment, else it will always fail
         if: env.INCLUDE_API_MANAGEMENT == 'true' && env.INCLUDE_APPLICATION_INFRA_RESOURCES == 'true'
         run: |
-          dotnet build ./tests/AISQuick.IntegrationTests/AISQuick.IntegrationTests.csproj --configuration Release --output ./artifacts/integration-tests
+          dotnet restore ./tests/AISQuick.IntegrationTests/AISQuick.IntegrationTests.csproj --locked-mode
+          dotnet build ./tests/AISQuick.IntegrationTests/AISQuick.IntegrationTests.csproj --no-restore --configuration Release --output ./artifacts/integration-tests
 
       - name: Upload Function App Package
         if: env.INCLUDE_FUNCTION_APP == 'true'
